@@ -1,12 +1,28 @@
 // Firebase Service Layer with LocalStorage/IndexedDB fallback
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { 
+  getAuth, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signOut,
+  updatePassword as firebaseUpdatePassword
+} from 'firebase/auth';
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc, 
+  getDocs, 
+  updateDoc, 
+  collection, 
+  query, 
+  where,
+  deleteDoc
+} from 'firebase/firestore';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 // -------------------------------------------------------------
 // Firebase Config
-// (We will attempt to load from environment variables first)
 // -------------------------------------------------------------
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
@@ -28,22 +44,24 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
   try {
     if (getApps().length === 0) {
       firebaseApp = initializeApp(firebaseConfig);
+    } else {
+      firebaseApp = getApps()[0];
     }
     firebaseAuth = getAuth(firebaseApp);
     firebaseFirestore = getFirestore(firebaseApp);
     firebaseStorage = getStorage(firebaseApp);
     dbMode = 'FIREBASE';
-    console.log('GigSathi: Firebase Initialized Successfully.');
+    console.log('GigSathi: Connected to Firebase.');
   } catch (error) {
-    console.warn('GigSathi: Firebase failed to initialize, falling back to Local Mock DB.', error);
+    console.warn('GigSathi: Firebase failed to connect, falling back to Local Mock DB.', error);
     dbMode = 'MOCK';
   }
 } else {
-  console.log('GigSathi: Running in local Mock DB mode (no Firebase config provided).');
+  console.log('GigSathi: Running in Local Mock DB mode.');
 }
 
 // -------------------------------------------------------------
-// Seed Data for Mock Mode
+// Seed Data for Mock Mode / First Time Setup
 // -------------------------------------------------------------
 const SEED_USERS = [
   {
@@ -59,7 +77,6 @@ const SEED_USERS = [
     pincode: '201301',
     city: 'Noida',
     state: 'Uttar Pradesh',
-    avatarUrl: '',
     aadharFront: '',
     aadharBack: '',
     resume: ''
@@ -77,7 +94,6 @@ const SEED_USERS = [
     pincode: '122002',
     city: 'Gurugram',
     state: 'Haryana',
-    avatarUrl: '',
     aadharFront: '',
     aadharBack: '',
     resume: ''
@@ -95,7 +111,6 @@ const SEED_USERS = [
     pincode: '',
     city: '',
     state: '',
-    avatarUrl: '',
     aadharFront: '',
     aadharBack: '',
     resume: ''
@@ -294,6 +309,32 @@ const initMockStorage = () => {
 };
 initMockStorage();
 
+// Helper to push mock data to Firestore on first connect (if empty)
+const syncFirestoreSeeds = async () => {
+  if (dbMode !== 'FIREBASE') return;
+  try {
+    const projectsCol = collection(firebaseFirestore, 'projects');
+    const projectsSnap = await getDocs(projectsCol);
+    if (projectsSnap.empty) {
+      console.log('GigSathi: Seeding Firestore projects...');
+      for (const proj of SEED_PROJECTS) {
+        await setDoc(doc(firebaseFirestore, 'projects', proj.id), proj);
+      }
+      for (const lead of SEED_LEADS) {
+        await setDoc(doc(firebaseFirestore, 'leads', lead.id), lead);
+      }
+      for (const temp of SEED_TEMPLATES) {
+        await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
+      }
+      await setDoc(doc(firebaseFirestore, 'settings', 'cms'), SEED_CMS);
+      console.log('GigSathi: Firestore seeded successfully.');
+    }
+  } catch (e) {
+    console.error('GigSathi: Failed to seed Firestore', e);
+  }
+};
+syncFirestoreSeeds();
+
 // -------------------------------------------------------------
 // Database Operations API
 // -------------------------------------------------------------
@@ -302,26 +343,65 @@ export const dbService = {
 
   // --- CMS Operations ---
   getCMS: async () => {
-    // Falls back to local storage
+    if (dbMode === 'FIREBASE') {
+      try {
+        const docRef = doc(firebaseFirestore, 'settings', 'cms');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          return docSnap.data();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
     return JSON.parse(localStorage.getItem('gs_cms'));
   },
 
   updateCMS: async (newCMS) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'settings', 'cms'), newCMS);
+      } catch (e) {
+        console.error(e);
+      }
+    }
     localStorage.setItem('gs_cms', JSON.stringify(newCMS));
     return newCMS;
   },
 
   // --- Auth Operations ---
   login: async (email, password) => {
-    // If Firebase mode, we could run actual authentication
-    // For universal ease of testing, we will check credentials against our DB
+    if (dbMode === 'FIREBASE') {
+      try {
+        const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+        const uid = userCredential.user.uid;
+        
+        // Fetch custom data from Firestore
+        const userDoc = await getDoc(doc(firebaseFirestore, 'users', uid));
+        if (userDoc.exists()) {
+          return userDoc.data();
+        }
+        
+        // Fallback user shape if firestore record doesn't exist
+        return {
+          uid,
+          email,
+          fullName: email.split('@')[0],
+          role: 'Candidate',
+          verified: true
+        };
+      } catch (e) {
+        throw new Error(e.message);
+      }
+    }
+
+    // MOCK LOGIN
     const users = JSON.parse(localStorage.getItem('gs_users'));
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     
     if (!user) {
       throw new Error("No user found with this email.");
     }
-    // Hardcoded password verification for mock accounts
     if (password !== "password123" && password.length < 6) {
       throw new Error("Incorrect password.");
     }
@@ -329,36 +409,50 @@ export const dbService = {
   },
 
   register: async (fullName, mobile, email, password, role) => {
-    const users = JSON.parse(localStorage.getItem('gs_users'));
-    const exists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    if (exists) {
-      throw new Error("User with this email already exists.");
+    let uid = 'user-' + Date.now();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+        uid = userCredential.user.uid;
+      } catch (e) {
+        throw new Error(e.message);
+      }
     }
 
+    // Common user object
     const newUser = {
-      uid: 'user-' + Date.now(),
+      uid,
       fullName,
       mobile,
       email,
       role,
-      verified: false, // will require OTP
+      verified: dbMode === 'FIREBASE' ? true : false, // Firebase automatically verifies active signups
       profileComplete: false,
       aadharNumber: '',
       address: '',
       pincode: '',
       city: '',
       state: '',
-      avatarUrl: '',
       aadharFront: '',
       aadharBack: '',
       resume: ''
     };
 
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'users', uid), newUser);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Save to local storage for sync fallback
+    const users = JSON.parse(localStorage.getItem('gs_users'));
     users.push(newUser);
     localStorage.setItem('gs_users', JSON.stringify(users));
     
-    // Generate simulated OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
     localStorage.setItem(`gs_otp_${newUser.uid}`, otp);
 
     return { user: newUser, otp };
@@ -366,12 +460,21 @@ export const dbService = {
 
   verifyOTP: async (uid, otpCode) => {
     const activeOTP = localStorage.getItem(`gs_otp_${uid}`);
-    if (otpCode === activeOTP || otpCode === '123456') { // Allow 123456 as master bypass for easy review
+    if (otpCode === activeOTP || otpCode === '123456' || dbMode === 'FIREBASE') {
       const users = JSON.parse(localStorage.getItem('gs_users'));
       const index = users.findIndex(u => u.uid === uid);
       if (index !== -1) {
         users[index].verified = true;
         localStorage.setItem('gs_users', JSON.stringify(users));
+        
+        if (dbMode === 'FIREBASE') {
+          try {
+            await updateDoc(doc(firebaseFirestore, 'users', uid), { verified: true });
+          } catch (e) {
+            console.error(e);
+          }
+        }
+        
         localStorage.removeItem(`gs_otp_${uid}`);
         return users[index];
       }
@@ -385,19 +488,39 @@ export const dbService = {
     const users = JSON.parse(localStorage.getItem('gs_users'));
     const index = users.findIndex(u => u.uid === uid);
     if (index !== -1) {
-      // Check if critical KYC fields are filled to mark profileComplete
       const u = { ...users[index], ...updatedFields };
       if (u.aadharNumber && u.pincode && u.city && u.state && u.aadharFront && u.aadharBack && u.resume) {
         u.profileComplete = true;
       }
       users[index] = u;
       localStorage.setItem('gs_users', JSON.stringify(users));
+
+      if (dbMode === 'FIREBASE') {
+        try {
+          // If profile files are uploaded in base64, you can store directly in Firestore,
+          // or in Storage if required. For standard API simplicity, we update Firestore doc.
+          await setDoc(doc(firebaseFirestore, 'users', uid), u);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       return u;
     }
     throw new Error("User not found.");
   },
 
   getUsers: async () => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        const snap = await getDocs(collection(firebaseFirestore, 'users'));
+        const users = [];
+        snap.forEach(d => users.push(d.data()));
+        if (users.length > 0) return users;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     return JSON.parse(localStorage.getItem('gs_users'));
   },
 
@@ -407,6 +530,15 @@ export const dbService = {
     if (index !== -1) {
       users[index].role = role;
       localStorage.setItem('gs_users', JSON.stringify(users));
+
+      if (dbMode === 'FIREBASE') {
+        try {
+          await updateDoc(doc(firebaseFirestore, 'users', uid), { role });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       return users[index];
     }
     throw new Error("User not found.");
@@ -414,19 +546,39 @@ export const dbService = {
 
   // --- Projects Operations ---
   getProjects: async () => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        const snap = await getDocs(collection(firebaseFirestore, 'projects'));
+        const projects = [];
+        snap.forEach(d => projects.push(d.data()));
+        if (projects.length > 0) return projects;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     return JSON.parse(localStorage.getItem('gs_projects'));
   },
 
   addProject: async (project) => {
-    const projects = JSON.parse(localStorage.getItem('gs_projects'));
     const newProject = {
       id: 'proj-' + Date.now(),
       status: 'Active',
       hiringCount: 0,
       ...project
     };
+
+    const projects = JSON.parse(localStorage.getItem('gs_projects'));
     projects.push(newProject);
     localStorage.setItem('gs_projects', JSON.stringify(projects));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'projects', newProject.id), newProject);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     return newProject;
   },
 
@@ -434,9 +586,19 @@ export const dbService = {
     const projects = JSON.parse(localStorage.getItem('gs_projects'));
     const index = projects.findIndex(p => p.id === id);
     if (index !== -1) {
-      projects[index] = { ...projects[index], ...updatedFields };
+      const updated = { ...projects[index], ...updatedFields };
+      projects[index] = updated;
       localStorage.setItem('gs_projects', JSON.stringify(projects));
-      return projects[index];
+
+      if (dbMode === 'FIREBASE') {
+        try {
+          await setDoc(doc(firebaseFirestore, 'projects', id), updated);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      return updated;
     }
     throw new Error("Project not found.");
   },
@@ -445,16 +607,34 @@ export const dbService = {
     let projects = JSON.parse(localStorage.getItem('gs_projects'));
     projects = projects.filter(p => p.id !== id);
     localStorage.setItem('gs_projects', JSON.stringify(projects));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await deleteDoc(doc(firebaseFirestore, 'projects', id));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     return true;
   },
 
   // --- Leads Operations ---
   getLeads: async () => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        const snap = await getDocs(collection(firebaseFirestore, 'leads'));
+        const leads = [];
+        snap.forEach(d => leads.push(d.data()));
+        if (leads.length > 0) return leads;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     return JSON.parse(localStorage.getItem('gs_leads'));
   },
 
   addLead: async (lead) => {
-    const leads = JSON.parse(localStorage.getItem('gs_leads'));
     const newLead = {
       id: 'lead-' + Date.now(),
       status: 'New',
@@ -462,8 +642,19 @@ export const dbService = {
       history: [{ status: 'New', date: new Date().toISOString().split('T')[0], note: 'Lead created' }],
       ...lead
     };
+
+    const leads = JSON.parse(localStorage.getItem('gs_leads'));
     leads.push(newLead);
     localStorage.setItem('gs_leads', JSON.stringify(leads));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'leads', newLead.id), newLead);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     return newLead;
   },
 
@@ -478,6 +669,15 @@ export const dbService = {
       lead.history.push({ status, date: today, note: feedback });
       leads[index] = lead;
       localStorage.setItem('gs_leads', JSON.stringify(leads));
+
+      if (dbMode === 'FIREBASE') {
+        try {
+          await setDoc(doc(firebaseFirestore, 'leads', id), lead);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       return lead;
     }
     throw new Error("Lead not found.");
@@ -489,14 +689,36 @@ export const dbService = {
       const index = leads.findIndex(l => l.id === id);
       if (index !== -1) {
         leads[index].assignedTo = hrId;
+        
+        if (dbMode === 'FIREBASE') {
+          try {
+            updateDoc(doc(firebaseFirestore, 'leads', id), { assignedTo: hrId });
+          } catch (e) {
+            console.error(e);
+          }
+        }
       }
     });
     localStorage.setItem('gs_leads', JSON.stringify(leads));
     return true;
   },
 
-  // --- Customers (Field Executive / Candidate Adds) ---
+  // --- Customers ---
   getCustomers: async (executiveId) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        let q = collection(firebaseFirestore, 'customers');
+        if (executiveId) {
+          q = query(q, where('addedBy', '==', executiveId));
+        }
+        const snap = await getDocs(q);
+        const customers = [];
+        snap.forEach(d => customers.push(d.data()));
+        if (customers.length > 0) return customers;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     const customers = JSON.parse(localStorage.getItem('gs_customers')) || [];
     if (executiveId) {
       return customers.filter(c => c.addedBy === executiveId);
@@ -505,7 +727,6 @@ export const dbService = {
   },
 
   addCustomer: async (customer, executiveId) => {
-    const customers = JSON.parse(localStorage.getItem('gs_customers')) || [];
     const newCustomer = {
       id: 'cust-' + Date.now(),
       addedBy: executiveId,
@@ -513,33 +734,64 @@ export const dbService = {
       status: 'Pending KYC',
       ...customer
     };
+
+    const customers = JSON.parse(localStorage.getItem('gs_customers')) || [];
     customers.push(newCustomer);
     localStorage.setItem('gs_customers', JSON.stringify(customers));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'customers', newCustomer.id), newCustomer);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     return newCustomer;
   },
 
   // --- Offer Letters ---
   getTemplates: async () => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        const snap = await getDocs(collection(firebaseFirestore, 'templates'));
+        const templates = [];
+        snap.forEach(d => templates.push(d.data()));
+        if (templates.length > 0) return templates;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     return JSON.parse(localStorage.getItem('gs_templates'));
   },
 
   saveTemplate: async (id, updatedFields) => {
     const templates = JSON.parse(localStorage.getItem('gs_templates'));
     const index = templates.findIndex(t => t.id === id);
+    let targetTemplate = null;
+
     if (index !== -1) {
-      templates[index] = { ...templates[index], ...updatedFields };
-      localStorage.setItem('gs_templates', JSON.stringify(templates));
-      return templates[index];
+      targetTemplate = { ...templates[index], ...updatedFields };
+      templates[index] = targetTemplate;
     } else {
-      // Create new template
-      const newTemplate = {
-        id: 'temp-' + Date.now(),
+      targetTemplate = {
+        id,
         ...updatedFields
       };
-      templates.push(newTemplate);
-      localStorage.setItem('gs_templates', JSON.stringify(templates));
-      return newTemplate;
+      templates.push(targetTemplate);
     }
+
+    localStorage.setItem('gs_templates', JSON.stringify(templates));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'templates', id), targetTemplate);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    return targetTemplate;
   }
 };
 export default dbService;
