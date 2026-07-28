@@ -22,6 +22,92 @@ const HRDashboard = () => {
     showToast("Offer letter accepted and signed successfully!", "success");
   };
 
+  const handleDownloadPDF = () => {
+    const printWindow = window.open('', '_blank');
+    const content = renderOfferLetter();
+    
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>GigSathi Offer Letter - ${currentUser?.fullName}</title>
+          <style>
+            body {
+              font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+              color: #334155;
+              line-height: 1.6;
+              padding: 40px;
+              max-width: 800px;
+              margin: 0 auto;
+            }
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-bottom: 2px solid #de3163;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .logo-text {
+              font-size: 28px;
+              font-weight: 800;
+              color: #de3163;
+              letter-spacing: -0.02em;
+            }
+            .header-info {
+              text-align: right;
+              font-size: 11px;
+              color: #64748b;
+              line-height: 1.4;
+            }
+            .content {
+              min-height: 700px;
+              font-size: 14px;
+            }
+            .footer {
+              margin-top: 60px;
+              border-top: 1px solid #e2e8f0;
+              padding-top: 20px;
+              font-size: 10px;
+              color: #64748b;
+              text-align: center;
+              line-height: 1.4;
+            }
+            @media print {
+              body { padding: 0; }
+              .page-break { page-break-before: always; height: 1px; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <span class="logo-text">GigSathi</span>
+              <div style="font-size: 10px; color: #64748b; font-weight: bold; letter-spacing: 0.05em; text-transform: uppercase;">Recruiting Excellence</div>
+            </div>
+            <div class="header-info">
+              <strong>GigSathi Solutions Private Limited</strong><br/>
+              CIN: U74999DL2026PTC394850<br/>
+              Website: www.gigsathi.com
+            </div>
+          </div>
+          <div class="content">
+            ${content}
+          </div>
+          <div class="footer">
+            GigSathi Solutions Pvt. Ltd. | Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+            Contact: support@gigsathi.com | Web: www.gigsathi.com | Confidential - Personal & Employment Document
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   const renderOfferLetter = () => {
     const hrTemplate = templates.find(t => t.role === 'HR') || {
       content: `<h3>GIGSATHI SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
@@ -434,10 +520,13 @@ const HRDashboard = () => {
                 </p>
 
                 {offerSigned ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--primary-light)', border: '1px solid rgba(222,49,99,0.2)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--primary-light)', border: '1px solid rgba(222,49,99,0.2)', width: '100%' }}>
                     <CheckCircle2 size={36} color="var(--primary-color)" />
                     <strong style={{ color: 'var(--primary-color)' }}>Agreement Signed & Locked</strong>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>IP logged successfully. Copy sent to verified email.</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>IP logged successfully. Copy sent to verified email.</span>
+                    <button onClick={handleDownloadPDF} className="btn btn-primary" style={{ width: '100%' }}>
+                      Download Offer Letter (PDF)
+                    </button>
                   </div>
                 ) : (
                   <button onClick={handleSignOffer} className="btn btn-primary" style={{ width: '100%' }}>
