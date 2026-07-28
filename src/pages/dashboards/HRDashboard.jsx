@@ -32,71 +32,114 @@ const HRDashboard = () => {
           <title>GigSathi Offer Letter - ${currentUser?.fullName}</title>
           <style>
             body {
-              font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+              font-family: Arial, sans-serif;
+              background-color: #ffffff;
               color: #334155;
-              line-height: 1.6;
-              padding: 40px;
-              max-width: 800px;
-              margin: 0 auto;
+              margin: 0;
+              padding: 0;
             }
-            .header {
+            .contract-page-sheet {
+              position: relative;
+              background: #ffffff;
+              color: #334155;
+              padding: 50px 40px;
+              margin: 0 auto;
+              max-width: 800px;
+              min-height: 1050px;
+              display: flex;
+              flex-direction: column;
+              border: none;
+              box-sizing: border-box;
+              page-break-after: always;
+            }
+            .contract-page-sheet .watermark-text {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%) rotate(-35deg);
+              font-size: 5rem;
+              font-weight: 900;
+              color: rgba(222, 49, 99, 0.045) !important;
+              text-transform: uppercase;
+              pointer-events: none;
+              user-select: none;
+              white-space: nowrap;
+              letter-spacing: 0.12em;
+              z-index: 1;
+            }
+            .contract-page-sheet .letterhead-logo {
               display: flex;
               justify-content: space-between;
               align-items: center;
               border-bottom: 2px solid #de3163;
-              padding-bottom: 20px;
-              margin-bottom: 30px;
+              padding-bottom: 12px;
+              margin-bottom: 24px;
             }
-            .logo-text {
-              font-size: 28px;
+            .contract-page-sheet .letterhead-logo .logo-main {
+              font-size: 1.8rem;
               font-weight: 800;
               color: #de3163;
               letter-spacing: -0.02em;
             }
-            .header-info {
+            .contract-page-sheet .letterhead-logo .company-cin {
               text-align: right;
-              font-size: 11px;
+              font-size: 0.7rem;
               color: #64748b;
               line-height: 1.4;
             }
-            .content {
-              min-height: 700px;
-              font-size: 14px;
+            .contract-page-sheet .contract-body {
+              flex: 1;
+              position: relative;
+              z-index: 2;
+              font-size: 0.85rem;
+              line-height: 1.6;
+              text-align: justify;
             }
-            .footer {
-              margin-top: 60px;
+            .contract-page-sheet .contract-body p {
+              margin-bottom: 12px;
+            }
+            .contract-page-sheet .contract-body h3 {
+              margin-top: 20px;
+              margin-bottom: 8px;
+              color: #de3163;
+              font-size: 0.95rem;
+              border-bottom: 1px solid #f1f5f9;
+              padding-bottom: 4px;
+              text-transform: uppercase;
+            }
+            .contract-page-sheet .contract-body ul {
+              margin-bottom: 12px;
+              padding-left: 20px;
+            }
+            .contract-page-sheet .contract-body li {
+              margin-bottom: 4px;
+            }
+            .contract-page-sheet .contract-footer-info {
               border-top: 1px solid #e2e8f0;
-              padding-top: 20px;
-              font-size: 10px;
+              padding-top: 12px;
+              margin-top: 20px;
+              font-size: 0.65rem;
               color: #64748b;
               text-align: center;
               line-height: 1.4;
             }
             @media print {
-              body { padding: 0; }
-              .page-break { page-break-before: always; height: 1px; }
+              body {
+                background: #ffffff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+              }
+              .contract-page-sheet {
+                padding: 30px 20px !important;
+                margin: 0 !important;
+                min-height: 100% !important;
+                page-break-after: always !important;
+              }
             }
           </style>
         </head>
         <body>
-          <div class="header">
-            <div>
-              <span class="logo-text">GigSathi</span>
-              <div style="font-size: 10px; color: #64748b; font-weight: bold; letter-spacing: 0.05em; text-transform: uppercase;">Recruiting Excellence</div>
-            </div>
-            <div class="header-info">
-              <strong>GigSathi Solutions Private Limited</strong><br/>
-              CIN: U74999DL2026PTC394850<br/>
-              Website: www.gigsathi.com
-            </div>
-          </div>
-          <div class="content">
-            ${content}
-          </div>
-          <div class="footer">
-            GigSathi Solutions Pvt. Ltd. | Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-            Contact: support@gigsathi.com | Web: www.gigsathi.com | Confidential - Personal & Employment Document
-          </div>
+          ${content}
           <script>
             window.onload = function() {
               window.print();
@@ -119,10 +162,18 @@ const HRDashboard = () => {
       year: 'numeric'
     });
 
+    const userAddress = [
+      currentUser?.address,
+      currentUser?.city,
+      currentUser?.state,
+      currentUser?.pincode
+    ].filter(Boolean).join(', ') || 'Not Provided (Complete KYC Profile)';
+
     let html = hrTemplate.content
       .replace(/{{name}}/g, currentUser?.fullName || 'HR Officer')
       .replace(/{{email}}/g, currentUser?.email || '')
       .replace(/{{mobile}}/g, currentUser?.mobile || '')
+      .replace(/{{address}}/g, userAddress)
       .replace(/{{date}}/g, todayStr);
 
     return html;
@@ -507,10 +558,12 @@ const HRDashboard = () => {
                   </span>
                 </div>
                 
-                <div 
-                  style={{ padding: '30px', maxHeight: '500px', overflowY: 'auto', backgroundColor: '#fff', color: '#334155', fontFamily: 'serif', fontSize: '0.95rem', lineHeight: '1.6', textAlign: 'left' }}
-                  dangerouslySetInnerHTML={{ __html: renderOfferLetter() }}
-                />
+                <div className="contract-document-wrapper">
+                  <div 
+                    dangerouslySetInnerHTML={{ __html: renderOfferLetter() }} 
+                    style={{ textAlign: 'left' }}
+                  />
+                </div>
               </div>
 
               <div className="card">

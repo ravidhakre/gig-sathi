@@ -214,58 +214,121 @@ const SEED_TEMPLATES = [
     id: 'temp-candidate',
     role: 'Candidate',
     title: 'Candidate / Field Executive Offer Letter',
-    content: `<h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.6rem; border-bottom: 2px solid #de3163; padding-bottom: 10px;">CONTRACT OF ENGAGEMENT</h2>
-<p><strong>Date:</strong> {{date}}</p>
-<p><strong>To,</strong><br>
-<strong>Name:</strong> {{name}}<br>
-<strong>Email:</strong> {{email}}<br>
-<strong>Mobile:</strong> {{mobile}}</p>
-
-<p><strong>Subject: Letter of Engagement as Independent Field Associate / Gig Partner</strong></p>
-
-<p>Dear {{name}},</p>
-<p>We are pleased to offer you engagement as an <strong>Independent Field Associate / Candidate Executive</strong> with GigSathi Solutions Private Limited. This letter outlines the terms and conditions that govern your business relationship with our company.</p>
-
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">1. Commencement & Scope of Engagement</h3>
-<p>Your engagement shall commence from the date of your digital acceptance of this letter. You will operate as an independent contractor. This engagement does not constitute a relationship of employer-employee, agency, or partnership between you and GigSathi. You shall be responsible for defining your work hours, methods, and tactics in onboarding customers for our client projects.</p>
-
-<div style="page-break-before: always; margin-top: 40px; border-top: 1px dashed #de3163; padding-top: 10px;"></div>
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">2. Deliverables & Payout Commission Matrices</h3>
-<p>As a Field Associate, your main scope is to promote, solicit, and acquire valid customers for the financial, delivery, and utility products listed in your GigSathi dashboard. Your compensation will be strictly commission-based, as defined below:</p>
-<ul>
-  <li>Commissions will be calculated weekly based on approved and verified leads as per client reports.</li>
-  <li>All taxes (TDS/GST) will be deducted at source (TDS @ 5% under Section 194H of the Income Tax Act, where applicable).</li>
-  <li>GigSathi reserves the right to reject payouts for any onboarding containing fake documents, verification errors, or duplicates.</li>
-</ul>
-
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">3. Code of Conduct & Representation</h3>
-<p>While representing client brands (such as HDFC Bank, Zomato, Swiggy, etc.), you agree to adhere to strict ethical standards. You shall not collect cash from customers, misrepresent product terms, or use unethical tactics. Any report of misconduct will result in immediate termination of your portal access and forfeiture of outstanding commissions.</p>
-
-<div style="page-break-before: always; margin-top: 40px; border-top: 1px dashed #de3163; padding-top: 10px;"></div>
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">4. Confidentiality & Non-Disclosure Agreement</h3>
-<p>During the course of your engagement, you will have access to sensitive customer data, client links, and business models. You agree to:</p>
-<ul>
-  <li>Keep all customer contact coordinates (Names, Mobile numbers, emails, addresses) strictly confidential.</li>
-  <li>Not download, copy, or export data outside the official GigSathi tracking dashboard.</li>
-  <li>Not share client-specific onboarding links on public message boards unless authorized.</li>
-</ul>
-
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">5. Termination & Dispute Resolution</h3>
-<p>Either party may terminate this agreement at any time, with or without cause, by giving 7 days written notice. In case of any breach of confidentiality or client guidelines, GigSathi may terminate this agreement immediately. Any disputes arising out of this engagement shall be subject to the exclusive jurisdiction of the courts in New Delhi.</p>
-
-<div style="page-break-before: always; margin-top: 40px; border-top: 1px dashed #de3163; padding-top: 10px;"></div>
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">6. Execution & Digital Sign-off</h3>
-<p>By clicking "Accept & Sign Agreement" on your dashboard, you formally agree to all terms stated across this 4-page engagement contract.</p>
-<div style="margin-top: 40px; display: flex; justify-content: space-between;">
-  <div>
-    <p>___________________________</p>
-    <p><strong>Authorized Signatory</strong></p>
-    <p>GigSathi Solutions Pvt. Ltd.</p>
+    content: `<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
   </div>
-  <div style="text-align: right;">
-    <p><strong>Accepted Digitally By:</strong></p>
-    <p style="color: #2563eb; font-family: cursive; font-size: 1.1rem; padding: 4px; border: 1px dashed #2563eb;">{{name}}</p>
-    <p>IP Address Logged | Verified via Mobile OTP</p>
+  <div class="contract-body">
+    <h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.5rem; font-weight: 800;">CONTRACT OF ENGAGEMENT</h2>
+    <p><strong>Date:</strong> {{date}}</p>
+    <p><strong>To,</strong><br/>
+    <strong>Name:</strong> {{name}}<br/>
+    <strong>Email:</strong> {{email}}<br/>
+    <strong>Mobile:</strong> {{mobile}}</p>
+
+    <p><strong>Subject: Letter of Engagement as Independent Field Associate / Gig Partner</strong></p>
+
+    <p>Dear {{name}},</p>
+    <p>It is with great pleasure that GigSathi Solutions Private Limited extends this formal Letter of Engagement for the position of Independent Field Associate. This document outlines the terms and conditions governing your business association with the Company.</p>
+
+    <h3>1. Commencement & Scope of Engagement</h3>
+    <p>Your engagement shall commence from the date of your digital acceptance of this letter. You will operate as an independent contractor. This engagement does not constitute a relationship of employer-employee, agency, or partnership between you and GigSathi. You shall be responsible for defining your work hours, methods, and tactics in onboarding customers for our client projects.</p>
+
+    <h3>2. Client Project Sourcing</h3>
+    <p>You shall execute field acquisition and promotional activities for top corporate entities, banks, and fintech providers as listed in the active projects directory of your portal. You are expected to deliver authentic onboarding campaigns with absolute transparency and code compliance.</p>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 1 of 4 | Confidential - Employment Document
+  </div>
+</div>
+
+<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
+  </div>
+  <div class="contract-body">
+    <h3>3. Deliverables & Payout Commission Matrices</h3>
+    <p>Your compensation structure is linked directly to valid acquisitions approved by our client auditors. Commissions will be verified and disbursed on a weekly cycle as follows:</p>
+    <ul>
+      <li>Payouts are based strictly on the approved acquisitions list from verified fintech audits.</li>
+      <li>All applicable taxes (TDS @ 5% under Section 194H of the Income Tax Act) will be deducted at source.</li>
+      <li>GigSathi reserves the right to reject payouts or terminate agreements for any onboarding containing false coordinates, duplicates, or fake Aadhaar uploads.</li>
+    </ul>
+
+    <h3>4. Training & Compliance Updates</h3>
+    <p>The Company will provide digital process training materials and campaign orientation on your portal dashboard. You are required to stay updated with product guidelines and policy revisions issued from time to time. Deficiencies in onboarding quality may result in temporary suspension of specific project campaigns on your dashboard.</p>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 2 of 4 | Confidential - Employment Document
+  </div>
+</div>
+
+<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
+  </div>
+  <div class="contract-body">
+    <h3>5. Confidentiality & Non-Disclosure Agreement</h3>
+    <p>During your association, you will have access to sensitive customer contact data and client databases. You agree to treat all such information as strictly confidential. You shall not download, copy, distribute, or use candidate or customer records for personal gain or share them with third parties. Any breach of confidentiality will result in immediate termination of portal access and forfeiture of all pending commissions, alongside legal proceedings under the IT Act.</p>
+
+    <h3>6. Code of Conduct & Client Representation</h3>
+    <p>While promoting client services, you must behave ethically. You shall not collect cash payments from candidates or customers, misrepresent onboarding rewards, or use coercive practices. GigSathi maintains zero tolerance for field misconduct, and any reported infraction will lead to legal action.</p>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 3 of 4 | Confidential - Employment Document
+  </div>
+</div>
+
+<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
+  </div>
+  <div class="contract-body">
+    <h3>7. Separation & Notice Requirements</h3>
+    <p>Either party may terminate this business engagement at any time, with or without cause, by giving 7 days written notice. GigSathi reserves the right to terminate access immediately in case of breach of terms. All disputes are subject to the exclusive jurisdiction of the courts of New Delhi, India.</p>
+
+    <h3>8. Execution & Acceptance of Contract</h3>
+    <p>By clicking "Accept & Sign Contract" on your dashboard, you formally agree to all terms stated across this 4-page engagement contract.</p>
+    
+    <div style="margin-top: 60px; display: flex; justify-content: space-between;">
+      <div>
+        <p>___________________________</p>
+        <p><strong>Authorized Signatory</strong></p>
+        <p>GigSathi Solutions Pvt. Ltd.</p>
+      </div>
+      <div style="text-align: right;">
+        <p><strong>Accepted Digitally By:</strong></p>
+        <p style="color: #2563eb; font-family: cursive; font-size: 1.1rem; padding: 4px; border: 1px dashed #2563eb; display: inline-block;">{{name}}</p>
+        <p style="font-size: 0.7rem; color: #64748b; margin-top: 4px;">IP Address Logged | Verified via Mobile OTP</p>
+      </div>
+    </div>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 4 of 4 | Confidential - Employment Document
   </div>
 </div>`
   },
@@ -273,64 +336,139 @@ const SEED_TEMPLATES = [
     id: 'temp-hr',
     role: 'HR',
     title: 'HR Officer / Manager Offer Letter',
-    content: `<h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.6rem; border-bottom: 2px solid #de3163; padding-bottom: 10px;">EMPLOYMENT & ENGAGEMENT AGREEMENT (HR)</h2>
-<p><strong>Date:</strong> {{date}}</p>
-<p><strong>To,</strong><br>
-<strong>Name:</strong> {{name}}<br>
-<strong>Email:</strong> {{email}}<br>
-<strong>Mobile:</strong> {{mobile}}</p>
-
-<p><strong>Subject: Offer of Engagement as HR Officer & Recruitment Coordinator</strong></p>
-
-<p>Dear {{name}},</p>
-<p>We are delighted to extend this offer for engagement as an <strong>HR Officer & Recruitment Coordinator</strong> with GigSathi Solutions Private Limited. This contract details the administrative and operational responsibilities assigned to you and the remuneration structure.</p>
-
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">1. Roles & Core Responsibilities</h3>
-<p>Your primary workspace is the GigSathi HR Portal. Your operational scope includes:</p>
-<ul>
-  <li><strong>Lead Management:</strong> Reviewing and calling candidates assigned to you by the administrator.</li>
-  <li><strong>Document Verification:</strong> Reviewing Aadhar cards and resume profiles uploaded by candidates to ensure compliance.</li>
-  <li><strong>CRM Pipelines:</strong> Executing calling status updates, scheduling interviews, and logging feedback notes.</li>
-</ul>
-
-<div style="page-break-before: always; margin-top: 40px; border-top: 1px dashed #de3163; padding-top: 10px;"></div>
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">2. Compensation & Payout Matrix</h3>
-<p>For your recruiting services, you shall receive compensation based on the following targets:</p>
-<ul>
-  <li>Fixed monthly retainership of Rs. 15,000 for maintaining basic calling operations.</li>
-  <li>Variable sourcing incentives of Rs. 200 per candidate successfully onboarded and verified in HDFC, Zomato, or Swiggy campaigns.</li>
-  <li>All payouts will be processed on the 7th working day of each calendar month.</li>
-</ul>
-
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">3. Data Protection & Integrity Rules</h3>
-<p>As HR Coordinator, you will have access to database leads containing candidate names, mobiles, and identity proofs. You agree to adhere to strict corporate data security policies. You shall not extract, download, or share candidate lists with third parties or use them for other recruitments. Any leak of data will result in immediate termination and legal action under the IT Act.</p>
-
-<div style="page-break-before: always; margin-top: 40px; border-top: 1px dashed #de3163; padding-top: 10px;"></div>
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">4. Working Hours & Performance KPI</h3>
-<p>You are expected to dedicate 6 to 8 hours daily to maintain pipeline activities. Performance KPIs include:
-  <ul>
-    <li>Minimum calling operations of 50 candidates daily.</li>
-    <li>Maintaining an Interested-to-Hired conversion efficiency of at least 15%.</li>
-    <li>Resolving KYC approvals within 24 hours of candidate document submission.</li>
-  </ul>
-</p>
-
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">5. Termination & Jurisdiction</h3>
-<p>This agreement can be terminated by either party by giving 15 days notice. GigSathi reserves the right to terminate your panel access immediately in cases of non-performance or data breaches. All disputes are subject to the exclusive jurisdiction of the courts of New Delhi.</p>
-
-<div style="page-break-before: always; margin-top: 40px; border-top: 1px dashed #de3163; padding-top: 10px;"></div>
-<h3 style="margin-top: 20px; color: #de3163; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">6. Execution & Acceptance</h3>
-<p>By signing digitally, you confirm that you accept all corporate policies of GigSathi Solutions Pvt. Ltd.</p>
-<div style="margin-top: 40px; display: flex; justify-content: space-between;">
-  <div>
-    <p>___________________________</p>
-    <p><strong>Authorized Signatory</strong></p>
-    <p>GigSathi Solutions Pvt. Ltd.</p>
+    content: `<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
   </div>
-  <div style="text-align: right;">
-    <p><strong>Accepted Digitally By:</strong></p>
-    <p style="color: #2563eb; font-family: cursive; font-size: 1.1rem; padding: 4px; border: 1px dashed #2563eb;">{{name}}</p>
-    <p>IP Address Logged | Verified via Mobile OTP</p>
+  <div class="contract-body">
+    <h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.4rem; font-weight: 800; border-bottom: 2px solid #de3163; padding-bottom: 8px;">APPOINTMENT CUM OFFER LETTER</h2>
+    <p><strong>Date:</strong> {{date}}</p>
+    <p><strong>Employee Name:</strong> {{name}}<br/>
+    <strong>Address:</strong> {{address}}</p>
+
+    <p>Dear Mr./Ms. {{name}},</p>
+    <p>It is with great pleasure that GigSathi Solutions Private Limited extends this formal Offer of Employment for the position of HR Executive. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time.</p>
+
+    <h3>1. Appointment and Commencement of Employment</h3>
+    <p>You are hereby appointed as an HR Executive with GigSathi Solutions Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice.</p>
+
+    <h3>2. Nature of Employment</h3>
+    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of GigSathi Solutions Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management.</p>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 1 of 4 | Confidential - Employment Document
+  </div>
+</div>
+
+<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
+  </div>
+  <div class="contract-body">
+    <h3>3. Probation Period</h3>
+    <p>Your employment shall initially remain on probation for a continuous period of Three (3) Months commencing from your official date of joining. The objective of this probationary period is to enable the Company to evaluate your professional competence, recruitment skills, communication ability, attendance, punctuality, discipline, adaptability, work ethics, and overall suitability for continued employment. You acknowledge that confirmation of employment shall become effective only after receiving a written confirmation issued by the authorized representative of the Company.</p>
+
+    <h3>4. Roles and Responsibilities</h3>
+    <p>As an HR Executive, you shall play a vital role in strengthening the Company's workforce by identifying, attracting, evaluating, and coordinating suitable candidates for various positions. Your responsibilities shall include sourcing candidates through different recruitment channels, conducting initial telephonic screenings, scheduling interviews, maintaining regular communication with applicants, collecting and verifying required documents, coordinating with reporting managers, and ensuring the smooth completion of the hiring process. You shall maintain accurate recruitment records, prepare daily and monthly reports, and ensure that all information entered into the systems is authentic.</p>
+
+    <h3>5. Working Hours and Attendance</h3>
+    <p>The normal working schedule for this position shall be from 11:00 A.M. to 7:30 P.M., comprising eight working hours together with the applicable break period as determined by the Company. In the event an employee fails to log in or report for work by 11:00 A.M. without obtaining prior approval, the Company reserves the right to treat such attendance as a Half-Day, irrespective of the actual reporting time thereafter. Repeated late logins or irregular attendance shall be viewed as a serious breach of workplace discipline.</p>
+
+    <h3>6. Performance Evaluation and Recruitment Expectations</h3>
+    <p>The position of HR Executive is a performance-oriented role. As part of the performance framework, the Employee shall be expected to facilitate the successful hiring of Forty (40) candidates during each monthly evaluation cycle. For the purpose of salary eligibility, the Employee shall be required to achieve at least Sixty Percent (60%) of the prescribed monthly performance expectation together with satisfactory attendance and compliance with Company policies. Where performance remains below the minimum acceptable benchmark, the Company may determine the monthly remuneration proportionately based upon actual performance.</p>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 2 of 4 | Confidential - Employment Document
+  </div>
+</div>
+
+<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
+  </div>
+  <div class="contract-body">
+    <h3>7. Compensation and Salary Administration</h3>
+    <p>Your monthly consolidated salary for the position of HR Executive shall be ₹9,000/- (Rupees Nine Thousand Only), subject to statutory deductions, if applicable, and the terms contained in this Appointment Letter. Salary shall become due only after the successful completion of each thirty (30) days of continuous service, and the Company shall process the salary within the following seven (7) days through the approved mode of payment. The Employee understands that salary is linked with actual attendance, performance, and fulfillment of assigned responsibilities.</p>
+
+    <h3>8. Leave, Holidays and Absenteeism</h3>
+    <p>The weekly holiday for employees shall ordinarily be Sunday. Except where specifically approved by the Management in writing, the Company shall not provide any paid leave or paid holiday. Failure to inform the Company before remaining absent shall be treated as unauthorized absence, and the concerned day shall be considered Leave Without Pay (LWP). If the Employee remains absent from duty for more than three (3) consecutive working days without prior approval, such conduct may be treated as abandonment of employment.</p>
+
+    <h3>9. Professional Conduct and Workplace Discipline</h3>
+    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, or breach of confidentiality shall constitute a violation of employment obligations and may invite disciplinary proceedings.</p>
+
+    <h3>10. Confidentiality and Non-Disclosure</h3>
+    <p>During the course of your employment, you may have access to confidential information relating to the Company's business operations, candidate databases, and proprietary systems. You shall treat all such information as strictly confidential and shall not disclose, copy, or use it for any personal benefit or for the benefit of any third party. This obligation shall continue even after the cessation of your employment.</p>
+
+    <h3>11. Company Property and Data Protection</h3>
+    <p>All documents, files, databases, official email accounts, and login credentials provided by the Company shall remain the exclusive property of GigSathi Solutions Private Limited. Upon resignation, termination, or whenever directed, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices.</p>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 3 of 4 | Confidential - Employment Document
+  </div>
+</div>
+
+<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="letterhead-logo">
+    <div class="logo-main">GigSathi</div>
+    <div class="company-cin">
+      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+    </div>
+  </div>
+  <div class="contract-body">
+    <h3>12. Conflict of Interest</h3>
+    <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, or commercial venture that may conflict with the interests of GigSathi Solutions Private Limited.</p>
+
+    <h3>13. Disciplinary Action and Corrective Measures</h3>
+    <p>In situations where an employee fails to maintain acceptable standards of performance, attendance, behaviour, discipline, or compliance, the Company reserves the right to initiate appropriate corrective and disciplinary measures (counselling, warnings, or suspension).</p>
+
+    <h3>14. Termination of Employment</h3>
+    <p>The Company reserves the right to terminate employment where the Employee demonstrates unsatisfactory performance, repeated failure to meet assigned responsibilities, violation of Company policies, misconduct, or breach of confidentiality. In cases where an employee remains absent from work for more than three consecutive working days without prior approval, it will be treated as abandonment.</p>
+
+    <h3>15. Resignation and Notice Requirements</h3>
+    <p>In case the Employee wishes to voluntarily discontinue employment, the Employee shall provide written communication to the Management in advance as per the separation procedure. Resignation shall be effective only after acceptance and handover.</p>
+
+    <h3>16. Governing Law and Jurisdiction</h3>
+    <p>This Appointment Letter and the employment relationship shall be governed by and interpreted in accordance with the applicable laws of India. Any dispute arising out of this agreement shall be subject to the exclusive jurisdiction of the competent courts located in New Delhi, India.</p>
+
+    <h3>17. Employee Declaration, Undertaking & Acceptance</h3>
+    <p>I confirm that I have carefully read and understood all terms and conditions of this Appointment Letter. I voluntarily accept this offer of employment and agree to comply with them throughout my association with the Company.</p>
+
+    <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+      <div>
+        <p>___________________________</p>
+        <p><strong>Authorized Signatory</strong></p>
+        <p>GigSathi Solutions Pvt. Ltd.</p>
+      </div>
+      <div style="text-align: right;">
+        <p><strong>Accepted Digitally By:</strong></p>
+        <p style="color: #2563eb; font-family: cursive; font-size: 1.1rem; padding: 4px; border: 1px dashed #2563eb; display: inline-block;">{{name}}</p>
+        <p style="font-size: 0.7rem; color: #64748b; margin-top: 4px;">IP Address Logged | Verified via Mobile OTP</p>
+      </div>
+    </div>
+  </div>
+  <div class="contract-footer-info">
+    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+    Contact: support@gigsathi.com | Page 4 of 4 | Confidential - Employment Document
   </div>
 </div>`
   }

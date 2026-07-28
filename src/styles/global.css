@@ -793,3 +793,113 @@ h1, h2, h3, h4, h5, h6 {
 .metric-orange { border-left: 4px solid var(--accent-color) !important; }
 .metric-blue { border-left: 4px solid var(--info-color) !important; }
 .metric-cherry { border-left: 4px solid var(--primary-color) !important; }
+
+/* Professional Contract Document Styles */
+.contract-document-wrapper {
+  background-color: #f8fafc;
+  padding: 30px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  max-height: 700px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.contract-page-sheet {
+  position: relative;
+  background: #ffffff;
+  color: #334155;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 60px 50px;
+  margin: 0 auto 30px auto;
+  max-width: 800px;
+  min-height: 1050px; /* A4 size standard ratio */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+
+.contract-page-sheet .watermark-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  font-size: 4.8rem;
+  font-weight: 900;
+  color: rgba(222, 49, 99, 0.035) !important; /* extremely faint cherry red */
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  letter-spacing: 0.12em;
+  z-index: 1;
+}
+
+.contract-page-sheet .letterhead-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 14px;
+  margin-bottom: 30px;
+}
+
+.contract-page-sheet .letterhead-logo .logo-main {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  letter-spacing: -0.02em;
+}
+
+.contract-page-sheet .letterhead-logo .company-cin {
+  text-align: right;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.contract-page-sheet .contract-body {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  text-align: justify;
+  color: #334155;
+}
+
+.contract-page-sheet .contract-body p {
+  margin-bottom: 14px;
+}
+
+.contract-page-sheet .contract-body h3 {
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+  font-size: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.contract-page-sheet .contract-body ul {
+  margin-bottom: 14px;
+  padding-left: 20px;
+}
+
+.contract-page-sheet .contract-body li {
+  margin-bottom: 6px;
+}
+
+.contract-page-sheet .contract-footer-info {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 14px;
+  margin-top: 30px;
+  font-size: 0.68rem;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.4;
+}
