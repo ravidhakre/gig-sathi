@@ -960,10 +960,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: If content does not contain "Subject: Letter of Engagement", auto-upgrade in Firestore
-          const candidate = templates.find(t => t.role === 'Candidate');
-          if (candidate && candidate.content && !candidate.content.includes("Subject: Letter of Engagement")) {
-            console.log('GigSathi: Upgrading Firestore offer templates to professional version...');
+          // Self-healing check: If HR template does not contain "APPOINTMENT CUM OFFER LETTER", auto-upgrade in Firestore
+          const hr = templates.find(t => t.role === 'HR');
+          if (hr && hr.content && !hr.content.includes("APPOINTMENT CUM OFFER LETTER")) {
+            console.log('GigSathi: Upgrading Firestore offer templates to 20-section appointment layout...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -975,9 +975,10 @@ export const dbService = {
         console.error(e);
       }
     }
-    // Fallback logic for Local Storage: Upgrade if old
+    // Fallback logic for Local Storage: Upgrade if old HR template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
-    if (local && local[0] && local[0].content && !local[0].content.includes("Subject: Letter of Engagement")) {
+    const localHR = local ? local.find(t => t.role === 'HR') : null;
+    if (localHR && localHR.content && !localHR.content.includes("APPOINTMENT CUM OFFER LETTER")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
