@@ -896,10 +896,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .contract-page-sheet .contract-footer-info {
-  position: absolute;
-  bottom: 24px;
-  left: 45px;
-  right: 45px;
+  margin-top: auto; /* flexbox push to bottom */
   border-top: 1px solid #e2e8f0;
   padding-top: 10px;
   font-size: 0.65rem;
@@ -911,7 +908,7 @@ h1, h2, h3, h4, h5, h6 {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 1.2cm 1.5cm; /* standard margins so default printer settings fit perfectly */
   }
   body {
     background-color: #ffffff;
@@ -920,12 +917,14 @@ h1, h2, h3, h4, h5, h6 {
   }
   .contract-page-sheet {
     margin: 0 !important;
-    padding: 40px 45px 60px 45px !important; /* compact padding in print */
-    width: 210mm !important;
-    height: 297mm !important;
+    padding: 0 !important; /* let page margins handle borders */
+    width: 100% !important;
+    min-height: 25cm !important; /* standard printed page height */
     box-shadow: none !important;
     border: none !important;
     page-break-after: always !important;
     page-break-inside: avoid !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 }

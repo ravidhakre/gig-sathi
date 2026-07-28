@@ -42,10 +42,10 @@ const HRDashboard = () => {
               position: relative;
               background: #ffffff;
               color: #334155;
-              padding: 50px 40px;
+              padding: 40px 45px;
               margin: 0 auto;
               max-width: 800px;
-              min-height: 1050px;
+              min-height: 1040px;
               display: flex;
               flex-direction: column;
               border: none;
@@ -59,7 +59,7 @@ const HRDashboard = () => {
               transform: translate(-50%, -50%) rotate(-35deg);
               font-size: 5rem;
               font-weight: 900;
-              color: rgba(222, 49, 99, 0.045) !important;
+              color: rgba(222, 49, 99, 0.04) !important;
               text-transform: uppercase;
               pointer-events: none;
               user-select: none;
@@ -72,68 +72,77 @@ const HRDashboard = () => {
               justify-content: space-between;
               align-items: center;
               border-bottom: 2px solid #de3163;
-              padding-bottom: 12px;
-              margin-bottom: 24px;
+              padding-bottom: 10px;
+              margin-bottom: 20px;
             }
             .contract-page-sheet .letterhead-logo .logo-main {
-              font-size: 1.8rem;
+              font-size: 1.6rem;
               font-weight: 800;
               color: #de3163;
               letter-spacing: -0.02em;
             }
             .contract-page-sheet .letterhead-logo .company-cin {
               text-align: right;
-              font-size: 0.7rem;
+              font-size: 0.65rem;
               color: #64748b;
-              line-height: 1.4;
+              line-height: 1.3;
             }
             .contract-page-sheet .contract-body {
               flex: 1;
               position: relative;
               z-index: 2;
-              font-size: 0.85rem;
-              line-height: 1.6;
+              font-size: 11px;
+              line-height: 1.45;
               text-align: justify;
             }
             .contract-page-sheet .contract-body p {
-              margin-bottom: 12px;
+              margin-bottom: 8px;
             }
             .contract-page-sheet .contract-body h3 {
-              margin-top: 20px;
-              margin-bottom: 8px;
+              margin-top: 14px;
+              margin-bottom: 6px;
               color: #de3163;
-              font-size: 0.95rem;
+              font-size: 12px;
+              font-weight: bold;
               border-bottom: 1px solid #f1f5f9;
-              padding-bottom: 4px;
+              padding-bottom: 2px;
               text-transform: uppercase;
             }
             .contract-page-sheet .contract-body ul {
-              margin-bottom: 12px;
+              margin-bottom: 8px;
               padding-left: 20px;
             }
             .contract-page-sheet .contract-body li {
               margin-bottom: 4px;
             }
             .contract-page-sheet .contract-footer-info {
+              margin-top: auto;
               border-top: 1px solid #e2e8f0;
-              padding-top: 12px;
-              margin-top: 20px;
-              font-size: 0.65rem;
+              padding-top: 10px;
+              font-size: 10px;
               color: #64748b;
               text-align: center;
-              line-height: 1.4;
+              line-height: 1.3;
             }
             @media print {
+              @page {
+                size: A4 portrait;
+                margin: 1.2cm 1.5cm;
+              }
               body {
                 background: #ffffff;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
               }
               .contract-page-sheet {
-                padding: 30px 20px !important;
+                padding: 0 !important;
                 margin: 0 !important;
-                min-height: 100% !important;
+                width: 100% !important;
+                min-height: 25cm !important;
                 page-break-after: always !important;
+                page-break-inside: avoid !important;
+                display: flex !important;
+                flex-direction: column !important;
               }
             }
           </style>
