@@ -167,29 +167,51 @@ const Home = () => {
       </section>
 
       {/* Stats Banner */}
-      <section style={statsSectionStyle}>
-        <div className="container grid-3" style={{ textAlign: 'center' }}>
-          <div style={statCardStyle}>
-            <div style={statNumberStyle}>{hCMS.statsCandidates}</div>
-            <div style={statLabelStyle}>Active Field Force</div>
-          </div>
-          <div style={statCardStyle}>
-            <div style={statNumberStyle}>{hCMS.statsPartners}</div>
-            <div style={statLabelStyle}>Corporate Clients Scaled</div>
-          </div>
-          <div style={statCardStyle}>
-            <div style={statNumberStyle}>{hCMS.statsCommission}</div>
-            <div style={statLabelStyle}>Commissions Disbursed</div>
+      <section className="section-padding" style={{ backgroundColor: 'var(--bg-surface)', borderBottom: '1px solid var(--border-color)', borderTop: '1px solid var(--border-color)' }}>
+        <div className="container">
+          <div className="stats-container-premium">
+            {/* Stat Card 1 */}
+            <div className="stat-card-premium">
+              <div className="stat-icon-wrapper">
+                <Users size={28} />
+              </div>
+              <div className="stat-info">
+                <div className="stat-number-premium">{hCMS.statsCandidates}</div>
+                <div className="stat-label-premium">Active Field Force</div>
+              </div>
+            </div>
+
+            {/* Stat Card 2 */}
+            <div className="stat-card-premium">
+              <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--secondary-light)', color: 'var(--secondary-color)' }}>
+                <Briefcase size={28} />
+              </div>
+              <div className="stat-info">
+                <div className="stat-number-premium" style={{ color: 'var(--secondary-color)' }}>{hCMS.statsPartners}</div>
+                <div className="stat-label-premium">Corporate Clients Scaled</div>
+              </div>
+            </div>
+
+            {/* Stat Card 3 */}
+            <div className="stat-card-premium">
+              <div className="stat-icon-wrapper" style={{ backgroundColor: 'var(--accent-light)', color: 'var(--accent-color)' }}>
+                <TrendingUp size={28} />
+              </div>
+              <div className="stat-info">
+                <div className="stat-number-premium" style={{ color: 'var(--accent-color)' }}>{hCMS.statsCommission}</div>
+                <div className="stat-label-premium">Commissions Disbursed</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Divisions Section */}
       <section className="section-padding" style={{ backgroundColor: 'rgba(255,255,255,0.01)' }}>
-        <div className="container" style={{ textAlign: 'center', marginBottom: '60px' }}>
+        <div className="container" style={{ textAlign: 'left', marginBottom: '60px' }}>
           <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>OUR DOMAINS</span>
           <h2 className="section-heading">Hiring Programs We Manage</h2>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '12px auto 0 auto' }}>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '680px', margin: '12px 0 0 0' }}>
             We recruit, verify, and train personnel across multiple channels to ensure absolute delivery metrics.
           </p>
         </div>

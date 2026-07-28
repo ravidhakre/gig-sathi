@@ -530,19 +530,19 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 992px) {
   .slide-content-grid {
     grid-template-columns: 1fr !important;
-    text-align: left !important; /* Left alignment path as requested */
-    padding: 100px 24px 40px 24px !important; /* Shifted higher up */
+    text-align: left !important;
+    padding: 100px 24px 40px 24px !important;
     align-content: flex-start;
     height: 100%;
   }
   .slide-text-container {
-    align-items: flex-start !important; /* Align children (badge, buttons) to left */
+    align-items: flex-start !important;
     text-align: left !important;
     width: 100% !important;
     gap: 20px !important;
   }
   .slide-header {
-    font-size: 2.5rem !important; /* Balanced big heading */
+    font-size: 2.5rem !important;
     line-height: 1.2;
     text-align: left !important;
     width: 100% !important;
@@ -562,7 +562,7 @@ h1, h2, h3, h4, h5, h6 {
     display: none !important;
   }
   .slider-arrow {
-    display: none !important; /* Hide arrows on mobile for clean look */
+    display: none !important;
   }
 }
 
@@ -601,8 +601,76 @@ h1, h2, h3, h4, h5, h6 {
     gap: 30px !important;
   }
   .section-heading {
-    font-size: 1.8rem !important; /* Responsive, professional sizing */
+    font-size: 1.8rem !important;
     line-height: 1.25;
     margin-bottom: 12px;
+  }
+}
+
+/* -------------------------------------------------------------
+   Premium Stats Section Card Styles
+   ------------------------------------------------------------- */
+.stats-container-premium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.stat-card-premium {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  text-align: left;
+}
+
+.stat-card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(222, 49, 99, 0.25);
+}
+
+.stat-icon-wrapper {
+  padding: 16px;
+  border-radius: 50%;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.stat-number-premium {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  line-height: 1.1;
+}
+
+.stat-label-premium {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 992px) {
+  .stats-container-premium {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
   }
 }
