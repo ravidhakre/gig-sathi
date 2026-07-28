@@ -111,13 +111,13 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background-color: var(--primary-color);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+  box-shadow: 0 4px 14px rgba(222, 49, 99, 0.2);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3), var(--shadow-glow);
+  box-shadow: 0 6px 20px rgba(222, 49, 99, 0.3), var(--shadow-glow);
 }
 
 .btn-secondary {

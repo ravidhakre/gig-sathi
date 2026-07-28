@@ -1,9 +1,9 @@
 /* CSS Variables for GigSathi - Modern Light Premium Theme */
 :root {
   /* Color Palette */
-  --primary-color: #059669;      /* Rich Emerald Green for headings/contrast */
-  --primary-hover: #047857;
-  --primary-light: rgba(5, 150, 105, 0.1);
+  --primary-color: #DE3163;      /* Cerise / Pinkish Red (#DE3163) */
+  --primary-hover: #c21b50;
+  --primary-light: rgba(222, 49, 99, 0.1);
   
   --secondary-color: #4f46e5;    /* Indigo */
   --secondary-hover: #4338ca;
@@ -15,7 +15,7 @@
   --danger-color: #dc2626;       /* Crimson Red */
   --danger-light: rgba(220, 38, 38, 0.1);
   
-  --success-color: #059669;
+  --success-color: #059669;      /* Keeping standard success indicators green */
   --info-color: #2563eb;
 
   /* Neutrals (Light Theme Reset) */
@@ -23,7 +23,7 @@
   --bg-surface: #f8fafc;         /* Soft Gray Surface */
   --bg-surface-hover: #f1f5f9;   /* Hover gray */
   --border-color: #e2e8f0;       /* Light border */
-  --border-focus: rgba(5, 150, 105, 0.4);
+  --border-focus: rgba(222, 49, 99, 0.4);
   
   --text-primary: #0f172a;       /* Dark Slate Text */
   --text-secondary: #475569;     /* Slate Secondary Text */
@@ -47,7 +47,7 @@
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
-  --shadow-glow: 0 0 20px rgba(5, 150, 105, 0.15);
+  --shadow-glow: 0 0 20px rgba(222, 49, 99, 0.15);
 
   /* Transitions */
   --transition-fast: 0.15s ease;
