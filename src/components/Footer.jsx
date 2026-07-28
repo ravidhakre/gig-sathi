@@ -10,7 +10,7 @@ const Footer = () => {
         <div style={colStyle}>
           <Link to="/" style={logoStyle}>
             <Briefcase size={28} color="var(--primary-color)" />
-            <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#fff' }}>
+            <span style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-primary)' }}>
               Gig<span style={{ color: 'var(--primary-color)' }}>Sathi</span>
             </span>
           </Link>
@@ -75,7 +75,7 @@ const Footer = () => {
 
 // Inline Styles
 const footerStyle = {
-  backgroundColor: '#070a12',
+  backgroundColor: 'var(--bg-surface)',
   borderTop: '1px solid var(--border-color)',
   padding: '60px 24px 30px 24px',
   color: 'var(--text-secondary)',
@@ -109,7 +109,7 @@ const descStyle = {
 };
 
 const titleStyle = {
-  color: '#fff',
+  color: 'var(--primary-color)',
   fontSize: '1.1rem',
   fontWeight: '700'
 };

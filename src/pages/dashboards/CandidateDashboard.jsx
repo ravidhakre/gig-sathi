@@ -454,7 +454,7 @@ const metricLabelStyle = {
 const metricValueStyle = {
   fontSize: '1.6rem',
   fontWeight: '800',
-  color: '#fff',
+  color: 'var(--text-primary)',
   marginTop: '4px'
 };
 

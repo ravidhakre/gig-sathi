@@ -98,7 +98,7 @@ const Profile = () => {
       
       {/* Page Title */}
       <div>
-        <h2 style={{ fontSize: '1.8rem', color: '#fff', marginBottom: '8px' }}>Complete Profile & KYC</h2>
+        <h2 style={{ fontSize: '1.8rem', color: 'var(--primary-color)', marginBottom: '8px' }}>Complete Profile & KYC</h2>
         <p style={{ color: 'var(--text-secondary)' }}>
           Please complete your KYC verify verification by entering address coordinates and Aadhar documents.
         </p>
@@ -312,7 +312,7 @@ const Profile = () => {
                   {files.resume ? (
                     <div style={docPreviewStyle}>
                       <FileText size={24} color="var(--secondary-color)" />
-                      <span style={{ fontSize: '0.9rem', color: '#fff', flexGrow: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <span style={{ fontSize: '0.9rem', color: 'var(--text-primary)', flexGrow: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         resume_loaded.pdf
                       </span>
                       <label style={changeFileBtnStyle}>

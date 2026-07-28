@@ -92,7 +92,7 @@ const Auth = () => {
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '12px' }}>
             <Briefcase size={32} color="var(--primary-color)" />
-            <span style={{ fontWeight: 800, fontSize: '1.8rem', color: '#fff' }}>
+            <span style={{ fontWeight: 800, fontSize: '1.8rem', color: 'var(--text-primary)' }}>
               Gig<span style={{ color: 'var(--primary-color)' }}>Sathi</span>
             </span>
           </div>
@@ -212,7 +212,7 @@ const Auth = () => {
             {/* Test Credentials Display */}
             {!isSignup && (
               <div style={credentialsBoxStyle}>
-                <h5 style={{ color: '#fff', marginBottom: '8px', fontSize: '0.85rem' }}>🔑 DEMO ACCOUNTS (Use password: password123)</h5>
+                <h5 style={{ color: 'var(--primary-color)', marginBottom: '8px', fontSize: '0.85rem' }}>🔑 DEMO ACCOUNTS (Use password: password123)</h5>
                 <ul style={{ paddingLeft: '16px', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   <li><strong>Admin:</strong> admin@gigsathi.com</li>
                   <li><strong>HR Manager:</strong> hr@gigsathi.com</li>

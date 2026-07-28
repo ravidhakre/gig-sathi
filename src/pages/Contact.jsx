@@ -186,7 +186,7 @@ const iconBoxStyle = {
 const infoTitleStyle = {
   fontSize: '1rem',
   fontWeight: '700',
-  color: '#fff',
+  color: 'var(--primary-color)',
   marginBottom: '4px'
 };
 

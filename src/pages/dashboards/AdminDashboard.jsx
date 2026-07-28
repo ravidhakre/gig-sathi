@@ -435,7 +435,7 @@ const AdminDashboard = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>PAYOUT COMMISSION</div>
-                      <strong style={{ fontSize: '1.1rem', color: '#fff' }}>{p.commission}</strong>
+                      <strong style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>{p.commission}</strong>
                     </div>
                   </div>
 

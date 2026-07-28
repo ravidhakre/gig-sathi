@@ -32,7 +32,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" style={logoStyle}>
             <Briefcase size={28} color="var(--primary-color)" />
-            <span style={{ fontWeight: 800, fontSize: '1.5rem', color: '#fff' }}>
+            <span style={{ fontWeight: 800, fontSize: '1.5rem', color: 'var(--text-primary)' }}>
               Gig<span style={{ color: 'var(--primary-color)' }}>Sathi</span>
             </span>
           </Link>
@@ -145,7 +145,7 @@ const navbarStyle = {
   top: 0,
   left: 0,
   zIndex: 1000,
-  backgroundColor: 'rgba(11, 15, 25, 0.85)',
+  backgroundColor: 'rgba(255, 255, 255, 0.85)',
   backdropFilter: 'blur(12px)',
   borderBottom: '1px solid var(--border-color)',
   display: 'flex',
@@ -185,7 +185,7 @@ const desktopActionsStyle = {
 
 const mobileMenuBtnStyle = {
   display: 'none',
-  color: '#fff'
+  color: 'var(--text-primary)'
 };
 
 const mobileDrawerStyle = {
