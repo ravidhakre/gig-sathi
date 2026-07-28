@@ -969,10 +969,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: If HR template does not contain "Performance Improvement Process", auto-upgrade in Firestore
+          // Self-healing check: If HR template contains old footers or lacks new sections, auto-upgrade in Firestore
           const hr = templates.find(t => t.role === 'HR');
-          if (hr && hr.content && !hr.content.includes("Performance Improvement Process")) {
-            console.log('GigSathi: Upgrading Firestore offer templates to 20-section appointment layout...');
+          if (hr && hr.content && (hr.content.includes("Page 1 of 4") || !hr.content.includes("Performance Improvement Process"))) {
+            console.log('GigSathi: Upgrading Firestore offer templates to footerless 20-section layout...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -987,7 +987,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old HR template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (localHR && localHR.content && !localHR.content.includes("Performance Improvement Process")) {
+    if (localHR && localHR.content && (localHR.content.includes("Page 1 of 4") || !localHR.content.includes("Performance Improvement Process"))) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
