@@ -811,7 +811,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #334155;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-sm);
-  padding: 60px 50px;
+  padding: 60px 50px 80px 50px; /* added bottom padding to clear absolute footer */
   margin: 0 auto 30px auto;
   max-width: 800px;
   min-height: 1050px; /* A4 size standard ratio */
@@ -868,6 +868,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
   text-align: justify;
   color: #334155;
+  padding-bottom: 60px; /* clear absolute footer */
 }
 
 .contract-page-sheet .contract-body p {
@@ -895,11 +896,36 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .contract-page-sheet .contract-footer-info {
+  position: absolute;
+  bottom: 30px;
+  left: 50px;
+  right: 50px;
   border-top: 1px solid #e2e8f0;
   padding-top: 14px;
-  margin-top: 30px;
   font-size: 0.68rem;
   color: #64748b;
   text-align: center;
   line-height: 1.4;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  body {
+    background-color: #ffffff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .contract-page-sheet {
+    margin: 0 !important;
+    padding: 60px 50px 80px 50px !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+  }
 }
