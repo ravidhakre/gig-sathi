@@ -215,7 +215,7 @@ const SEED_TEMPLATES = [
     role: 'Candidate',
     title: 'Candidate / Field Executive Offer Letter',
     content: `<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -243,13 +243,10 @@ const SEED_TEMPLATES = [
     <h3>2. Client Project Sourcing</h3>
     <p>You shall execute field acquisition and promotional activities for top corporate entities, banks, and fintech providers as listed in the active projects directory of your portal. You are expected to deliver authentic onboarding campaigns with absolute transparency and code compliance.</p>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 1 of 4
-  </div>
 </div>
 
 <div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -270,13 +267,10 @@ const SEED_TEMPLATES = [
     <h3>4. Training & Compliance Updates</h3>
     <p>The Company will provide digital process training materials and campaign orientation on your portal dashboard. You are required to stay updated with product guidelines and policy revisions issued from time to time. Deficiencies in onboarding quality may result in temporary suspension of specific project campaigns on your dashboard.</p>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 2 of 4
-  </div>
 </div>
 
 <div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -292,13 +286,10 @@ const SEED_TEMPLATES = [
     <h3>6. Code of Conduct & Client Representation</h3>
     <p>While promoting client services, you must behave ethically. You shall not collect cash payments from candidates or customers, misrepresent onboarding rewards, or use coercive practices. GigSathi maintains zero tolerance for field misconduct, and any reported infraction will lead to legal action.</p>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 3 of 4
-  </div>
 </div>
 
 <div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -327,9 +318,6 @@ const SEED_TEMPLATES = [
       </div>
     </div>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 4 of 4
-  </div>
 </div>`
   },
   {
@@ -337,7 +325,7 @@ const SEED_TEMPLATES = [
     role: 'HR',
     title: 'HR Officer / Manager Offer Letter',
     content: `<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -361,13 +349,10 @@ const SEED_TEMPLATES = [
     <h3>2. Nature of Employment</h3>
     <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of GigSathi Solutions Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment.</p>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 1 of 4
-  </div>
 </div>
 
 <div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -389,13 +374,10 @@ const SEED_TEMPLATES = [
     <h3>6. Performance Evaluation and Recruitment Expectations</h3>
     <p>The position of HR Executive is a performance-oriented role in which productivity and recruitment efficiency are important factors for evaluating professional contribution. As part of the performance framework, the Employee shall be expected to facilitate the successful hiring of Forty (40) candidates during each monthly evaluation cycle. For the purpose of salary eligibility, the Employee shall be required to achieve at least Sixty Percent (60%) of the prescribed monthly performance expectation together with satisfactory attendance and compliance with Company policies. Where performance remains below the minimum acceptable benchmark, the Company may determine the monthly remuneration proportionately based upon actual performance, attendance, work quality, and overall contribution.</p>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 2 of 4
-  </div>
 </div>
 
 <div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -423,13 +405,10 @@ const SEED_TEMPLATES = [
     <h3>12. Conflict of Interest and Exclusive Employment</h3>
     <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, partnership, commission-based activity, or commercial venture that may conflict with the interests of GigSathi Solutions Private Limited. Any violation of this provision shall constitute serious misconduct and may result in disciplinary action.</p>
   </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 3 of 4
-  </div>
 </div>
 
 <div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL</div>
+  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
@@ -475,9 +454,6 @@ const SEED_TEMPLATES = [
         <p style="font-size: 0.7rem; color: #64748b; margin-top: 4px;">IP Address Logged | Verified via Mobile OTP</p>
       </div>
     </div>
-  </div>
-  <div class="contract-footer-info">
-    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 4 of 4
   </div>
 </div>`
   }
