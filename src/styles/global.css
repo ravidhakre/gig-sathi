@@ -462,7 +462,7 @@ h1, h2, h3, h4, h5, h6 {
    Slider Responsive Stylesheet
    ------------------------------------------------------------- */
 .slider-section {
-  height: 100vh; /* Lock to full screen height */
+  height: 100vh;
   width: 100%;
   position: relative;
   background-color: var(--primary-color);
@@ -508,7 +508,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.03em;
-  color: #ffffff !important; /* Ensure headings in slider are white */
+  color: #ffffff !important;
 }
 
 .slide-sub {
@@ -523,39 +523,50 @@ h1, h2, h3, h4, h5, h6 {
   .slide-content-grid {
     grid-template-columns: 1fr !important;
     text-align: center;
-    padding: 0 20px;
+    padding: 120px 24px 40px 24px !important; /* Shifted higher up to leave no empty bottom spaces */
+    align-content: flex-start;
+    height: 100%;
   }
   .slide-text-container {
     align-items: center;
     text-align: center;
     width: 100% !important;
+    gap: 22px !important;
   }
   .slide-header {
-    font-size: 2.2rem !important; /* Large text on mobile, no empty spaces */
-    line-height: 1.25;
+    font-size: 2.6rem !important; /* Bold, large text size to fill screen */
+    line-height: 1.2;
     text-align: center;
     width: 100% !important;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    font-weight: 800;
+    color: #ffffff !important;
   }
   .slide-sub {
-    font-size: 1.05rem;
+    font-size: 1.12rem !important;
     text-align: center;
     max-width: 100% !important;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.92) !important;
+    line-height: 1.6;
   }
   .hero-glow-card {
-    display: none !important; /* Hide details card to save mobile viewport */
+    display: none !important;
   }
 }
 
 @media (max-width: 480px) {
+  .slide-content-grid {
+    padding-top: 100px !important; /* Clean start height for mobile screens */
+  }
   .slide-header {
-    font-size: 1.9rem !important; /* Fill up space on small mobile screen */
+    font-size: 2.1rem !important;
+    line-height: 1.25;
   }
   .slide-sub {
-    font-size: 0.95rem;
+    font-size: 1.05rem !important;
   }
   .slider-section {
-    height: 100vh !important; /* Keep viewport height */
+    height: 100vh !important;
   }
 }

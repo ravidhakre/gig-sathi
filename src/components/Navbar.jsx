@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { Menu, X, Briefcase, LogOut, User, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Briefcase, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const { currentUser, logout } = useApp();
@@ -10,7 +10,18 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  const isHome = location.pathname === '/';
+
   useEffect(() => {
+    // If not on the Home page, the navbar MUST always be solid black for clear contrast
+    if (!isHome) {
+      setIsScrolled(true);
+      return;
+    }
+
+    // On Home page, detect scroll
+    setIsScrolled(window.scrollY > 50);
+
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setIsScrolled(true);
@@ -20,7 +31,7 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHome]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -38,7 +49,7 @@ const Navbar = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
-  // Dynamic Styles based on Scroll State
+  // Dynamic Navbar Styles
   const navbarStyle = {
     height: 'var(--navbar-height)',
     width: '100%',
@@ -115,8 +126,8 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button className="mobile-menu-btn" onClick={toggleMenu} style={{ ...mobileMenuBtnStyle, color: '#ffffff' }}>
+          {/* Mobile Menu Button - Controlled entirely via CSS responsive classes */}
+          <button className="mobile-menu-btn" onClick={toggleMenu}>
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -125,7 +136,7 @@ const Navbar = () => {
       {/* Mobile Drawer */}
       {isOpen && (
         <div className="mobile-drawer" style={mobileDrawerStyle}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '40px 24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', padding: '40px 24px' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -166,7 +177,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-      {/* Spacer for fixed navbar is managed on pages */}
     </>
   );
 };
@@ -203,13 +213,6 @@ const desktopActionsStyle = {
   alignItems: 'center'
 };
 
-const mobileMenuBtnStyle = {
-  display: 'none',
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer'
-};
-
 const mobileDrawerStyle = {
   position: 'fixed',
   top: 'var(--navbar-height)',
@@ -222,16 +225,24 @@ const mobileDrawerStyle = {
 };
 
 const mobileNavLinkStyle = {
-  fontSize: '1.25rem',
+  fontSize: '1.35rem',
   fontWeight: '600',
   padding: '10px 0',
   display: 'block'
 };
 
-// Injected styles for hover states
+// Injected styles for responsive overrides
 const style = document.createElement('style');
 style.textContent = `
-  @media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 1100;
+  }
+  @media (max-width: 992px) {
     .nav-links-desktop, .nav-actions-desktop { display: none !important; }
     .mobile-menu-btn { display: block !important; }
   }
