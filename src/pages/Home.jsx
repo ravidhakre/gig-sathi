@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { Shield, Users, Award, TrendingUp, ArrowRight, Briefcase, Mail, Phone, CheckCircle2 } from 'lucide-react';
 
@@ -7,6 +7,48 @@ const Home = () => {
 
   const [jobForm, setJobForm] = useState({ fullName: '', email: '', mobile: '', project: '', message: '' });
   const [clientForm, setClientForm] = useState({ companyName: '', contactPerson: '', email: '', mobile: '', hiringType: 'Delivery Boy Hiring', description: '' });
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      title: "Empowering Freelancers, Connecting Opportunities",
+      subtitle: "GigSathi is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
+      badge: "🚀 INDIA'S #1 GIG PORTAL",
+      btn1Text: "Apply For Work",
+      btn1Link: "#apply",
+      btn2Text: "Partner With Us",
+      btn2Link: "#partner"
+    },
+    {
+      title: "Instant KYC Verification & Quick Onboarding",
+      subtitle: "Register as an executive, upload your Aadhar Card, complete address details, and submit your resume to activate your profile and start your campaign tracking instantly.",
+      badge: "🛡️ 100% SECURE PROFILE",
+      btn1Text: "Register Now",
+      btn1Link: "/auth?signup=true",
+      btn2Text: "Explore Campaigns",
+      btn2Link: "/projects"
+    },
+    {
+      title: "High Commissions & Direct Bank Payouts",
+      subtitle: "Earn competitive commissions like Rs. 2,500 per approved credit card or Rs. 1,200 for active delivery boy onboardings. Access comprehensive ledgers and real-time payouts.",
+      badge: "💰 EARN HIGHER PAYOUTS",
+      btn1Text: "View Open Projects",
+      btn1Link: "/projects",
+      btn2Text: "Contact Helpline",
+      btn2Link: "/contact"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   const handleJobSubmit = (e) => {
     e.preventDefault();
@@ -38,39 +80,88 @@ const Home = () => {
 
   return (
     <div className="fade-in">
-      {/* Hero Section */}
-      <section style={heroSectionStyle}>
-        <div className="container" style={heroContainerStyle}>
-          <div style={heroTextStyle}>
-            <span style={badgeStyle}>🚀 INDIA'S #1 GIG PORTAL</span>
-            <h1 style={heroHeaderStyle}>
-              {hCMS.heroTitle}
-            </h1>
-            <p style={heroSubStyle}>
-              {hCMS.heroSubtitle}
-            </p>
-            <div style={heroActionsStyle}>
-              <a href="#apply" className="btn btn-primary btn-lg" style={lgBtnStyle}>
-                Apply For Work <ArrowRight size={18} />
-              </a>
-              <a href="#partner" className="btn btn-outline btn-lg" style={lgBtnStyle}>
-                Partner With Us
-              </a>
-            </div>
-          </div>
-          
-          {/* Hero Decorative Glow Card */}
-          <div className="hero-glow-card" style={glowCardStyle}>
-            <div className="glass-card glass-card-glow" style={{ padding: '40px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <h3 style={{ fontSize: '1.8rem', marginBottom: '16px' }}><span className="text-gradient">GigSathi Ecosystem</span></h3>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '16px', padding: 0 }}>
-                <li style={listItemStyle}><CheckCircle2 color="var(--primary-color)" /> Instant Onboarding & Verification</li>
-                <li style={listItemStyle}><CheckCircle2 color="var(--primary-color)" /> Direct-to-bank Commission Payouts</li>
-                <li style={listItemStyle}><CheckCircle2 color="var(--primary-color)" /> Multi-Project Earning Options</li>
-                <li style={listItemStyle}><CheckCircle2 color="var(--primary-color)" /> Dedicated Relationship Manager Support</li>
-              </ul>
-            </div>
-          </div>
+      {/* Hero Slider Section */}
+      <section style={sliderSectionStyle}>
+        <div style={slidesContainerStyle}>
+          {slides.map((slide, index) => {
+            const isActive = index === currentSlide;
+            return (
+              <div 
+                key={index} 
+                style={{
+                  ...slideItemStyle,
+                  opacity: isActive ? 1 : 0,
+                  visibility: isActive ? 'visible' : 'hidden',
+                  transform: isActive ? 'scale(1) translateX(0)' : 'scale(0.95) translateX(20px)',
+                  transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out, visibility 0.6s'
+                }}
+              >
+                <div className="container" style={slideContentStyle}>
+                  <div style={slideTextStyle}>
+                    <span style={sliderBadgeStyle}>{slide.badge}</span>
+                    <h1 style={sliderHeaderStyle}>
+                      {slide.title}
+                    </h1>
+                    <p style={sliderSubStyle}>
+                      {slide.subtitle}
+                    </p>
+                    <div style={sliderActionsStyle}>
+                      {slide.btn1Link.startsWith('#') ? (
+                        <a href={slide.btn1Link} className="btn btn-primary btn-lg" style={sliderBtn1Style}>
+                          {slide.btn1Text} <ArrowRight size={18} />
+                        </a>
+                      ) : (
+                        <Link to={slide.btn1Link} className="btn btn-primary btn-lg" style={sliderBtn1Style}>
+                          {slide.btn1Text} <ArrowRight size={18} />
+                        </Link>
+                      )}
+                      {slide.btn2Link.startsWith('/') ? (
+                        <Link to={slide.btn2Link} className="btn btn-outline btn-lg" style={sliderBtn2Style}>
+                          {slide.btn2Text}
+                        </Link>
+                      ) : (
+                        <a href={slide.btn2Link} className="btn btn-outline btn-lg" style={sliderBtn2Style}>
+                          {slide.btn2Text}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Hero Decorative Glow Card */}
+                  <div className="hero-glow-card" style={glowCardStyle}>
+                    <div className="glass-card" style={sliderGlassCardStyle}>
+                      <h3 style={{ fontSize: '1.7rem', marginBottom: '16px', color: '#ffffff' }}>GigSathi Ecosystem</h3>
+                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px', padding: 0 }}>
+                        <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Instant Onboarding & Verification</li>
+                        <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Direct-to-bank Payouts</li>
+                        <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Multi-Project Commission Campaigns</li>
+                        <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Dedicated HR Support Callings</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Navigation Arrows */}
+        <button onClick={prevSlide} style={arrowLeftStyle}>&larr;</button>
+        <button onClick={nextSlide} style={arrowRightStyle}>&rarr;</button>
+
+        {/* Indicators */}
+        <div style={indicatorsStyle}>
+          {slides.map((_, i) => (
+            <button 
+              key={i} 
+              onClick={() => setCurrentSlide(i)}
+              style={{
+                ...dotStyle,
+                width: i === currentSlide ? '24px' : '8px',
+                backgroundColor: i === currentSlide ? '#ffffff' : 'rgba(255,255,255,0.4)'
+              }}
+            />
+          ))}
         </div>
       </section>
 
@@ -325,68 +416,171 @@ const Home = () => {
   );
 };
 
-// Inline styles
-const heroSectionStyle = {
-  padding: '100px 24px 80px 24px',
+// Inline styles for Slider & Layout
+const sliderSectionStyle = {
+  height: '620px',
+  width: '100%',
   position: 'relative',
+  backgroundColor: '#DE3163',
+  color: '#ffffff',
+  paddingTop: 'var(--navbar-height)',
   overflow: 'hidden'
 };
 
-const heroContainerStyle = {
-  display: 'grid',
-  gridTemplateColumns: '1.2fr 0.8fr',
-  gap: '40px',
+const slidesContainerStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '100%'
+};
+
+const slideItemStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  display: 'flex',
   alignItems: 'center'
 };
 
-const heroTextStyle = {
+const slideContentStyle = {
+  display: 'grid',
+  gridTemplateColumns: '1.2fr 0.8fr',
+  gap: '40px',
+  alignItems: 'center',
+  padding: '0 24px'
+};
+
+const slideTextStyle = {
   display: 'flex',
   flexDirection: 'column',
   gap: '24px',
   textAlign: 'left'
 };
 
-const badgeStyle = {
+const sliderBadgeStyle = {
   display: 'inline-block',
   alignSelf: 'flex-start',
   padding: '6px 14px',
-  backgroundColor: 'var(--primary-light)',
-  border: '1px solid rgba(16, 185, 129, 0.3)',
-  color: 'var(--primary-color)',
+  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  color: '#ffffff',
   fontSize: '0.8rem',
   fontWeight: '800',
   borderRadius: 'var(--radius-full)',
   letterSpacing: '0.05em'
 };
 
-const heroHeaderStyle = {
-  fontSize: '3.6rem',
+const sliderHeaderStyle = {
+  fontSize: '3.4rem',
   fontWeight: '800',
   lineHeight: '1.15',
-  letterSpacing: '-0.03em'
+  letterSpacing: '-0.03em',
+  color: '#ffffff'
 };
 
-const heroSubStyle = {
-  fontSize: '1.15rem',
-  color: 'var(--text-secondary)',
+const sliderSubStyle = {
+  fontSize: '1.1rem',
+  color: 'rgba(255, 255, 255, 0.9)',
   lineHeight: '1.6',
   maxWidth: '560px'
 };
 
-const heroActionsStyle = {
+const sliderActionsStyle = {
   display: 'flex',
   gap: '16px',
   flexWrap: 'wrap'
 };
 
-const lgBtnStyle = {
+const sliderBtn1Style = {
   padding: '14px 28px',
-  fontSize: '1.05rem'
+  fontSize: '1.05rem',
+  backgroundColor: '#ffffff',
+  color: '#DE3163',
+  border: 'none',
+  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)'
+};
+
+const sliderBtn2Style = {
+  padding: '14px 28px',
+  fontSize: '1.05rem',
+  backgroundColor: 'transparent',
+  border: '1px solid rgba(255, 255, 255, 0.4)',
+  color: '#ffffff'
+};
+
+const sliderGlassCardStyle = {
+  backgroundColor: 'rgba(255, 255, 255, 0.12)',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid rgba(255, 255, 255, 0.18)',
+  borderRadius: 'var(--radius-lg)',
+  padding: '40px',
+  textAlign: 'left'
+};
+
+const arrowLeftStyle = {
+  position: 'absolute',
+  left: '24px',
+  top: '55%',
+  transform: 'translateY(-50%)',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  color: '#ffffff',
+  width: '44px',
+  height: '44px',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.2rem',
+  cursor: 'pointer',
+  zIndex: 10,
+  transition: 'background-color 0.2s'
+};
+
+const arrowRightStyle = {
+  position: 'absolute',
+  right: '24px',
+  top: '55%',
+  transform: 'translateY(-50%)',
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  color: '#ffffff',
+  width: '44px',
+  height: '44px',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.2rem',
+  cursor: 'pointer',
+  zIndex: 10,
+  transition: 'background-color 0.2s'
+};
+
+const indicatorsStyle = {
+  position: 'absolute',
+  bottom: '24px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  display: 'flex',
+  gap: '8px',
+  zIndex: 10
+};
+
+const dotStyle = {
+  height: '8px',
+  borderRadius: 'var(--radius-full)',
+  border: 'none',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease'
 };
 
 const glowCardStyle = {
   height: '100%',
-  minHeight: '340px'
+  minHeight: '340px',
+  display: 'flex',
+  alignItems: 'center'
 };
 
 const listItemStyle = {
@@ -394,7 +588,8 @@ const listItemStyle = {
   alignItems: 'center',
   gap: '12px',
   fontSize: '1.05rem',
-  fontWeight: '600'
+  fontWeight: '600',
+  color: '#ffffff'
 };
 
 const statsSectionStyle = {

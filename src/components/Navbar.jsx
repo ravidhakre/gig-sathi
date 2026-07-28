@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { Menu, X, Briefcase, LogOut, User, LayoutDashboard, Shield } from 'lucide-react';
+import { Menu, X, Briefcase, LogOut, User, LayoutDashboard } from 'lucide-react';
 
 const Navbar = () => {
   const { currentUser, logout } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -25,15 +38,34 @@ const Navbar = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  // Dynamic Styles based on Scroll State
+  const navbarStyle = {
+    height: 'var(--navbar-height)',
+    width: '100%',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    backgroundColor: isScrolled ? '#0b0f19' : 'transparent',
+    borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
+    boxShadow: isScrolled ? '0 10px 30px rgba(0, 0, 0, 0.25)' : 'none',
+    display: 'flex',
+    alignItems: 'center',
+    transition: 'all 0.3s ease-in-out'
+  };
+
+  const logoColor = isScrolled ? 'var(--primary-color)' : '#ffffff';
+  const logoTextColor = '#ffffff';
+
   return (
     <>
       <nav className="navbar" style={navbarStyle}>
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
           <Link to="/" style={logoStyle}>
-            <Briefcase size={28} color="var(--primary-color)" />
-            <span style={{ fontWeight: 800, fontSize: '1.5rem', color: 'var(--text-primary)' }}>
-              Gig<span style={{ color: 'var(--primary-color)' }}>Sathi</span>
+            <Briefcase size={28} color={logoColor} style={{ transition: 'color 0.3s' }} />
+            <span style={{ fontWeight: 800, fontSize: '1.5rem', color: logoTextColor }}>
+              Gig<span style={{ color: logoColor, transition: 'color 0.3s' }}>Sathi</span>
             </span>
           </Link>
 
@@ -45,7 +77,11 @@ const Navbar = () => {
                 to={link.path}
                 style={{
                   ...navLinkStyle,
-                  color: location.pathname === link.path ? 'var(--primary-color)' : 'var(--text-secondary)'
+                  color: location.pathname === link.path 
+                    ? (isScrolled ? 'var(--primary-color)' : '#ffffff') 
+                    : (isScrolled ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.9)'),
+                  borderBottom: location.pathname === link.path ? `2px solid ${isScrolled ? 'var(--primary-color)' : '#ffffff'}` : 'none',
+                  paddingBottom: '4px'
                 }}
               >
                 {link.name}
@@ -57,23 +93,22 @@ const Navbar = () => {
           <div className="nav-actions-desktop" style={desktopActionsStyle}>
             {currentUser ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                  Hi, <strong style={{ color: 'var(--text-primary)' }}>{currentUser.fullName}</strong> ({currentUser.role})
+                <span style={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.8)' }}>
+                  Hi, <strong style={{ color: '#ffffff' }}>{currentUser.fullName}</strong>
                 </span>
-                <Link to={getDashboardPath()} className="btn btn-primary" style={{ padding: '8px 16px' }}>
-                  <LayoutDashboard size={18} />
+                <Link to={getDashboardPath()} className="btn btn-primary" style={{ padding: '8px 16px', boxShadow: 'none' }}>
                   Dashboard
                 </Link>
-                <button onClick={() => { logout(); navigate('/'); }} className="btn btn-outline" style={{ padding: '8px 16px' }}>
-                  <LogOut size={18} />
+                <button onClick={() => { logout(); navigate('/'); }} className="btn btn-outline" style={{ padding: '8px 12px', borderColor: 'rgba(255,255,255,0.2)', color: '#ffffff' }}>
+                  <LogOut size={16} />
                 </button>
               </div>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Link to="/auth" className="btn btn-outline" style={{ padding: '8px 20px' }}>
+                <Link to="/auth" className="btn btn-outline" style={{ padding: '8px 20px', borderColor: 'rgba(255,255,255,0.2)', color: '#ffffff' }}>
                   Login
                 </Link>
-                <Link to="/auth?signup=true" className="btn btn-primary" style={{ padding: '8px 20px' }}>
+                <Link to="/auth?signup=true" className="btn btn-primary" style={{ padding: '8px 20px', boxShadow: 'none' }}>
                   Register
                 </Link>
               </div>
@@ -81,7 +116,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="mobile-menu-btn" onClick={toggleMenu} style={mobileMenuBtnStyle}>
+          <button className="mobile-menu-btn" onClick={toggleMenu} style={{ ...mobileMenuBtnStyle, color: '#ffffff' }}>
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -98,29 +133,29 @@ const Navbar = () => {
                 onClick={toggleMenu}
                 style={{
                   ...mobileNavLinkStyle,
-                  color: location.pathname === link.path ? 'var(--primary-color)' : 'var(--text-primary)'
+                  color: location.pathname === link.path ? 'var(--primary-color)' : '#ffffff'
                 }}
               >
                 {link.name}
               </Link>
             ))}
-            <hr style={{ borderColor: 'var(--border-color)', margin: '10px 0' }} />
+            <hr style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '10px 0' }} />
             
             {currentUser ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-                  Logged in as <strong style={{ color: 'var(--text-primary)' }}>{currentUser.fullName}</strong>
+                <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.95rem' }}>
+                  Logged in as <strong style={{ color: '#ffffff' }}>{currentUser.fullName}</strong>
                 </div>
                 <Link to={getDashboardPath()} onClick={toggleMenu} className="btn btn-primary" style={{ width: '100%' }}>
-                  <LayoutDashboard size={18} /> Dashboard
+                  Dashboard
                 </Link>
-                <button onClick={() => { logout(); navigate('/'); toggleMenu(); }} className="btn btn-outline" style={{ width: '100%' }}>
-                  <LogOut size={18} /> Logout
+                <button onClick={() => { logout(); navigate('/'); toggleMenu(); }} className="btn btn-outline" style={{ width: '100%', color: '#ffffff', borderColor: 'rgba(255,255,255,0.2)' }}>
+                  Logout
                 </button>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <Link to="/auth" onClick={toggleMenu} className="btn btn-outline" style={{ width: '100%' }}>
+                <Link to="/auth" onClick={toggleMenu} className="btn btn-outline" style={{ width: '100%', color: '#ffffff', borderColor: 'rgba(255,255,255,0.2)' }}>
                   Login
                 </Link>
                 <Link to="/auth?signup=true" onClick={toggleMenu} className="btn btn-primary" style={{ width: '100%' }}>
@@ -131,27 +166,12 @@ const Navbar = () => {
           </div>
         </div>
       )}
-      {/* Spacer for fixed navbar */}
-      <div style={{ height: 'var(--navbar-height)' }}></div>
+      {/* Spacer for fixed navbar is managed on pages */}
     </>
   );
 };
 
 // Inline Styles
-const navbarStyle = {
-  height: 'var(--navbar-height)',
-  width: '100%',
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  zIndex: 1000,
-  backgroundColor: 'rgba(255, 255, 255, 0.85)',
-  backdropFilter: 'blur(12px)',
-  borderBottom: '1px solid var(--border-color)',
-  display: 'flex',
-  alignItems: 'center'
-};
-
 const navContainerStyle = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -175,7 +195,7 @@ const desktopLinksStyle = {
 const navLinkStyle = {
   fontWeight: '600',
   fontSize: '0.95rem',
-  transition: 'color var(--transition-fast)'
+  transition: 'all 0.2s ease'
 };
 
 const desktopActionsStyle = {
@@ -185,7 +205,9 @@ const desktopActionsStyle = {
 
 const mobileMenuBtnStyle = {
   display: 'none',
-  color: 'var(--text-primary)'
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer'
 };
 
 const mobileDrawerStyle = {
@@ -194,7 +216,7 @@ const mobileDrawerStyle = {
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'var(--bg-color)',
+  backgroundColor: '#0b0f19',
   zIndex: 999,
   animation: 'fadeIn 0.2s forwards'
 };
@@ -202,15 +224,19 @@ const mobileDrawerStyle = {
 const mobileNavLinkStyle = {
   fontSize: '1.25rem',
   fontWeight: '600',
-  padding: '10px 0'
+  padding: '10px 0',
+  display: 'block'
 };
 
-// Media query style insertions (to support responsive menu toggles on small screen)
+// Injected styles for hover states
 const style = document.createElement('style');
 style.textContent = `
   @media (max-width: 768px) {
     .nav-links-desktop, .nav-actions-desktop { display: none !important; }
     .mobile-menu-btn { display: block !important; }
+  }
+  .nav-links-desktop a:hover {
+    color: var(--primary-color) !important;
   }
 `;
 document.head.appendChild(style);

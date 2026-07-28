@@ -27,9 +27,12 @@ const AppLayout = ({ children }) => {
     location.pathname.startsWith('/hr') || 
     location.pathname.startsWith('/admin');
 
+  const isHome = location.pathname === '/';
+
   return (
     <div className="app-container">
       {!isDashboard && <Navbar />}
+      {!isDashboard && !isHome && <div style={{ height: 'var(--navbar-height)' }}></div>}
       <main className="main-content">
         {children}
       </main>
