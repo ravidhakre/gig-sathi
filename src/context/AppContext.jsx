@@ -22,25 +22,31 @@ export const AppProvider = ({ children }) => {
     try {
       setLoading(true);
       const projData = await dbService.getProjects();
-      setProjects(projData);
+      setProjects(projData || []);
       
       const leadData = await dbService.getLeads();
-      setLeads(leadData);
+      setLeads(leadData || []);
 
       const tempData = await dbService.getTemplates();
-      setTemplates(tempData);
+      setTemplates(tempData || []);
 
       const cmsData = await dbService.getCMS();
-      setCms(cmsData);
+      setCms(cmsData || {});
 
       if (currentUser) {
         const custData = await dbService.getCustomers(
           currentUser.role === 'Candidate' ? currentUser.uid : null
         );
-        setCustomers(custData);
+        setCustomers(custData || []);
       }
     } catch (error) {
       console.error("Failed to load initial application data:", error);
+      // Ensure fallbacks are applied on failure
+      setProjects([]);
+      setLeads([]);
+      setTemplates([]);
+      setCustomers([]);
+      setCms({});
     } finally {
       setLoading(false);
     }

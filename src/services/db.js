@@ -354,7 +354,7 @@ export const dbService = {
         console.error(e);
       }
     }
-    return JSON.parse(localStorage.getItem('gs_cms'));
+    return JSON.parse(localStorage.getItem('gs_cms')) || {};
   },
 
   updateCMS: async (newCMS) => {
@@ -556,7 +556,7 @@ export const dbService = {
         console.error(e);
       }
     }
-    return JSON.parse(localStorage.getItem('gs_projects'));
+    return JSON.parse(localStorage.getItem('gs_projects')) || [];
   },
 
   addProject: async (project) => {
@@ -631,7 +631,7 @@ export const dbService = {
         console.error(e);
       }
     }
-    return JSON.parse(localStorage.getItem('gs_leads'));
+    return JSON.parse(localStorage.getItem('gs_leads')) || [];
   },
 
   addLead: async (lead) => {
@@ -762,7 +762,7 @@ export const dbService = {
         console.error(e);
       }
     }
-    return JSON.parse(localStorage.getItem('gs_templates'));
+    return JSON.parse(localStorage.getItem('gs_templates')) || [];
   },
 
   saveTemplate: async (id, updatedFields) => {
