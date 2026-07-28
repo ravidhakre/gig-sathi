@@ -220,7 +220,8 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
@@ -243,8 +244,7 @@ const SEED_TEMPLATES = [
     <p>You shall execute field acquisition and promotional activities for top corporate entities, banks, and fintech providers as listed in the active projects directory of your portal. You are expected to deliver authentic onboarding campaigns with absolute transparency and code compliance.</p>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 1 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 1 of 4
   </div>
 </div>
 
@@ -254,7 +254,8 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
@@ -270,8 +271,7 @@ const SEED_TEMPLATES = [
     <p>The Company will provide digital process training materials and campaign orientation on your portal dashboard. You are required to stay updated with product guidelines and policy revisions issued from time to time. Deficiencies in onboarding quality may result in temporary suspension of specific project campaigns on your dashboard.</p>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 2 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 2 of 4
   </div>
 </div>
 
@@ -281,7 +281,8 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
@@ -292,8 +293,7 @@ const SEED_TEMPLATES = [
     <p>While promoting client services, you must behave ethically. You shall not collect cash payments from candidates or customers, misrepresent onboarding rewards, or use coercive practices. GigSathi maintains zero tolerance for field misconduct, and any reported infraction will lead to legal action.</p>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 3 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 3 of 4
   </div>
 </div>
 
@@ -303,7 +303,8 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
@@ -327,8 +328,7 @@ const SEED_TEMPLATES = [
     </div>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 4 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 4 of 4
   </div>
 </div>`
   },
@@ -342,27 +342,27 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
-    <h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.4rem; font-weight: 800; border-bottom: 2px solid #de3163; padding-bottom: 8px;">APPOINTMENT CUM OFFER LETTER</h2>
+    <h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.4rem; font-weight: 800; border-bottom: 2px solid #de3163; padding-bottom: 6px;">APPOINTMENT CUM OFFER LETTER</h2>
     <p><strong>Date:</strong> {{date}}</p>
     <p><strong>Employee Name:</strong> {{name}}<br/>
     <strong>Address:</strong> {{address}}</p>
 
     <p>Dear Mr./Ms. {{name}},</p>
-    <p>It is with great pleasure that GigSathi Solutions Private Limited extends this formal Offer of Employment for the position of HR Executive. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time.</p>
+    <p>It is with great pleasure that GigSathi Solutions Private Limited extends this formal Offer of Employment for the position of HR Executive. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time. By accepting this offer and commencing employment, you acknowledge that you have carefully read, understood, and voluntarily accepted all provisions contained herein and agree to comply with them throughout your association with the Company.</p>
 
     <h3>1. Appointment and Commencement of Employment</h3>
-    <p>You are hereby appointed as an HR Executive with GigSathi Solutions Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice.</p>
+    <p>You are hereby appointed as an HR Executive with GigSathi Solutions Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
 
     <h3>2. Nature of Employment</h3>
-    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of GigSathi Solutions Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management.</p>
+    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of GigSathi Solutions Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment.</p>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 1 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 1 of 4
   </div>
 </div>
 
@@ -372,25 +372,25 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
     <h3>3. Probation Period</h3>
-    <p>Your employment shall initially remain on probation for a continuous period of Three (3) Months commencing from your official date of joining. The objective of this probationary period is to enable the Company to evaluate your professional competence, recruitment skills, communication ability, attendance, punctuality, discipline, adaptability, work ethics, and overall suitability for continued employment. You acknowledge that confirmation of employment shall become effective only after receiving a written confirmation issued by the authorized representative of the Company.</p>
+    <p>Your employment shall initially remain on probation for a continuous period of Three (3) Months commencing from your official date of joining. The objective of this probationary period is to enable the Company to evaluate your professional competence, recruitment skills, communication ability, attendance, punctuality, discipline, adaptability, work ethics, and overall suitability for continued employment. During this period, your performance shall be reviewed periodically by the Management based upon your contribution towards organizational objectives and adherence to Company policies. Successful completion of three months shall not automatically result in confirmation of employment, and the Company may, at its sole discretion, confirm your services, extend the probation period, or discontinue your employment whenever your performance, conduct, attendance, or commitment is found to be unsatisfactory. You acknowledge that confirmation of employment shall become effective only after receiving a written confirmation issued by the authorized representative of the Company.</p>
 
     <h3>4. Roles and Responsibilities</h3>
-    <p>As an HR Executive, you shall play a vital role in strengthening the Company's workforce by identifying, attracting, evaluating, and coordinating suitable candidates for various positions. Your responsibilities shall include sourcing candidates through different recruitment channels, conducting initial telephonic screenings, scheduling interviews, maintaining regular communication with applicants, collecting and verifying required documents, coordinating with reporting managers, and ensuring the smooth completion of the hiring process. You shall maintain accurate recruitment records, prepare daily and monthly reports, and ensure that all information entered into the systems is authentic.</p>
+    <p>As an HR Executive, you shall play a vital role in strengthening the Company's workforce by identifying, attracting, evaluating, and coordinating suitable candidates for various positions. Your responsibilities shall include sourcing candidates through different recruitment channels, conducting initial telephonic screenings, scheduling interviews, maintaining regular communication with applicants, collecting and verifying required documents, coordinating with reporting managers, and ensuring the smooth completion of the hiring process. You shall maintain accurate recruitment records, prepare daily and monthly recruitment reports, update candidate databases, and ensure that all information entered into the Company's systems is complete and authentic. You are expected to maintain professional communication with every candidate and represent the Company in a courteous, ethical, and responsible manner.</p>
 
     <h3>5. Working Hours and Attendance</h3>
-    <p>The normal working schedule for this position shall be from 11:00 A.M. to 7:30 P.M., comprising eight working hours together with the applicable break period as determined by the Company. In the event an employee fails to log in or report for work by 11:00 A.M. without obtaining prior approval, the Company reserves the right to treat such attendance as a Half-Day, irrespective of the actual reporting time thereafter. Repeated late logins or irregular attendance shall be viewed as a serious breach of workplace discipline.</p>
+    <p>The normal working schedule for this position shall be from 11:00 A.M. to 7:30 P.M., comprising eight working hours together with the applicable break period as determined by the Company. Employees are expected to report for duty punctually and complete their daily responsibilities within the prescribed working hours. Regular attendance and punctuality are considered essential conditions of employment, and every employee is expected to remain available throughout the scheduled working period unless otherwise authorized by the Management. In the event an employee fails to log in or report for work by 11:00 A.M. without obtaining prior approval, the Company reserves the right to treat such attendance as a Half-Day, irrespective of the actual reporting time thereafter. Repeated instances of late reporting or habitual delays shall be viewed as a serious breach of discipline.</p>
 
     <h3>6. Performance Evaluation and Recruitment Expectations</h3>
-    <p>The position of HR Executive is a performance-oriented role. As part of the performance framework, the Employee shall be expected to facilitate the successful hiring of Forty (40) candidates during each monthly evaluation cycle. For the purpose of salary eligibility, the Employee shall be required to achieve at least Sixty Percent (60%) of the prescribed monthly performance expectation together with satisfactory attendance and compliance with Company policies. Where performance remains below the minimum acceptable benchmark, the Company may determine the monthly remuneration proportionately based upon actual performance.</p>
+    <p>The position of HR Executive is a performance-oriented role in which productivity and recruitment efficiency are important factors for evaluating professional contribution. As part of the performance framework, the Employee shall be expected to facilitate the successful hiring of Forty (40) candidates during each monthly evaluation cycle. For the purpose of salary eligibility, the Employee shall be required to achieve at least Sixty Percent (60%) of the prescribed monthly performance expectation together with satisfactory attendance and compliance with Company policies. Where performance remains below the minimum acceptable benchmark, the Company may determine the monthly remuneration proportionately based upon actual performance, attendance, work quality, and overall contribution.</p>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 2 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 2 of 4
   </div>
 </div>
 
@@ -400,28 +400,31 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
     <h3>7. Compensation and Salary Administration</h3>
-    <p>Your monthly consolidated salary for the position of HR Executive shall be ₹9,000/- (Rupees Nine Thousand Only), subject to statutory deductions, if applicable, and the terms contained in this Appointment Letter. Salary shall become due only after the successful completion of each thirty (30) days of continuous service, and the Company shall process the salary within the following seven (7) days through the approved mode of payment. The Employee understands that salary is linked with actual attendance, performance, and fulfillment of assigned responsibilities.</p>
+    <p>Your monthly consolidated salary for the position of HR Executive shall be ₹9,000/- (Rupees Nine Thousand Only), subject to statutory deductions, if applicable, and the terms contained in this Appointment Letter. Salary shall become due only after the successful completion of each thirty (30) days of continuous service, and the Company shall process the salary within the following seven (7) days through the approved mode of payment. The Employee understands that salary is linked with actual attendance, performance, and fulfillment of assigned responsibilities. In cases involving unauthorized absence, poor performance, misconduct, or failure to meet the minimum performance requirements, the Company reserves the right to determine the payable remuneration in accordance with the applicable employment terms.</p>
 
     <h3>8. Leave, Holidays and Absenteeism</h3>
-    <p>The weekly holiday for employees shall ordinarily be Sunday. Except where specifically approved by the Management in writing, the Company shall not provide any paid leave or paid holiday. Failure to inform the Company before remaining absent shall be treated as unauthorized absence, and the concerned day shall be considered Leave Without Pay (LWP). If the Employee remains absent from duty for more than three (3) consecutive working days without prior approval, such conduct may be treated as abandonment of employment.</p>
+    <p>The weekly holiday for employees shall ordinarily be Sunday, unless operational requirements necessitate otherwise. Except where specifically approved by the Management in writing, the Company shall not provide any paid leave or paid holiday during the course of employment. Failure to inform the Company before remaining absent shall be treated as unauthorized absence, and the concerned day shall be considered Leave Without Pay (LWP). If the Employee remains absent from duty for more than three (3) consecutive working days without prior approval, such conduct may be treated as abandonment of employment.</p>
 
     <h3>9. Professional Conduct and Workplace Discipline</h3>
-    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, or breach of confidentiality shall constitute a violation of employment obligations and may invite disciplinary proceedings.</p>
+    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline throughout the period of employment. Every interaction with candidates, colleagues, clients, vendors, and business associates shall be conducted respectfully and in a manner that enhances the reputation and goodwill of GigSathi Solutions Private Limited. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, abusive language, breach of confidentiality, or conduct prejudicial to the Company's interests shall constitute a violation of employment obligations.</p>
 
     <h3>10. Confidentiality and Non-Disclosure</h3>
-    <p>During the course of your employment, you may have access to confidential information relating to the Company's business operations, candidate databases, and proprietary systems. You shall treat all such information as strictly confidential and shall not disclose, copy, or use it for any personal benefit or for the benefit of any third party. This obligation shall continue even after the cessation of your employment.</p>
+    <p>During the course of your employment, you may have access to confidential information relating to the Company's business operations, recruitment strategies, client details, employee records, candidate databases, and other proprietary information. You shall treat all such information as strictly confidential and shall not disclose, copy, reproduce, publish, transmit, or use such information for any personal benefit or for the benefit of any third party without obtaining prior written authorization from the Company. This obligation shall continue even after the cessation of your employment.</p>
 
     <h3>11. Company Property and Data Protection</h3>
-    <p>All documents, files, databases, official email accounts, and login credentials provided by the Company shall remain the exclusive property of GigSathi Solutions Private Limited. Upon resignation, termination, or whenever directed, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices.</p>
+    <p>All documents, files, databases, official email accounts, recruitment records, candidate information, and any other resources provided by the Company shall remain the exclusive property of GigSathi Solutions Private Limited. Upon resignation, termination, or whenever directed by the Management, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices.</p>
+
+    <h3>12. Conflict of Interest and Exclusive Employment</h3>
+    <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, partnership, commission-based activity, or commercial venture that may conflict with the interests of GigSathi Solutions Private Limited. Any violation of this provision shall constitute serious misconduct and may result in disciplinary action.</p>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 3 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 3 of 4
   </div>
 </div>
 
@@ -431,28 +434,35 @@ const SEED_TEMPLATES = [
     <div class="logo-main">GigSathi</div>
     <div class="company-cin">
       <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
-      CIN: U74999DL2026PTC394850 | www.gigsathi.com
+      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
+      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
     </div>
   </div>
   <div class="contract-body">
-    <h3>12. Conflict of Interest</h3>
-    <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, or commercial venture that may conflict with the interests of GigSathi Solutions Private Limited.</p>
+    <h3>13. Training, Performance Improvement and Professional Development</h3>
+    <p>The Company may, at its discretion, provide induction programs, process training, or other learning opportunities to assist the Employee in performing assigned responsibilities efficiently. Where the Management identifies deficiencies in performance, communication, productivity, attendance, or professional conduct, the Employee may be placed under a Performance Improvement Process for a reasonable period to provide an opportunity for improvement. However, participation in any training shall not be construed as a guarantee of continued employment.</p>
 
-    <h3>13. Disciplinary Action and Corrective Measures</h3>
-    <p>In situations where an employee fails to maintain acceptable standards of performance, attendance, behaviour, discipline, or compliance, the Company reserves the right to initiate appropriate corrective and disciplinary measures (counselling, warnings, or suspension).</p>
+    <h3>14. Disciplinary Action and Corrective Measures</h3>
+    <p>In situations where an employee fails to maintain acceptable standards of performance, attendance, behaviour, discipline, or compliance, the Company reserves the right to initiate appropriate corrective and disciplinary measures. Such measures may include counselling, warnings, suspension of duties, or termination of employment depending upon the seriousness and frequency of the violation.</p>
 
-    <h3>14. Termination of Employment</h3>
-    <p>The Company reserves the right to terminate employment where the Employee demonstrates unsatisfactory performance, repeated failure to meet assigned responsibilities, violation of Company policies, misconduct, or breach of confidentiality. In cases where an employee remains absent from work for more than three consecutive working days without prior approval, it will be treated as abandonment.</p>
+    <h3>15. Termination of Employment</h3>
+    <p>The Company reserves the right to terminate employment where the Employee demonstrates unsatisfactory performance, repeated failure to meet assigned responsibilities, violation of Company policies, misconduct, breach of confidentiality, unauthorized absence, or any act detrimental to the Company's interests. If the Employee remains absent from work for more than three consecutive working days without prior approval, it will be treated as abandonment.</p>
 
-    <h3>15. Resignation and Notice Requirements</h3>
-    <p>In case the Employee wishes to voluntarily discontinue employment, the Employee shall provide written communication to the Management in advance as per the separation procedure. Resignation shall be effective only after acceptance and handover.</p>
+    <h3>16. Resignation and Notice Requirements</h3>
+    <p>In case the Employee wishes to voluntarily discontinue employment, the Employee shall provide written communication to the Management in advance as per the separation procedure. Resignation shall become effective only after acceptance and handover.</p>
 
-    <h3>16. Governing Law and Jurisdiction</h3>
+    <h3>17. General Terms and Conditions</h3>
+    <p>This Appointment Letter represents the complete understanding between the Company and the Employee concerning the terms of employment and supersedes any previous verbal discussions or commitments. The Employee confirms that all personal information and documents submitted during the recruitment process are accurate.</p>
+
+    <h3>18. Governing Law and Jurisdiction</h3>
     <p>This Appointment Letter and the employment relationship shall be governed by and interpreted in accordance with the applicable laws of India. Any dispute arising out of this agreement shall be subject to the exclusive jurisdiction of the competent courts located in New Delhi, India.</p>
 
-    <h3>17. Employee Declaration, Undertaking & Acceptance</h3>
-    <p>I confirm that I have carefully read and understood all terms and conditions of this Appointment Letter. I voluntarily accept this offer of employment and agree to comply with them throughout my association with the Company.</p>
+    <h3>19. Employee Declaration & Undertaking</h3>
+    <p>I hereby confirm that I have carefully read and understood all terms, conditions, and obligations mentioned in this Appointment Letter. I voluntarily accept this offer of employment and agree that my association with the Company shall be governed by the provisions contained herein.</p>
 
+    <h3>20. Acceptance of Appointment</h3>
+    <p>I hereby confirm my acceptance of the employment offer extended by GigSathi Solutions Private Limited for the position of HR Executive and agree to join the Company under the terms and conditions mentioned in this Appointment Letter.</p>
+    
     <div style="margin-top: 50px; display: flex; justify-content: space-between;">
       <div>
         <p>___________________________</p>
@@ -467,8 +477,7 @@ const SEED_TEMPLATES = [
     </div>
   </div>
   <div class="contract-footer-info">
-    Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-    Contact: support@gigsathi.com | Page 4 of 4 | Confidential - Employment Document
+    CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT | Page 4 of 4
   </div>
 </div>`
   }
@@ -960,9 +969,9 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: If HR template does not contain "APPOINTMENT CUM OFFER LETTER", auto-upgrade in Firestore
+          // Self-healing check: If HR template does not contain "Performance Improvement Process", auto-upgrade in Firestore
           const hr = templates.find(t => t.role === 'HR');
-          if (hr && hr.content && !hr.content.includes("APPOINTMENT CUM OFFER LETTER")) {
+          if (hr && hr.content && !hr.content.includes("Performance Improvement Process")) {
             console.log('GigSathi: Upgrading Firestore offer templates to 20-section appointment layout...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
@@ -978,7 +987,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old HR template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (localHR && localHR.content && !localHR.content.includes("APPOINTMENT CUM OFFER LETTER")) {
+    if (localHR && localHR.content && !localHR.content.includes("Performance Improvement Process")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
