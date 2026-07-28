@@ -82,28 +82,28 @@ const Home = () => {
   return (
     <div className="fade-in">
       {/* Hero Slider Section */}
-      <section style={sliderSectionStyle}>
-        <div style={slidesContainerStyle}>
+      <section className="slider-section">
+        <div className="slides-container">
           {slides.map((slide, index) => {
             const isActive = index === currentSlide;
             return (
               <div 
                 key={index} 
+                className="slide-item"
                 style={{
-                  ...slideItemStyle,
                   opacity: isActive ? 1 : 0,
                   visibility: isActive ? 'visible' : 'hidden',
                   transform: isActive ? 'scale(1) translateX(0)' : 'scale(0.95) translateX(20px)',
                   transition: 'opacity 0.6s ease-in-out, transform 0.6s ease-in-out, visibility 0.6s'
                 }}
               >
-                <div className="container" style={slideContentStyle}>
-                  <div style={slideTextStyle}>
+                <div className="container slide-content-grid">
+                  <div className="slide-text-container">
                     <span style={sliderBadgeStyle}>{slide.badge}</span>
-                    <h1 style={sliderHeaderStyle}>
+                    <h1 className="slide-header">
                       {slide.title}
                     </h1>
-                    <p style={sliderSubStyle}>
+                    <p className="slide-sub">
                       {slide.subtitle}
                     </p>
                     <div style={sliderActionsStyle}>

@@ -80,7 +80,7 @@ button {
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.2;
-  color: var(--primary-color); /* Updated to Emerald Green */
+  color: var(--primary-color);
   letter-spacing: -0.02em;
 }
 
@@ -226,7 +226,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-control {
-  background: #ffffff; /* Clean white input backgrounds */
+  background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 12px 16px;
@@ -340,7 +340,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .crm-table th {
-  background-color: rgba(0, 0, 0, 0.02); /* Adjusted for light backgrounds */
+  background-color: rgba(0, 0, 0, 0.02);
   padding: 16px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -361,7 +361,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .crm-table tr:hover td {
-  background-color: rgba(0, 0, 0, 0.01); /* Adjusted for light backgrounds */
+  background-color: rgba(0, 0, 0, 0.01);
 }
 
 .badge {
@@ -403,7 +403,7 @@ h1, h2, h3, h4, h5, h6 {
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(15, 23, 42, 0.5); /* Soft dark overlay for light theme */
+  background: rgba(15, 23, 42, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -435,7 +435,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .toast {
-  background: #ffffff; /* Explicit white background for high contrast */
+  background: #ffffff;
   border-left: 4px solid var(--primary-color);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   padding: 16px 20px;
@@ -456,4 +456,106 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes slideInRight {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
+}
+
+/* -------------------------------------------------------------
+   Slider Responsive Stylesheet
+   ------------------------------------------------------------- */
+.slider-section {
+  height: 100vh; /* Lock to full screen height */
+  width: 100%;
+  position: relative;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  padding-top: var(--navbar-height);
+  overflow: hidden;
+}
+
+.slides-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.slide-content-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 40px;
+  align-items: center;
+  padding: 0 24px;
+  width: 100%;
+}
+
+.slide-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+
+.slide-header {
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff !important; /* Ensure headings in slider are white */
+}
+
+.slide-sub {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  max-width: 580px;
+}
+
+/* Slider Mobile Responsiveness */
+@media (max-width: 992px) {
+  .slide-content-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .slide-text-container {
+    align-items: center;
+    text-align: center;
+    width: 100% !important;
+  }
+  .slide-header {
+    font-size: 2.2rem !important; /* Large text on mobile, no empty spaces */
+    line-height: 1.25;
+    text-align: center;
+    width: 100% !important;
+    margin-bottom: 8px;
+  }
+  .slide-sub {
+    font-size: 1.05rem;
+    text-align: center;
+    max-width: 100% !important;
+    margin-bottom: 8px;
+  }
+  .hero-glow-card {
+    display: none !important; /* Hide details card to save mobile viewport */
+  }
+}
+
+@media (max-width: 480px) {
+  .slide-header {
+    font-size: 1.9rem !important; /* Fill up space on small mobile screen */
+  }
+  .slide-sub {
+    font-size: 0.95rem;
+  }
+  .slider-section {
+    height: 100vh !important; /* Keep viewport height */
+  }
 }
