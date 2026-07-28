@@ -7,11 +7,40 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const HRDashboard = () => {
-  const { currentUser, logout, leads, addNewLead, updateLeadStatus, projects, showToast } = useApp();
+  const { currentUser, logout, leads, addNewLead, updateLeadStatus, projects, templates, showToast } = useApp();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [offerSigned, setOfferSigned] = useState(() => {
+    return localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true';
+  });
+
+  const handleSignOffer = () => {
+    localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
+    setOfferSigned(true);
+    showToast("Offer letter accepted and signed successfully!", "success");
+  };
+
+  const renderOfferLetter = () => {
+    const hrTemplate = templates.find(t => t.role === 'HR') || {
+      content: `<h3>GIGSATHI SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
+    };
+    
+    const todayStr = new Date().toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    let html = hrTemplate.content
+      .replace(/{{name}}/g, currentUser?.fullName || 'HR Officer')
+      .replace(/{{email}}/g, currentUser?.email || '')
+      .replace(/{{mobile}}/g, currentUser?.mobile || '')
+      .replace(/{{date}}/g, todayStr);
+
+    return html;
+  };
   
   // CRM Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -118,6 +147,12 @@ const HRDashboard = () => {
             <BarChart3 size={18} /> Reports
           </button>
           <button 
+            onClick={() => { setActiveTab('offer'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'offer' ? activeLinkStyle : {}) }}
+          >
+            <FileText size={18} /> View Offer Letter
+          </button>
+          <button 
             onClick={() => { setActiveTab('profile'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'profile' ? activeLinkStyle : {}) }}
           >
@@ -142,28 +177,28 @@ const HRDashboard = () => {
             <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Monitor assignments, calling stats, and onboardings.</p>
 
             <div className="grid-4" style={{ marginBottom: '40px' }}>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-purple">
                 <Users size={28} color="var(--secondary-color)" />
                 <div>
                   <div style={metricLabelStyle}>Total Leads</div>
                   <div style={metricValueStyle}>{totalAssigned}</div>
                 </div>
               </div>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-orange">
                 <PhoneCall size={28} color="var(--accent-color)" />
                 <div>
                   <div style={metricLabelStyle}>In Calling status</div>
                   <div style={metricValueStyle}>{callingCount}</div>
                 </div>
               </div>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-blue">
                 <BarChart3 size={28} color="var(--info-color)" />
                 <div>
                   <div style={metricLabelStyle}>Interested</div>
                   <div style={metricValueStyle}>{interestedCount}</div>
                 </div>
               </div>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-cherry">
                 <CheckCircle2 size={28} color="var(--primary-color)" />
                 <div>
                   <div style={metricLabelStyle}>Hired (Verified)</div>
@@ -371,7 +406,48 @@ const HRDashboard = () => {
             </div>
           </div>
         )}
+        {/* --- OFFER LETTER TAB --- */}
+        {activeTab === 'offer' && (
+          <div style={tabContentStyle}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Employment Offer Agreement</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Please review the terms of your engagement as HR Officer / Recruitment Coordinator with GigSathi.</p>
 
+            <div className="grid-2" style={{ gap: '30px', alignItems: 'start' }}>
+              <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                <div style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>OFFER_LETTER_HR.pdf</span>
+                  <span className={`badge ${offerSigned ? 'badge-hired' : 'badge-calling'}`}>
+                    {offerSigned ? 'SIGNED & ACTIVE' : 'AWAITING SIGNATURE'}
+                  </span>
+                </div>
+                
+                <div 
+                  style={{ padding: '30px', maxHeight: '500px', overflowY: 'auto', backgroundColor: '#fff', color: '#334155', fontFamily: 'serif', fontSize: '0.95rem', lineHeight: '1.6', textAlign: 'left' }}
+                  dangerouslySetInnerHTML={{ __html: renderOfferLetter() }}
+                />
+              </div>
+
+              <div className="card">
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Sign & Accept Offer</h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
+                  By clicking accept, you acknowledge and agree to the roles, payout matrices, and code of conduct policies of GigSathi Recruiting Solutions.
+                </p>
+
+                {offerSigned ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--primary-light)', border: '1px solid rgba(222,49,99,0.2)' }}>
+                    <CheckCircle2 size={36} color="var(--primary-color)" />
+                    <strong style={{ color: 'var(--primary-color)' }}>Agreement Signed & Locked</strong>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>IP logged successfully. Copy sent to verified email.</span>
+                  </div>
+                ) : (
+                  <button onClick={handleSignOffer} className="btn btn-primary" style={{ width: '100%' }}>
+                    Accept & Sign Agreement
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         {/* --- COMPLETE PROFILE --- */}
         {activeTab === 'profile' && (
           <div style={tabContentStyle}>

@@ -769,3 +769,27 @@ h1, h2, h3, h4, h5, h6 {
     width: auto !important;
   }
 }
+
+/* Premium Metric Cards */
+.premium-metric-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  text-align: left;
+}
+
+.premium-metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-purple { border-left: 4px solid var(--secondary-color) !important; }
+.metric-orange { border-left: 4px solid var(--accent-color) !important; }
+.metric-blue { border-left: 4px solid var(--info-color) !important; }
+.metric-cherry { border-left: 4px solid var(--primary-color) !important; }

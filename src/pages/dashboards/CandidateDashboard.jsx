@@ -143,28 +143,28 @@ const CandidateDashboard = () => {
             
             {/* Metrics cards */}
             <div className="grid-4" style={{ marginBottom: '40px' }}>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-cherry">
                 <Users size={28} color="var(--primary-color)" />
                 <div>
                   <div style={metricLabelStyle}>Total Customers</div>
                   <div style={metricValueStyle}>{customers.length}</div>
                 </div>
               </div>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-orange">
                 <HelpCircle size={28} color="var(--accent-color)" />
                 <div>
                   <div style={metricLabelStyle}>Pending KYC</div>
                   <div style={metricValueStyle}>{pendingKYC}</div>
                 </div>
               </div>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-purple">
                 <BarChart3 size={28} color="var(--secondary-color)" />
                 <div>
                   <div style={metricLabelStyle}>Estimated Commissions</div>
                   <div style={metricValueStyle}>₹{activeEarnings.toLocaleString('en-IN')}</div>
                 </div>
               </div>
-              <div className="card" style={metricCardStyle}>
+              <div className="premium-metric-card metric-blue">
                 <FileText size={28} color={offerSigned ? "var(--primary-color)" : "var(--danger-color)"} />
                 <div>
                   <div style={metricLabelStyle}>Offer Letter</div>
