@@ -42,7 +42,7 @@ const HRDashboard = () => {
               position: relative;
               background: #ffffff;
               color: #334155;
-              padding: 40px 45px;
+              padding: 45px 50px;
               margin: 0 auto;
               max-width: 800px;
               min-height: 1040px;
@@ -56,10 +56,10 @@ const HRDashboard = () => {
               position: absolute;
               top: 50%;
               left: 50%;
-              transform: translate(-50%, -50%) rotate(-35deg);
-              font-size: 5rem;
+              transform: translate(-50%, -50%) rotate(-30deg);
+              font-size: 2.3rem;
               font-weight: 900;
-              color: rgba(222, 49, 99, 0.04) !important;
+              color: rgba(222, 49, 99, 0.03) !important;
               text-transform: uppercase;
               pointer-events: none;
               user-select: none;
@@ -91,38 +91,28 @@ const HRDashboard = () => {
               flex: 1;
               position: relative;
               z-index: 2;
-              font-size: 11px;
-              line-height: 1.45;
+              font-size: 0.88rem;
+              line-height: 1.55;
               text-align: justify;
             }
             .contract-page-sheet .contract-body p {
-              margin-bottom: 8px;
+              margin-bottom: 10px;
             }
             .contract-page-sheet .contract-body h3 {
-              margin-top: 14px;
-              margin-bottom: 6px;
+              margin-top: 18px;
+              margin-bottom: 8px;
               color: #de3163;
-              font-size: 12px;
-              font-weight: bold;
+              font-size: 0.95rem;
               border-bottom: 1px solid #f1f5f9;
               padding-bottom: 2px;
               text-transform: uppercase;
             }
             .contract-page-sheet .contract-body ul {
-              margin-bottom: 8px;
+              margin-bottom: 10px;
               padding-left: 20px;
             }
             .contract-page-sheet .contract-body li {
               margin-bottom: 4px;
-            }
-            .contract-page-sheet .contract-footer-info {
-              margin-top: auto;
-              border-top: 1px solid #e2e8f0;
-              padding-top: 10px;
-              font-size: 10px;
-              color: #64748b;
-              text-align: center;
-              line-height: 1.3;
             }
             @media print {
               @page {
@@ -138,11 +128,9 @@ const HRDashboard = () => {
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 100% !important;
-                min-height: 25cm !important;
+                height: auto !important;
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
-                display: flex !important;
-                flex-direction: column !important;
               }
             }
           </style>
