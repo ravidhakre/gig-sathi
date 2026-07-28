@@ -7,6 +7,11 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
@@ -14,7 +19,6 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
 a {
@@ -518,55 +522,87 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 580px;
 }
 
-/* Slider Mobile Responsiveness */
+.slider-arrow {
+  display: flex;
+}
+
+/* Slider Mobile Responsiveness (Left aligned layout / Left Path) */
 @media (max-width: 992px) {
   .slide-content-grid {
     grid-template-columns: 1fr !important;
-    text-align: center;
-    padding: 120px 24px 40px 24px !important; /* Shifted higher up to leave no empty bottom spaces */
+    text-align: left !important; /* Left alignment path as requested */
+    padding: 100px 24px 40px 24px !important; /* Shifted higher up */
     align-content: flex-start;
     height: 100%;
   }
   .slide-text-container {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start !important; /* Align children (badge, buttons) to left */
+    text-align: left !important;
     width: 100% !important;
-    gap: 22px !important;
+    gap: 20px !important;
   }
   .slide-header {
-    font-size: 2.6rem !important; /* Bold, large text size to fill screen */
+    font-size: 2.5rem !important; /* Balanced big heading */
     line-height: 1.2;
-    text-align: center;
+    text-align: left !important;
     width: 100% !important;
     margin-bottom: 4px;
     font-weight: 800;
     color: #ffffff !important;
   }
   .slide-sub {
-    font-size: 1.12rem !important;
-    text-align: center;
+    font-size: 1.08rem !important;
+    text-align: left !important;
     max-width: 100% !important;
     margin-bottom: 4px;
     color: rgba(255, 255, 255, 0.92) !important;
-    line-height: 1.6;
+    line-height: 1.55;
   }
   .hero-glow-card {
     display: none !important;
+  }
+  .slider-arrow {
+    display: none !important; /* Hide arrows on mobile for clean look */
   }
 }
 
 @media (max-width: 480px) {
   .slide-content-grid {
-    padding-top: 100px !important; /* Clean start height for mobile screens */
+    padding: 90px 20px 20px 20px !important;
   }
   .slide-header {
-    font-size: 2.1rem !important;
-    line-height: 1.25;
+    font-size: 2.2rem !important;
   }
   .slide-sub {
-    font-size: 1.05rem !important;
+    font-size: 0.98rem !important;
   }
   .slider-section {
     height: 100vh !important;
+  }
+}
+
+/* Responsive Grid and Heading Utilities for Home Sections */
+.why-grid-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+}
+
+.section-heading {
+  font-size: 2.5rem;
+  margin-top: 10px;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .why-grid-layout {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .section-heading {
+    font-size: 1.8rem !important; /* Responsive, professional sizing */
+    line-height: 1.25;
+    margin-bottom: 12px;
   }
 }

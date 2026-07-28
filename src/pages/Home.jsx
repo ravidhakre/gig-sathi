@@ -147,8 +147,8 @@ const Home = () => {
         </div>
 
         {/* Navigation Arrows */}
-        <button onClick={prevSlide} style={arrowLeftStyle}>&larr;</button>
-        <button onClick={nextSlide} style={arrowRightStyle}>&rarr;</button>
+        <button onClick={prevSlide} className="slider-arrow slider-arrow-left" style={arrowLeftStyle}>&larr;</button>
+        <button onClick={nextSlide} className="slider-arrow slider-arrow-right" style={arrowRightStyle}>&rarr;</button>
 
         {/* Indicators */}
         <div style={indicatorsStyle}>
@@ -188,7 +188,7 @@ const Home = () => {
       <section className="section-padding" style={{ backgroundColor: 'rgba(255,255,255,0.01)' }}>
         <div className="container" style={{ textAlign: 'center', marginBottom: '60px' }}>
           <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>OUR DOMAINS</span>
-          <h2 style={{ fontSize: '2.5rem', marginTop: '10px' }}>Hiring Programs We Manage</h2>
+          <h2 className="section-heading">Hiring Programs We Manage</h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '12px auto 0 auto' }}>
             We recruit, verify, and train personnel across multiple channels to ensure absolute delivery metrics.
           </p>
@@ -224,10 +224,10 @@ const Home = () => {
 
       {/* Why Choose Us */}
       <section className="section-padding">
-        <div className="container" style={whyGridStyle}>
+        <div className="container why-grid-layout">
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem' }}>WHY PARTNER GIGSATHI</span>
-            <h2 style={{ fontSize: '2.5rem', marginTop: '10px', marginBottom: '24px' }}>Tech-Enabled Force Hiring Solutions</h2>
+            <h2 className="section-heading" style={{ marginBottom: '24px' }}>Tech-Enabled Force Hiring Solutions</h2>
             <div style={whyFeatureItemStyle}>
               <div style={iconBoxStyle}><Award size={24} color="var(--primary-color)" /></div>
               <div>
