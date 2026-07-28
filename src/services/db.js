@@ -822,9 +822,9 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: If the content is old/short (< 1000 chars), auto-upgrade it in Firestore
+          // Self-healing check: If content does not contain "Subject: Letter of Engagement", auto-upgrade in Firestore
           const candidate = templates.find(t => t.role === 'Candidate');
-          if (candidate && candidate.content && candidate.content.length < 1000) {
+          if (candidate && candidate.content && !candidate.content.includes("Subject: Letter of Engagement")) {
             console.log('GigSathi: Upgrading Firestore offer templates to professional version...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
@@ -837,9 +837,9 @@ export const dbService = {
         console.error(e);
       }
     }
-    // Fallback logic for Local Storage: Upgrade if short
+    // Fallback logic for Local Storage: Upgrade if old
     const local = JSON.parse(localStorage.getItem('gs_templates'));
-    if (local && local[0] && local[0].content && local[0].content.length < 1000) {
+    if (local && local[0] && local[0].content && !local[0].content.includes("Subject: Letter of Engagement")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
