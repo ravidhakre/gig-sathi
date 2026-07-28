@@ -65,10 +65,10 @@ const CandidateDashboard = () => {
               position: relative;
               background: #ffffff;
               color: #334155;
-              padding: 45px 50px;
+              padding: 50px 60px;
               margin: 0 auto;
               max-width: 800px;
-              min-height: 1040px;
+              min-height: 1080px;
               display: flex;
               flex-direction: column;
               border: none;
@@ -95,52 +95,52 @@ const CandidateDashboard = () => {
               justify-content: space-between;
               align-items: center;
               border-bottom: 2px solid #de3163;
-              padding-bottom: 10px;
-              margin-bottom: 20px;
+              padding-bottom: 12px;
+              margin-bottom: 24px;
             }
             .contract-page-sheet .letterhead-logo .logo-main {
-              font-size: 1.6rem;
+              font-size: 1.8rem;
               font-weight: 800;
               color: #de3163;
               letter-spacing: -0.02em;
             }
             .contract-page-sheet .letterhead-logo .company-cin {
               text-align: right;
-              font-size: 0.65rem;
+              font-size: 0.68rem;
               color: #64748b;
-              line-height: 1.3;
+              line-height: 1.4;
             }
             .contract-page-sheet .contract-body {
               flex: 1;
               position: relative;
               z-index: 2;
-              font-size: 0.88rem;
-              line-height: 1.55;
+              font-size: 0.92rem;
+              line-height: 1.62;
               text-align: justify;
             }
             .contract-page-sheet .contract-body p {
-              margin-bottom: 10px;
+              margin-bottom: 12px;
             }
             .contract-page-sheet .contract-body h3 {
-              margin-top: 18px;
-              margin-bottom: 8px;
+              margin-top: 22px;
+              margin-bottom: 10px;
               color: #de3163;
-              font-size: 0.95rem;
-              border-bottom: 1px solid #f1f5f9;
-              padding-bottom: 2px;
+              font-size: 1rem;
+              border-left: 3px solid #de3163;
+              padding-left: 10px;
               text-transform: uppercase;
             }
             .contract-page-sheet .contract-body ul {
-              margin-bottom: 10px;
+              margin-bottom: 12px;
               padding-left: 20px;
             }
             .contract-page-sheet .contract-body li {
-              margin-bottom: 4px;
+              margin-bottom: 6px;
             }
             @media print {
               @page {
                 size: A4 portrait;
-                margin: 1.2cm 1.5cm;
+                margin: 1.5cm 1.8cm;
               }
               body {
                 background: #ffffff;

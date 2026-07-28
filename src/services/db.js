@@ -305,16 +305,33 @@ const SEED_TEMPLATES = [
     <h3>8. Execution & Acceptance of Contract</h3>
     <p>By clicking "Accept & Sign Contract" on your dashboard, you formally agree to all terms stated across this 4-page engagement contract.</p>
     
-    <div style="margin-top: 60px; display: flex; justify-content: space-between;">
-      <div>
-        <p>___________________________</p>
-        <p><strong>Authorized Signatory</strong></p>
-        <p>GigSathi Solutions Pvt. Ltd.</p>
+    <div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
+      <!-- Employer Sign -->
+      <div style="border: 1px solid #e2e8f0; padding: 16px; border-radius: 8px; background-color: #fafafa; position: relative;">
+        <div style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px;">For the Company</div>
+        <div style="height: 60px; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1; border-radius: 4px; background: #fff; margin-bottom: 12px; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
+          Corporate Seal / Authorized Stamp
+        </div>
+        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #1e293b;">___________________________</p>
+        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #de3163;">Authorized Signatory</p>
+        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">GigSathi Solutions Pvt. Ltd.</p>
       </div>
-      <div style="text-align: right;">
-        <p><strong>Accepted Digitally By:</strong></p>
-        <p style="color: #2563eb; font-family: cursive; font-size: 1.1rem; padding: 4px; border: 1px dashed #2563eb; display: inline-block;">{{name}}</p>
-        <p style="font-size: 0.7rem; color: #64748b; margin-top: 4px;">IP Address Logged | Verified via Mobile OTP</p>
+
+      <!-- Employee Digital Seal -->
+      <div style="border: 2px solid #2563eb; padding: 16px; border-radius: 8px; background-color: #eff6ff; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="position: absolute; top: -10px; right: 15px; background: #2563eb; color: white; font-size: 0.6rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
+          ✓ SECURE SIGN
+        </div>
+        <div style="font-size: 0.65rem; color: #2563eb; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Employee Acceptance</div>
+        <div style="text-align: center; margin-bottom: 10px;">
+          <span style="font-family: cursive; font-size: 1.4rem; color: #1d4ed8; font-weight: bold; display: block; border-bottom: 1px dashed #bfdbfe; padding-bottom: 4px;">{{name}}</span>
+          <span style="font-size: 0.6rem; color: #60a5fa; display: block; margin-top: 4px;">Digitally Signed & Authenticated</span>
+        </div>
+        <div style="font-size: 0.65rem; color: #1e3a8a; line-height: 1.35;">
+          <strong>IP:</strong> Logged & Hash-Verified<br/>
+          <strong>Authentication:</strong> Registered Mobile OTP<br/>
+          <strong>Document Status:</strong> Legally Enforceable & Executed
+        </div>
       </div>
     </div>
   </div>
@@ -442,16 +459,33 @@ const SEED_TEMPLATES = [
     <h3>20. Acceptance of Appointment</h3>
     <p>I hereby confirm my acceptance of the employment offer extended by GigSathi Solutions Private Limited for the position of HR Executive and agree to join the Company under the terms and conditions mentioned in this Appointment Letter.</p>
     
-    <div style="margin-top: 50px; display: flex; justify-content: space-between;">
-      <div>
-        <p>___________________________</p>
-        <p><strong>Authorized Signatory</strong></p>
-        <p>GigSathi Solutions Pvt. Ltd.</p>
+    <div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
+      <!-- Employer Sign -->
+      <div style="border: 1px solid #e2e8f0; padding: 16px; border-radius: 8px; background-color: #fafafa; position: relative;">
+        <div style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px;">For the Company</div>
+        <div style="height: 60px; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1; border-radius: 4px; background: #fff; margin-bottom: 12px; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
+          Corporate Seal / Authorized Stamp
+        </div>
+        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #1e293b;">___________________________</p>
+        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #de3163;">Authorized Signatory</p>
+        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">GigSathi Solutions Pvt. Ltd.</p>
       </div>
-      <div style="text-align: right;">
-        <p><strong>Accepted Digitally By:</strong></p>
-        <p style="color: #2563eb; font-family: cursive; font-size: 1.1rem; padding: 4px; border: 1px dashed #2563eb; display: inline-block;">{{name}}</p>
-        <p style="font-size: 0.7rem; color: #64748b; margin-top: 4px;">IP Address Logged | Verified via Mobile OTP</p>
+
+      <!-- Employee Digital Seal -->
+      <div style="border: 2px solid #2563eb; padding: 16px; border-radius: 8px; background-color: #eff6ff; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="position: absolute; top: -10px; right: 15px; background: #2563eb; color: white; font-size: 0.6rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
+          ✓ SECURE SIGN
+        </div>
+        <div style="font-size: 0.65rem; color: #2563eb; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Employee Acceptance</div>
+        <div style="text-align: center; margin-bottom: 10px;">
+          <span style="font-family: cursive; font-size: 1.4rem; color: #1d4ed8; font-weight: bold; display: block; border-bottom: 1px dashed #bfdbfe; padding-bottom: 4px;">{{name}}</span>
+          <span style="font-size: 0.6rem; color: #60a5fa; display: block; margin-top: 4px;">Digitally Signed & Authenticated</span>
+        </div>
+        <div style="font-size: 0.65rem; color: #1e3a8a; line-height: 1.35;">
+          <strong>IP:</strong> Logged & Hash-Verified<br/>
+          <strong>Authentication:</strong> Registered Mobile OTP<br/>
+          <strong>Document Status:</strong> Legally Enforceable & Executed
+        </div>
       </div>
     </div>
   </div>
@@ -945,10 +979,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: If HR template contains old footers or lacks new sections, auto-upgrade in Firestore
+          // Self-healing check: If HR template contains old footers or lacks new signature design, auto-upgrade in Firestore
           const hr = templates.find(t => t.role === 'HR');
-          if (hr && hr.content && (hr.content.includes("Page 1 of 4") || !hr.content.includes("Performance Improvement Process"))) {
-            console.log('GigSathi: Upgrading Firestore offer templates to footerless 20-section layout...');
+          if (hr && hr.content && (hr.content.includes("Page 1 of 4") || !hr.content.includes("border: 2px solid #2563eb"))) {
+            console.log('GigSathi: Upgrading Firestore offer templates to creative signing 20-section layout...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -963,7 +997,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old HR template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (localHR && localHR.content && (localHR.content.includes("Page 1 of 4") || !localHR.content.includes("Performance Improvement Process"))) {
+    if (localHR && localHR.content && (localHR.content.includes("Page 1 of 4") || !localHR.content.includes("border: 2px solid #2563eb"))) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
