@@ -313,11 +313,13 @@ h1, h2, h3, h4, h5, h6 {
   padding: 40px;
   overflow-y: auto;
   min-height: 100vh;
+  width: calc(100% - var(--sidebar-width));
 }
 
 @media (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
   }
   .sidebar.active {
     transform: translateX(0);
@@ -325,6 +327,8 @@ h1, h2, h3, h4, h5, h6 {
   .dashboard-main {
     margin-left: 0;
     padding: 24px 16px;
+    width: 100% !important;
+    max-width: 100vw !important;
   }
 }
 
@@ -335,12 +339,15 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border-color);
   background: var(--bg-surface);
   margin-top: 20px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .crm-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  min-width: 700px; /* Forces scrollbar on container on narrow viewports */
 }
 
 .crm-table th {
@@ -672,5 +679,93 @@ h1, h2, h3, h4, h5, h6 {
   .stats-container-premium {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
+  }
+}
+
+/* -------------------------------------------------------------
+   Dashboard Mobile Header, Overlay, & Responsive Filters
+   ------------------------------------------------------------- */
+.dashboard-mobile-header {
+  display: none;
+  height: 60px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 105;
+}
+
+.mobile-toggle-btn {
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 99;
+}
+
+.filter-panel-responsive {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.filter-item-responsive {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 992px) {
+  .dashboard-mobile-header {
+    display: flex;
+  }
+  .dashboard-main {
+    margin-top: 60px !important;
+  }
+  .sidebar {
+    z-index: 110;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-panel-responsive {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 12px;
+  }
+  
+  .filter-panel-responsive > div {
+    width: 100% !important;
+  }
+
+  .filter-item-responsive {
+    width: 100% !important;
+    justify-content: space-between;
+  }
+
+  .filter-item-responsive select,
+  .filter-item-responsive input[type="date"] {
+    flex: 1;
+    width: auto !important;
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { User, Phone, Mail, ShieldAlert, UploadCloud, FileText, CheckCircle2, Lock } from 'lucide-react';
+import { User, Phone, Mail, ShieldAlert, UploadCloud, FileText, CheckCircle2, Lock, Landmark } from 'lucide-react';
 
 const Profile = () => {
   const { currentUser, updateProfile, showToast } = useApp();
@@ -22,6 +22,14 @@ const Profile = () => {
   // Password reset fields
   const [password, setPassword] = useState({ oldPassword: '', newPassword: '', confirmPassword: '' });
 
+  // Bank Account details
+  const [bankDetails, setBankDetails] = useState({
+    bankName: currentUser?.bankName || '',
+    accountNumber: currentUser?.accountNumber || '',
+    ifscCode: currentUser?.ifscCode || '',
+    accountHolderName: currentUser?.accountHolderName || ''
+  });
+
   // File uploads (DataURLs or simulated names)
   const [files, setFiles] = useState({
     aadharFront: currentUser?.aadharFront || '',
@@ -40,12 +48,27 @@ const Profile = () => {
 
   const handleAddressUpdate = async (e) => {
     e.preventDefault();
-    if (address.aadharNumber && !/^\d{4}-\d{4}-\d{4}$/.test(address.aadharNumber) && !/^\d{12}$/.test(address.aadharNumber)) {
+    if (address.aadharNumber && !/^\d{12}$/.test(address.aadharNumber)) {
       showToast("Please enter a valid 12-digit Aadhar number.", "warning");
       return;
     }
     try {
       await updateProfile(address);
+    } catch (err) {}
+  };
+
+  const handleBankDetailsUpdate = async (e) => {
+    e.preventDefault();
+    if (!bankDetails.bankName || !bankDetails.accountNumber || !bankDetails.ifscCode || !bankDetails.accountHolderName) {
+      showToast("Please fill all bank details fields.", "warning");
+      return;
+    }
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(bankDetails.ifscCode.toUpperCase())) {
+      showToast("Please enter a valid 11-digit IFSC code (e.g. SBIN0001234).", "warning");
+      return;
+    }
+    try {
+      await updateProfile(bankDetails);
     } catch (err) {}
   };
 
@@ -179,10 +202,14 @@ const Profile = () => {
                 <label>Aadhar Card Number</label>
                 <input
                   type="text"
+                  maxLength={12}
                   className="form-control"
-                  placeholder="12 digit number or xxxx-xxxx-xxxx"
+                  placeholder="Enter 12-digit Aadhar number..."
                   value={address.aadharNumber}
-                  onChange={(e) => setAddress({ ...address, aadharNumber: e.target.value })}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '');
+                    setAddress({ ...address, aadharNumber: val });
+                  }}
                   required
                 />
               </div>
@@ -236,6 +263,62 @@ const Profile = () => {
 
               <button type="submit" className="btn btn-primary" style={{ marginTop: '10px' }}>
                 Save KYC & Address
+              </button>
+            </form>
+          </div>
+
+          {/* Bank Account Details Form */}
+          <div className="card">
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Landmark size={18} color="var(--primary-color)" /> Bank Account Details (For Payouts)
+            </h3>
+            <form onSubmit={handleBankDetailsUpdate}>
+              <div className="form-group">
+                <label>Account Holder Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="As per bank passbook..."
+                  value={bankDetails.accountHolderName}
+                  onChange={(e) => setBankDetails({ ...bankDetails, accountHolderName: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Bank Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="E.g. HDFC, SBI, ICICI..."
+                  value={bankDetails.bankName}
+                  onChange={(e) => setBankDetails({ ...bankDetails, bankName: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Account Number</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter full bank account number..."
+                  value={bankDetails.accountNumber}
+                  onChange={(e) => setBankDetails({ ...bankDetails, accountNumber: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>IFSC Code</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="E.g. SBIN0001234 (11 characters)"
+                  value={bankDetails.ifscCode}
+                  onChange={(e) => setBankDetails({ ...bankDetails, ifscCode: e.target.value.toUpperCase() })}
+                  required
+                />
+              </div>
+              <button type="submit" className="btn btn-primary" style={{ marginTop: '10px' }}>
+                Save Bank Details
               </button>
             </form>
           </div>

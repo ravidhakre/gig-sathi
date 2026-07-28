@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import Profile from '../Profile';
 import { 
-  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Plus, ShieldCheck, Mail, Calendar, HelpCircle 
+  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Plus, ShieldCheck, Mail, Calendar, HelpCircle, Menu
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ const CandidateDashboard = () => {
   const navigate = useNavigate();
   
   const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, customer, report, offer, profile
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Add Customer form state
   const [custForm, setCustForm] = useState({ name: '', mobile: '', email: '', project: '' });
@@ -71,8 +72,21 @@ const CandidateDashboard = () => {
 
   return (
     <div className="dashboard-layout fade-in">
+      {/* Mobile Header Bar */}
+      <div className="dashboard-mobile-header">
+        <button onClick={() => setSidebarOpen(true)} className="mobile-toggle-btn">
+          <Menu size={24} />
+        </button>
+        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>GigSathi Exec Panel</span>
+      </div>
+
+      {/* Sidenav Overlay */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div style={sidebarLogoStyle}>
           <ShieldCheck size={24} color="var(--primary-color)" />
           <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>GigSathi <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)' }}>Exec</span></span>
@@ -80,34 +94,34 @@ const CandidateDashboard = () => {
 
         <div style={sidebarMenuStyle}>
           <button 
-            onClick={() => setActiveTab('dashboard')}
+            onClick={() => { setActiveTab('dashboard'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'dashboard' ? activeLinkStyle : {}) }}
           >
             <LayoutDashboard size={18} /> Dashboard
           </button>
           <button 
-            onClick={() => setActiveTab('customer')}
+            onClick={() => { setActiveTab('customer'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'customer' ? activeLinkStyle : {}) }}
           >
-            <Users size={18} /> Customers
+            <Users size={18} /> Customers Onboarded
           </button>
           <button 
-            onClick={() => setActiveTab('report')}
+            onClick={() => { setActiveTab('report'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'report' ? activeLinkStyle : {}) }}
           >
-            <BarChart3 size={18} /> Reports
+            <BarChart3 size={18} /> Earnings Reports
           </button>
           <button 
-            onClick={() => setActiveTab('offer')}
+            onClick={() => { setActiveTab('offer'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'offer' ? activeLinkStyle : {}) }}
           >
-            <FileText size={18} /> Offer Letter
+            <FileText size={18} /> View Offer Letter
           </button>
           <button 
-            onClick={() => setActiveTab('profile')}
+            onClick={() => { setActiveTab('profile'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'profile' ? activeLinkStyle : {}) }}
           >
-            <User size={18} /> Complete Profile
+            <User size={18} /> KYC Profile
           </button>
         </div>
 

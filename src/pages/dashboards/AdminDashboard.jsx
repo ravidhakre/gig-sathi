@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle
+  Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import dbService from '../../services/db';
@@ -16,6 +16,7 @@ const AdminDashboard = () => {
   
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('users');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Local state for administrative tables
   const [usersList, setUsersList] = useState([]);
@@ -188,8 +189,21 @@ const AdminDashboard = () => {
 
   return (
     <div className="dashboard-layout fade-in">
+      {/* Mobile Header Bar */}
+      <div className="dashboard-mobile-header">
+        <button onClick={() => setSidebarOpen(true)} className="mobile-toggle-btn">
+          <Menu size={24} />
+        </button>
+        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>GigSathi Admin Panel</span>
+      </div>
+
+      {/* Sidenav Overlay */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
       {/* Sidenav */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div style={sidebarLogoStyle}>
           <Settings size={24} color="var(--primary-color)" />
           <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>GigSathi <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)' }}>Admin</span></span>
@@ -197,31 +211,31 @@ const AdminDashboard = () => {
 
         <div style={sidebarMenuStyle}>
           <button 
-            onClick={() => setActiveTab('users')}
+            onClick={() => { setActiveTab('users'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'users' ? activeLinkStyle : {}) }}
           >
             <Users size={18} /> Users Manager
           </button>
           <button 
-            onClick={() => setActiveTab('leads')}
+            onClick={() => { setActiveTab('leads'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'leads' ? activeLinkStyle : {}) }}
           >
             <Upload size={18} /> Lead Assignments
           </button>
           <button 
-            onClick={() => setActiveTab('projects')}
+            onClick={() => { setActiveTab('projects'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'projects' ? activeLinkStyle : {}) }}
           >
             <Briefcase size={18} /> Campaign Projects
           </button>
           <button 
-            onClick={() => setActiveTab('offer')}
+            onClick={() => { setActiveTab('offer'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'offer' ? activeLinkStyle : {}) }}
           >
             <FileText size={18} /> Offer Templates
           </button>
           <button 
-            onClick={() => setActiveTab('cms')}
+            onClick={() => { setActiveTab('cms'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'cms' ? activeLinkStyle : {}) }}
           >
             <Layout size={18} /> CMS Website Editor
@@ -259,7 +273,15 @@ const AdminDashboard = () => {
                 <tbody>
                   {usersList.map((u) => (
                     <tr key={u.uid}>
-                      <td style={{ fontWeight: '700' }}>{u.fullName}</td>
+                      <td style={{ fontWeight: '700' }}>
+                        {u.fullName}
+                        {u.bankName && (
+                          <div style={{ fontSize: '0.75rem', color: 'var(--secondary-color)', fontWeight: 'normal', marginTop: '4px' }}>
+                            🏦 {u.bankName} (A/c: {u.accountNumber})<br/>
+                            IFSC: {u.ifscCode} | Name: {u.accountHolderName}
+                          </div>
+                        )}
+                      </td>
                       <td>
                         <div>{u.email}</div>
                         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{u.mobile}</div>

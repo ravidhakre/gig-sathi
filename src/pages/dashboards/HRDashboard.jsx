@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import Profile from '../Profile';
 import { 
-  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2
+  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2, Menu
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ const HRDashboard = () => {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   // CRM Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,8 +78,21 @@ const HRDashboard = () => {
 
   return (
     <div className="dashboard-layout fade-in">
+      {/* Mobile Header Bar */}
+      <div className="dashboard-mobile-header">
+        <button onClick={() => setSidebarOpen(true)} className="mobile-toggle-btn">
+          <Menu size={24} />
+        </button>
+        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>GigSathi HR Panel</span>
+      </div>
+
+      {/* Sidenav Overlay */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
       {/* Sidenav */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div style={sidebarLogoStyle}>
           <Users size={24} color="var(--secondary-color)" />
           <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>GigSathi <span style={{ fontSize: '0.75rem', color: 'var(--secondary-color)' }}>HR</span></span>
@@ -86,25 +100,25 @@ const HRDashboard = () => {
 
         <div style={sidebarMenuStyle}>
           <button 
-            onClick={() => setActiveTab('dashboard')}
+            onClick={() => { setActiveTab('dashboard'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'dashboard' ? activeLinkStyle : {}) }}
           >
             <LayoutDashboard size={18} /> Dashboard
           </button>
           <button 
-            onClick={() => setActiveTab('leads')}
+            onClick={() => { setActiveTab('leads'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'leads' ? activeLinkStyle : {}) }}
           >
             <Users size={18} /> Leads CRM
           </button>
           <button 
-            onClick={() => setActiveTab('reports')}
+            onClick={() => { setActiveTab('reports'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'reports' ? activeLinkStyle : {}) }}
           >
             <BarChart3 size={18} /> Reports
           </button>
           <button 
-            onClick={() => setActiveTab('profile')}
+            onClick={() => { setActiveTab('profile'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'profile' ? activeLinkStyle : {}) }}
           >
             <User size={18} /> Complete Profile
@@ -219,9 +233,9 @@ const HRDashboard = () => {
             </div>
 
             {/* Filters panel */}
-            <div style={filterPanelStyle}>
+            <div className="filter-panel-responsive">
               {/* Search */}
-              <div style={searchContainerStyle}>
+              <div style={searchContainerStyle} className="search-container-premium">
                 <Search size={18} style={searchIconStyle} />
                 <input
                   type="text"
@@ -234,7 +248,7 @@ const HRDashboard = () => {
               </div>
 
               {/* Status filter */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="filter-item-responsive">
                 <Filter size={16} color="var(--text-muted)" />
                 <select 
                   className="form-control" 
@@ -252,7 +266,7 @@ const HRDashboard = () => {
               </div>
 
               {/* Date filter */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="filter-item-responsive">
                 <Calendar size={16} color="var(--text-muted)" />
                 <input
                   type="date"
