@@ -285,6 +285,24 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const deleteUserAdmin = async (uid) => {
+    try {
+      await dbService.deleteUser(uid);
+      showToast(`User deleted successfully!`, 'success');
+    } catch (error) {
+      showToast(error.message, 'danger');
+    }
+  };
+
+  const resetUserPasswordAdmin = async (uid, email) => {
+    try {
+      await dbService.resetUserPassword(uid, email);
+      showToast(`Password reset link sent to ${email} (Mock user password reset to password123)!`, 'success');
+    } catch (error) {
+      showToast(error.message, 'danger');
+    }
+  };
+
   return (
     <AppContext.Provider value={{
       currentUser,
@@ -312,6 +330,8 @@ export const AppProvider = ({ children }) => {
       deleteProjectDetails,
       changeUserRoleAdmin,
       approveUserKYCAdmin,
+      deleteUserAdmin,
+      resetUserPasswordAdmin,
       showToast
     }}>
       {children}

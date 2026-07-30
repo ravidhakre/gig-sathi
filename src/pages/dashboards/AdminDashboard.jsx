@@ -11,7 +11,8 @@ const AdminDashboard = () => {
     projects, leads, templates, cms, logout, 
     createProject, updateProjectDetails, deleteProjectDetails, 
     updateCMS, saveOfferLetterTemplate, changeUserRoleAdmin,
-    approveUserKYCAdmin, assignLeadsToHR, uploadLeadsBulk, showToast 
+    approveUserKYCAdmin, deleteUserAdmin, resetUserPasswordAdmin,
+    assignLeadsToHR, uploadLeadsBulk, showToast 
   } = useApp();
   
   const navigate = useNavigate();
@@ -22,6 +23,12 @@ const AdminDashboard = () => {
   const [usersList, setUsersList] = useState([]);
   const [hrOfficers, setHrOfficers] = useState([]);
   const [selectedUserForKYC, setSelectedUserForKYC] = useState(null);
+  const [editingCandidate, setEditingCandidate] = useState(null);
+  const [candidateForm, setCandidateForm] = useState({
+    fullName: '', email: '', mobile: '', aadharNumber: '', 
+    address: '', city: '', state: '', pincode: '',
+    bankName: '', accountNumber: '', ifscCode: '', accountHolderName: ''
+  });
 
   // CMS Form States
   const [homeCMS, setHomeCMS] = useState({ heroTitle: '', heroSubtitle: '', statsCandidates: '', statsPartners: '', statsCommission: '' });
@@ -83,6 +90,50 @@ const AdminDashboard = () => {
       await changeUserRoleAdmin(uid, newRole);
       await loadUsers();
     } catch (err) {}
+  };
+
+  const handleEditCandidateClick = (c) => {
+    setEditingCandidate(c);
+    setCandidateForm({
+      fullName: c.fullName || '',
+      email: c.email || '',
+      mobile: c.mobile || '',
+      aadharNumber: c.aadharNumber || '',
+      address: c.address || '',
+      city: c.city || '',
+      state: c.state || '',
+      pincode: c.pincode || '',
+      bankName: c.bankName || '',
+      accountNumber: c.accountNumber || '',
+      ifscCode: c.ifscCode || '',
+      accountHolderName: c.accountHolderName || ''
+    });
+  };
+
+  const handleCandidateEditSubmit = async (e) => {
+    e.preventDefault();
+    if (!editingCandidate) return;
+    try {
+      await dbService.updateProfile(editingCandidate.uid, candidateForm);
+      showToast("Candidate profile updated successfully!", "success");
+      setEditingCandidate(null);
+      await loadUsers();
+    } catch (err) {
+      showToast(err.message, "danger");
+    }
+  };
+
+  const handleDeleteCandidateClick = async (uid) => {
+    if (window.confirm("Are you sure you want to delete this candidate completely from the portal?")) {
+      await deleteUserAdmin(uid);
+      await loadUsers();
+    }
+  };
+
+  const handleResetPasswordClick = async (uid, email) => {
+    if (window.confirm(`Are you sure you want to trigger password reset for ${email}?`)) {
+      await resetUserPasswordAdmin(uid, email);
+    }
   };
 
   // CMS update submissions
@@ -218,6 +269,12 @@ const AdminDashboard = () => {
             <Users size={18} /> Users Manager
           </button>
           <button 
+            onClick={() => { setActiveTab('candidates'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'candidates' ? activeLinkStyle : {}) }}
+          >
+            <UserCheck size={18} /> Candidates
+          </button>
+          <button 
             onClick={() => { setActiveTab('leads'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'leads' ? activeLinkStyle : {}) }}
           >
@@ -333,6 +390,99 @@ const AdminDashboard = () => {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* --- CANDIDATES TAB --- */}
+        {activeTab === 'candidates' && (
+          <div style={tabContentStyle}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Candidates Database</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Inspect and manage candidate registration, documents, bank details, passwords, and portal roles.</p>
+
+            <div className="crm-table-container">
+              <table className="crm-table">
+                <thead>
+                  <tr>
+                    <th>Candidate Name</th>
+                    <th>Contact details</th>
+                    <th>KYC Uploads</th>
+                    <th>Verification Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersList.filter(u => u.role === 'Candidate').length > 0 ? (
+                    usersList.filter(u => u.role === 'Candidate').map((u) => (
+                      <tr key={u.uid}>
+                        <td style={{ fontWeight: '700' }}>
+                          {u.fullName}
+                          {u.bankName && (
+                            <div style={{ fontSize: '0.75rem', color: 'var(--secondary-color)', fontWeight: 'normal', marginTop: '4px' }}>
+                              🏦 {u.bankName} (A/c: {u.accountNumber})<br/>
+                              IFSC: {u.ifscCode} | Name: {u.accountHolderName}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          <div>{u.email}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{u.mobile}</div>
+                        </td>
+                        <td>
+                          <span style={{ fontSize: '0.9rem', color: u.profileComplete ? 'var(--primary-color)' : 'var(--danger-color)', fontWeight: '600' }}>
+                            {u.profileComplete ? 'Aadhar & Resume Uploaded' : 'Missing KYC Doc'}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`}>
+                            {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            {u.profileComplete && (
+                              <button 
+                                onClick={() => setSelectedUserForKYC(u)}
+                                className="btn btn-outline" 
+                                style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
+                              >
+                                View Docs
+                              </button>
+                            )}
+                            <button 
+                              onClick={() => handleEditCandidateClick(u)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem' }}
+                            >
+                              Edit Profile
+                            </button>
+                            <button 
+                              onClick={() => handleResetPasswordClick(u.uid, u.email)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--accent-color)', color: 'var(--accent-color)' }}
+                            >
+                              Reset Pass
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteCandidateClick(u.uid)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--danger-color)', color: 'var(--danger-color)' }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+                        No registered candidates found in the database.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -872,6 +1022,156 @@ const AdminDashboard = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- EDIT CANDIDATE MODAL --- */}
+      {editingCandidate && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in" style={{ maxWidth: '600px', width: '90%', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={modalHeaderStyle}>
+              <h3 style={{ fontSize: '1.4rem', color: '#fff' }}>Edit Candidate Profile</h3>
+              <button onClick={() => setEditingCandidate(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#fff' }}><X size={20} /></button>
+            </div>
+            
+            <form onSubmit={handleCandidateEditSubmit} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div className="grid-2" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Full Name</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.fullName}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, fullName: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Mobile Number</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.mobile}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, mobile: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Email Address</label>
+                  <input 
+                    type="email" 
+                    className="form-control" 
+                    value={candidateForm.email}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, email: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Aadhaar Number</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.aadharNumber}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, aadharNumber: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <h4 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px', marginTop: '10px', color: '#fff', fontSize: '1.05rem' }}>Address Details</h4>
+              <div className="form-group">
+                <label style={{ color: '#fff' }}>Street Address</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  value={candidateForm.address}
+                  onChange={(e) => setCandidateForm({ ...candidateForm, address: e.target.value })}
+                />
+              </div>
+              <div className="grid-3" style={{ gap: '10px' }}>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>City</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.city}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, city: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>State</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.state}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, state: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Pincode</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.pincode}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, pincode: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <h4 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px', marginTop: '10px', color: '#fff', fontSize: '1.05rem' }}>Bank Details</h4>
+              <div className="grid-2" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Bank Name</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.bankName}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, bankName: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Account Number</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.accountNumber}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, accountNumber: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>IFSC Code</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.ifscCode}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, ifscCode: e.target.value })}
+                  />
+                </div>
+                <div className="form-group">
+                  <label style={{ color: '#fff' }}>Account Holder Name</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    value={candidateForm.accountHolderName}
+                    onChange={(e) => setCandidateForm({ ...candidateForm, accountHolderName: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px', marginTop: '10px' }}>
+                <button type="submit" className="btn btn-primary" style={{ flex: 1, color: '#fff' }}>
+                  Save Profile Edits
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setEditingCandidate(null)} 
+                  className="btn btn-outline" 
+                  style={{ flex: 0.5, color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

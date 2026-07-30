@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut,
-  updatePassword as firebaseUpdatePassword
+  updatePassword as firebaseUpdatePassword,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { 
   getFirestore, 
@@ -831,6 +832,40 @@ export const dbService = {
       return users[index];
     }
     throw new Error("User not found.");
+  },
+
+  deleteUser: async (uid) => {
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const filtered = users.filter(u => u.uid !== uid);
+    localStorage.setItem('gs_users', JSON.stringify(filtered));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await deleteDoc(doc(firebaseFirestore, 'users', uid));
+      } catch (e) {
+        console.error("Firebase Firestore user document delete error:", e);
+      }
+    }
+    return true;
+  },
+
+  resetUserPassword: async (uid, email, newPassword = 'password123') => {
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const index = users.findIndex(u => u.uid === uid);
+    if (index !== -1) {
+      users[index].password = newPassword;
+      localStorage.setItem('gs_users', JSON.stringify(users));
+    }
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await sendPasswordResetEmail(firebaseAuth, email);
+      } catch (e) {
+        console.error("Firebase Auth send password reset email error:", e);
+        throw e;
+      }
+    }
+    return true;
   },
 
   // --- Projects Operations ---
