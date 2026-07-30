@@ -813,6 +813,26 @@ export const dbService = {
     throw new Error("User not found.");
   },
 
+  approveUserKYC: async (uid, isApproved) => {
+    const users = JSON.parse(localStorage.getItem('gs_users'));
+    const index = users.findIndex(u => u.uid === uid);
+    if (index !== -1) {
+      users[index].profileApproved = isApproved;
+      localStorage.setItem('gs_users', JSON.stringify(users));
+
+      if (dbMode === 'FIREBASE') {
+        try {
+          await updateDoc(doc(firebaseFirestore, 'users', uid), { profileApproved: isApproved });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      return users[index];
+    }
+    throw new Error("User not found.");
+  },
+
   // --- Projects Operations ---
   getProjects: async () => {
     if (dbMode === 'FIREBASE') {

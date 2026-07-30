@@ -128,23 +128,64 @@ const Profile = () => {
       </div>
 
       {/* Profile Status Badge */}
-      <div style={{
-        ...statusBannerStyle,
-        backgroundColor: currentUser?.profileComplete ? 'var(--primary-light)' : 'var(--danger-light)',
-        borderColor: currentUser?.profileComplete ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'
-      }}>
-        <ShieldAlert size={20} color={currentUser?.profileComplete ? 'var(--primary-color)' : 'var(--danger-color)'} />
-        <div>
-          <strong style={{ color: currentUser?.profileComplete ? '#fff' : 'var(--danger-color)' }}>
-            KYC Status: {currentUser?.profileComplete ? 'COMPLETED & VERIFIED' : 'PENDING ACTION'}
-          </strong>
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            {currentUser?.profileComplete 
-              ? 'Your Aadhar details, document uploads, and resumes are active. You are eligible for project assignments.' 
-              : 'Please input your Aadhar number, full address, front/back Aadhar cards, and upload your resume to activate your status.'}
+      {(() => {
+        const getKYCBannerStyles = () => {
+          if (!currentUser?.profileComplete) {
+            return {
+              bg: 'var(--danger-light)',
+              border: 'rgba(239,68,68,0.2)',
+              color: 'var(--danger-color)',
+              status: 'PENDING ACTION',
+              text: 'Please input your Aadhar number, full address, front/back Aadhar cards, and upload your resume to activate your status.'
+            };
+          }
+          if (currentUser?.profileApproved === true) {
+            return {
+              bg: 'rgba(16, 185, 129, 0.08)',
+              border: 'rgba(16, 185, 129, 0.2)',
+              color: '#10b981',
+              status: 'VERIFIED & APPROVED',
+              text: 'Your Aadhar details, document uploads, and resumes are verified and active. You are eligible for project assignments.'
+            };
+          }
+          if (currentUser?.profileApproved === false) {
+            return {
+              bg: 'var(--danger-light)',
+              border: 'rgba(239,68,68,0.2)',
+              color: 'var(--danger-color)',
+              status: 'KYC REJECTED',
+              text: 'Your KYC documents were rejected. Please review your address details, verify your Aadhar card front/back images, and upload them again.'
+            };
+          }
+          return {
+            bg: 'rgba(245, 158, 11, 0.08)',
+            border: 'rgba(245, 158, 11, 0.2)',
+            color: '#f59e0b',
+            status: 'SUBMITTED (UNDER REVIEW)',
+            text: 'Your documents have been submitted successfully and are currently under review by our compliance team. You will be notified once approved.'
+          };
+        };
+
+        const kycInfo = getKYCBannerStyles();
+
+        return (
+          <div style={{
+            ...statusBannerStyle,
+            backgroundColor: kycInfo.bg,
+            borderColor: kycInfo.border
+          }}>
+            <ShieldAlert size={20} color={kycInfo.color} />
+            <div>
+              <strong style={{ color: kycInfo.color }}>
+                KYC Status: {kycInfo.status}
+              </strong>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                {kycInfo.text}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      })()}
 
       <div className="grid-2" style={{ gap: '30px', alignItems: 'start' }}>
         

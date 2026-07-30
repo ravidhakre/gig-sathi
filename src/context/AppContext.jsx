@@ -275,6 +275,16 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const approveUserKYCAdmin = async (uid, isApproved) => {
+    try {
+      const updated = await dbService.approveUserKYC(uid, isApproved);
+      showToast(`Candidate profile ${isApproved ? 'Approved' : 'Rejected'} successfully!`, 'success');
+      return updated;
+    } catch (error) {
+      showToast(error.message, 'danger');
+    }
+  };
+
   return (
     <AppContext.Provider value={{
       currentUser,
@@ -301,6 +311,7 @@ export const AppProvider = ({ children }) => {
       updateProjectDetails,
       deleteProjectDetails,
       changeUserRoleAdmin,
+      approveUserKYCAdmin,
       showToast
     }}>
       {children}

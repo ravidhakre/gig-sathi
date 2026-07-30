@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     projects, leads, templates, cms, logout, 
     createProject, updateProjectDetails, deleteProjectDetails, 
     updateCMS, saveOfferLetterTemplate, changeUserRoleAdmin,
-    assignLeadsToHR, uploadLeadsBulk, showToast 
+    approveUserKYCAdmin, assignLeadsToHR, uploadLeadsBulk, showToast 
   } = useApp();
   
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const AdminDashboard = () => {
   // Local state for administrative tables
   const [usersList, setUsersList] = useState([]);
   const [hrOfficers, setHrOfficers] = useState([]);
+  const [selectedUserForKYC, setSelectedUserForKYC] = useState(null);
 
   // CMS Form States
   const [homeCMS, setHomeCMS] = useState({ heroTitle: '', heroSubtitle: '', statsCandidates: '', statsPartners: '', statsCommission: '' });
@@ -297,9 +298,25 @@ const AdminDashboard = () => {
                         </span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.9rem', color: u.profileComplete ? 'var(--primary-color)' : 'var(--danger-color)' }}>
-                          {u.profileComplete ? 'Aadhar Uploaded' : 'Missing KYC Doc'}
-                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          <span style={{ fontSize: '0.9rem', color: u.profileComplete ? 'var(--primary-color)' : 'var(--danger-color)', fontWeight: '600' }}>
+                            {u.profileComplete ? 'Aadhar Uploaded' : 'Missing KYC Doc'}
+                          </span>
+                          {u.role === 'Candidate' && u.profileComplete && (
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
+                              <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`} style={{ fontSize: '0.75rem' }}>
+                                {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
+                              </span>
+                              <button 
+                                onClick={() => setSelectedUserForKYC(u)} 
+                                className="btn btn-outline" 
+                                style={{ padding: '2px 8px', fontSize: '0.75rem', minWidth: 'auto', border: '1px solid var(--primary-color)', color: 'var(--primary-color)' }}
+                              >
+                                Review Docs
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td>
                         <select
@@ -307,11 +324,11 @@ const AdminDashboard = () => {
                           value={u.role}
                           onChange={(e) => handleRoleChange(u.uid, e.target.value)}
                           style={{ padding: '6px', fontSize: '0.85rem', width: '130px' }}
-                          disabled={u.uid === 'admin-1'}
+                          disabled={u.uid === 'admin-1' || u.role === 'Admin'}
                         >
                           <option value="Candidate">Candidate</option>
                           <option value="HR">HR Officer</option>
-                          <option value="Admin">Admin</option>
+                          {u.role === 'Admin' && <option value="Admin">Admin</option>}
                         </select>
                       </td>
                     </tr>
@@ -727,6 +744,134 @@ const AdminDashboard = () => {
                 {editingProj ? 'Save Project Details' : 'Generate Campaign'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- KYC REVIEW / APPROVAL MODAL --- */}
+      {selectedUserForKYC && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in" style={{ maxWidth: '650px', width: '90%', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={modalHeaderStyle}>
+              <h3 style={{ fontSize: '1.4rem', color: '#fff' }}>Review KYC Documents</h3>
+              <button onClick={() => setSelectedUserForKYC(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#fff' }}><X size={20} /></button>
+            </div>
+            
+            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {/* User info */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', backgroundColor: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CANDIDATE NAME</div>
+                  <strong style={{ fontSize: '1rem', color: '#fff' }}>{selectedUserForKYC.fullName}</strong>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>AADHAR NUMBER</div>
+                  <strong style={{ fontSize: '1rem', letterSpacing: '1px', color: '#fff' }}>{selectedUserForKYC.aadharNumber}</strong>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>EMAIL ADDRESS</div>
+                  <strong style={{ color: '#fff' }}>{selectedUserForKYC.email}</strong>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>MOBILE NUMBER</div>
+                  <strong style={{ color: '#fff' }}>{selectedUserForKYC.mobile}</strong>
+                </div>
+                <div style={{ gridColumn: 'span 2' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>PERMANENT ADDRESS</div>
+                  <strong style={{ color: '#fff' }}>{`${selectedUserForKYC.address}, ${selectedUserForKYC.city}, ${selectedUserForKYC.state} - ${selectedUserForKYC.pincode}`}</strong>
+                </div>
+              </div>
+
+              {/* Status Badge */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontWeight: '600', color: '#fff' }}>Current Status:</span>
+                <span className={`badge ${selectedUserForKYC.profileApproved === true ? 'badge-hired' : selectedUserForKYC.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`} style={{ fontSize: '0.9rem', padding: '6px 12px' }}>
+                  {selectedUserForKYC.profileApproved === true ? 'Approved & Verified' : selectedUserForKYC.profileApproved === false ? 'Rejected' : 'Pending Review'}
+                </span>
+              </div>
+
+              {/* Document Images */}
+              <div>
+                <h4 style={{ marginBottom: '12px', fontSize: '1.1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px', color: '#fff' }}>Uploaded Documents</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>AADHAR CARD FRONT</div>
+                    {selectedUserForKYC.aadharFront ? (
+                      <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000' }}>
+                        <img src={selectedUserForKYC.aadharFront} alt="Aadhar Front" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                      </div>
+                    ) : (
+                      <div style={{ height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', color: 'var(--text-muted)' }}>No image uploaded</div>
+                    )}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>AADHAR CARD BACK</div>
+                    {selectedUserForKYC.aadharBack ? (
+                      <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000' }}>
+                        <img src={selectedUserForKYC.aadharBack} alt="Aadhar Back" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                      </div>
+                    ) : (
+                      <div style={{ height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', color: 'var(--text-muted)' }}>No image uploaded</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Resume download / view */}
+              {selectedUserForKYC.resume && (
+                <div style={{ backgroundColor: 'rgba(255,255,255,0.01)', padding: '15px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <strong style={{ fontSize: '0.95rem', color: '#fff' }}>Candidate Resume / CV</strong>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Provided in text or document format</div>
+                    </div>
+                    <a 
+                      href={selectedUserForKYC.resume} 
+                      download={`${selectedUserForKYC.fullName.replace(/\s+/g, '_')}_Resume`}
+                      className="btn btn-outline" 
+                      style={{ padding: '6px 12px', fontSize: '0.85rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Download Resume
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              {/* Approval Buttons */}
+              <div style={{ display: 'flex', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px', marginTop: '10px' }}>
+                <button 
+                  onClick={async () => {
+                    await approveUserKYCAdmin(selectedUserForKYC.uid, true);
+                    setSelectedUserForKYC(null);
+                    await loadUsers();
+                  }}
+                  className="btn btn-primary" 
+                  style={{ flex: 1, backgroundColor: 'var(--primary-color)', color: '#fff' }}
+                >
+                  Approve KYC Profile
+                </button>
+                <button 
+                  onClick={async () => {
+                    await approveUserKYCAdmin(selectedUserForKYC.uid, false);
+                    setSelectedUserForKYC(null);
+                    await loadUsers();
+                  }}
+                  className="btn btn-outline" 
+                  style={{ flex: 1, borderColor: 'var(--danger-color)', color: 'var(--danger-color)', backgroundColor: 'transparent' }}
+                >
+                  Reject KYC Profile
+                </button>
+                <button 
+                  onClick={() => setSelectedUserForKYC(null)}
+                  className="btn btn-outline"
+                  style={{ flex: 0.5, color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
