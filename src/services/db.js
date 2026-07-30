@@ -597,18 +597,27 @@ export const dbService = {
         const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
         const uid = userCredential.user.uid;
         
-        // Fetch custom data from Firestore
-        const userDoc = await getDoc(doc(firebaseFirestore, 'users', uid));
-        if (userDoc.exists()) {
-          return userDoc.data();
+        // Fetch custom data from Firestore - catch read errors to be resilient
+        let userData = null;
+        try {
+          const userDoc = await getDoc(doc(firebaseFirestore, 'users', uid));
+          if (userDoc.exists()) {
+            userData = userDoc.data();
+          }
+        } catch (readErr) {
+          console.warn("Firestore read failed, using email-based role fallback:", readErr);
         }
         
-        // Fallback user shape if firestore record doesn't exist
+        if (userData) {
+          return userData;
+        }
+        
+        // Fallback user shape if firestore record doesn't exist or read fails
         return {
           uid,
           email,
           fullName: email.split('@')[0],
-          role: 'Candidate',
+          role: email.toLowerCase() === 'admin@gigsathi.com' ? 'Admin' : (email.toLowerCase() === 'hr@gigsathi.com' ? 'HR' : 'Candidate'),
           verified: true
         };
       } catch (e) {
@@ -640,7 +649,11 @@ export const dbService = {
               resume: ''
             };
             
-            await setDoc(doc(firebaseFirestore, 'users', uid), newUser);
+            try {
+              await setDoc(doc(firebaseFirestore, 'users', uid), newUser);
+            } catch (writeErr) {
+              console.warn("Firestore write failed, proceeding with local credentials object:", writeErr);
+            }
             return newUser;
           } catch (signUpErr) {
             console.error('Failed to auto-register demo user:', signUpErr);
