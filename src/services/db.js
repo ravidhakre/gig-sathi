@@ -612,6 +612,41 @@ export const dbService = {
           verified: true
         };
       } catch (e) {
+        // Self-healing: If login fails for a demo account with the correct password, automatically register it in Firebase!
+        const isDemoEmail = ['admin@gigsathi.com', 'hr@gigsathi.com', 'candidate@gigsathi.com'].includes(email.toLowerCase());
+        if (isDemoEmail && password === 'password123') {
+          try {
+            console.log('GigSathi: Demo user not found in Firebase. Auto-registering...');
+            const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            const uid = userCredential.user.uid;
+            const role = email.toLowerCase() === 'admin@gigsathi.com' ? 'Admin' : (email.toLowerCase() === 'hr@gigsathi.com' ? 'HR' : 'Candidate');
+            const fullName = email.toLowerCase() === 'admin@gigsathi.com' ? 'Admin Manager' : (email.toLowerCase() === 'hr@gigsathi.com' ? 'HR Specialist' : 'Candidate User');
+            
+            const newUser = {
+              uid,
+              fullName,
+              mobile: '9876543210',
+              email,
+              role,
+              verified: true,
+              profileComplete: true,
+              aadharNumber: '123456789012',
+              address: 'Registered Office Dwarka',
+              pincode: '110075',
+              city: 'New Delhi',
+              state: 'Delhi',
+              aadharFront: '',
+              aadharBack: '',
+              resume: ''
+            };
+            
+            await setDoc(doc(firebaseFirestore, 'users', uid), newUser);
+            return newUser;
+          } catch (signUpErr) {
+            console.error('Failed to auto-register demo user:', signUpErr);
+            throw new Error(e.message);
+          }
+        }
         throw new Error(e.message);
       }
     }

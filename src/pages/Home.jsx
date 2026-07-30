@@ -108,20 +108,20 @@ const Home = () => {
                     </p>
                     <div style={sliderActionsStyle}>
                       {slide.btn1Link.startsWith('#') ? (
-                        <a href={slide.btn1Link} className="btn btn-primary btn-lg" style={sliderBtn1Style}>
+                        <a href={slide.btn1Link} className="btn btn-slider-primary btn-lg">
                           {slide.btn1Text} <ArrowRight size={18} />
                         </a>
                       ) : (
-                        <Link to={slide.btn1Link} className="btn btn-primary btn-lg" style={sliderBtn1Style}>
+                        <Link to={slide.btn1Link} className="btn btn-slider-primary btn-lg">
                           {slide.btn1Text} <ArrowRight size={18} />
                         </Link>
                       )}
                       {slide.btn2Link.startsWith('/') ? (
-                        <Link to={slide.btn2Link} className="btn btn-outline btn-lg" style={sliderBtn2Style}>
+                        <Link to={slide.btn2Link} className="btn btn-slider-secondary btn-lg">
                           {slide.btn2Text}
                         </Link>
                       ) : (
-                        <a href={slide.btn2Link} className="btn btn-outline btn-lg" style={sliderBtn2Style}>
+                        <a href={slide.btn2Link} className="btn btn-slider-secondary btn-lg">
                           {slide.btn2Text}
                         </a>
                       )}
@@ -130,7 +130,7 @@ const Home = () => {
                   
                   {/* Hero Decorative Glow Card */}
                   <div className="hero-glow-card" style={glowCardStyle}>
-                    <div className="glass-card" style={sliderGlassCardStyle}>
+                    <div className="glass-card slider-glass-card">
                       <h3 style={{ fontSize: '1.7rem', marginBottom: '16px', color: '#ffffff' }}>GigSathi Ecosystem</h3>
                       <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px', padding: 0 }}>
                         <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Instant Onboarding & Verification</li>

@@ -70,7 +70,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar" style={navbarStyle}>
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`} style={navbarStyle}>
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
           <Link to="/" style={logoStyle}>
@@ -116,10 +116,10 @@ const Navbar = () => {
               </div>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Link to="/auth" className="btn btn-outline" style={{ padding: '8px 20px', borderColor: 'rgba(255,255,255,0.2)', color: '#ffffff' }}>
+                <Link to="/auth" className="btn btn-nav-outline">
                   Login
                 </Link>
-                <Link to="/auth?signup=true" className="btn btn-primary" style={{ padding: '8px 20px', boxShadow: 'none' }}>
+                <Link to="/auth?signup=true" className="btn btn-nav-primary">
                   Register
                 </Link>
               </div>
@@ -231,7 +231,7 @@ const mobileNavLinkStyle = {
   display: 'block'
 };
 
-// Injected styles for responsive overrides
+// Injected styles for responsive overrides and premium hovers
 const style = document.createElement('style');
 style.textContent = `
   .mobile-menu-btn {
@@ -246,8 +246,76 @@ style.textContent = `
     .nav-links-desktop, .nav-actions-desktop { display: none !important; }
     .mobile-menu-btn { display: block !important; }
   }
-  .nav-links-desktop a:hover {
+  
+  .nav-links-desktop a {
+    transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease !important;
+  }
+  
+  /* Transparent Navbar state (not scrolled) */
+  .navbar:not(.scrolled) .nav-links-desktop a:hover {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  }
+  
+  /* Scrolled Navbar state */
+  .navbar.scrolled .nav-links-desktop a:hover {
     color: var(--primary-color) !important;
+  }
+
+  /* Premium Nav Action Buttons */
+  .btn-nav-outline {
+    background: transparent !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  .btn-nav-outline:hover {
+    background: #ffffff !important;
+    color: var(--primary-color) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  .navbar.scrolled .btn-nav-outline {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+  }
+  
+  .navbar.scrolled .btn-nav-outline:hover {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: var(--shadow-glow) !important;
+  }
+
+  .btn-nav-primary {
+    background-color: #ffffff !important;
+    color: var(--primary-color) !important;
+    border: 1.5px solid #ffffff !important;
+    font-weight: 700 !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  .btn-nav-primary:hover {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.15) !important;
+  }
+  
+  .navbar.scrolled .btn-nav-primary {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+    border-color: var(--primary-color) !important;
+  }
+  
+  .navbar.scrolled .btn-nav-primary:hover {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    box-shadow: var(--shadow-glow) !important;
   }
 `;
 document.head.appendChild(style);
