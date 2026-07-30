@@ -37,7 +37,7 @@ const Auth = () => {
 
   const redirectUser = (userRole) => {
     if (userRole === 'Admin') navigate('/admin');
-    else if (userRole === 'HR') navigate('/hr');
+    else if (userRole === 'HR' || userRole === 'HR Executive' || userRole === 'HR Intern') navigate('/hr');
     else navigate('/candidate');
   };
 

@@ -61,7 +61,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     // If logged in but not authorized for this specific dashboard, redirect to their home dashboard
     if (currentUser.role === 'Admin') return <Navigate to="/admin" replace />;
-    if (currentUser.role === 'HR') return <Navigate to="/hr" replace />;
+    if (currentUser.role === 'HR' || currentUser.role === 'HR Executive' || currentUser.role === 'HR Intern') return <Navigate to="/hr" replace />;
     return <Navigate to="/candidate" replace />;
   }
 
@@ -95,7 +95,7 @@ function App() {
             <Route 
               path="/hr" 
               element={
-                <ProtectedRoute allowedRoles={['HR', 'Admin']}>
+                <ProtectedRoute allowedRoles={['HR', 'HR Executive', 'HR Intern', 'Admin']}>
                   <HRDashboard />
                 </ProtectedRoute>
               } 

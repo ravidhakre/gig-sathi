@@ -38,7 +38,7 @@ const Navbar = () => {
   const getDashboardPath = () => {
     if (!currentUser) return '/login';
     if (currentUser.role === 'Admin') return '/admin';
-    if (currentUser.role === 'HR') return '/hr';
+    if (currentUser.role === 'HR' || currentUser.role === 'HR Executive' || currentUser.role === 'HR Intern') return '/hr';
     return '/candidate';
   };
 

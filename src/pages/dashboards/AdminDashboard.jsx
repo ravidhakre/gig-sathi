@@ -275,6 +275,12 @@ const AdminDashboard = () => {
             <UserCheck size={18} /> Candidates
           </button>
           <button 
+            onClick={() => { setActiveTab('hr-candidates'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'hr-candidates' ? activeLinkStyle : {}) }}
+          >
+            <Users size={18} /> HR Candidates
+          </button>
+          <button 
             onClick={() => { setActiveTab('leads'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'leads' ? activeLinkStyle : {}) }}
           >
@@ -359,7 +365,7 @@ const AdminDashboard = () => {
                           <span style={{ fontSize: '0.9rem', color: u.profileComplete ? 'var(--primary-color)' : 'var(--danger-color)', fontWeight: '600' }}>
                             {u.profileComplete ? 'Aadhar Uploaded' : 'Missing KYC Doc'}
                           </span>
-                          {u.role === 'Candidate' && u.profileComplete && (
+                          {(u.role === 'Candidate' || u.role === 'HR' || u.role === 'HR Executive' || u.role === 'HR Intern') && (
                             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
                               <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`} style={{ fontSize: '0.75rem' }}>
                                 {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
@@ -369,7 +375,7 @@ const AdminDashboard = () => {
                                 className="btn btn-outline" 
                                 style={{ padding: '2px 8px', fontSize: '0.75rem', minWidth: 'auto', border: '1px solid var(--primary-color)', color: 'var(--primary-color)' }}
                               >
-                                Review Docs
+                                Review KYC
                               </button>
                             </div>
                           )}
@@ -380,11 +386,13 @@ const AdminDashboard = () => {
                           className="form-control"
                           value={u.role}
                           onChange={(e) => handleRoleChange(u.uid, e.target.value)}
-                          style={{ padding: '6px', fontSize: '0.85rem', width: '130px' }}
+                          style={{ padding: '6px', fontSize: '0.85rem', width: '140px' }}
                           disabled={u.uid === 'admin-1' || u.role === 'Admin'}
                         >
                           <option value="Candidate">Candidate</option>
-                          <option value="HR">HR Officer</option>
+                          <option value="HR Executive">HR Executive</option>
+                          <option value="HR Intern">HR Intern</option>
+                          {u.role === 'HR' && <option value="HR">HR Officer</option>}
                           {u.role === 'Admin' && <option value="Admin">Admin</option>}
                         </select>
                       </td>
@@ -442,15 +450,13 @@ const AdminDashboard = () => {
                         </td>
                         <td>
                           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            {u.profileComplete && (
-                              <button 
-                                onClick={() => setSelectedUserForKYC(u)}
-                                className="btn btn-outline" 
-                                style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
-                              >
-                                View Docs
-                              </button>
-                            )}
+                            <button 
+                              onClick={() => setSelectedUserForKYC(u)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
+                            >
+                              Review KYC
+                            </button>
                             <button 
                               onClick={() => handleEditCandidateClick(u)}
                               className="btn btn-outline" 
@@ -480,6 +486,103 @@ const AdminDashboard = () => {
                     <tr>
                       <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
                         No registered candidates found in the database.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* --- HR CANDIDATES TAB --- */}
+        {activeTab === 'hr-candidates' && (
+          <div style={tabContentStyle}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>HR Candidates Database</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Inspect and manage HR Executives and HR Interns: credentials, document uploads, passwords, and portal verification.</p>
+
+            <div className="crm-table-container">
+              <table className="crm-table">
+                <thead>
+                  <tr>
+                    <th>HR Name</th>
+                    <th>Contact details</th>
+                    <th>Sub-Role</th>
+                    <th>KYC Uploads</th>
+                    <th>Verification Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersList.filter(u => u.role === 'HR' || u.role === 'HR Executive' || u.role === 'HR Intern').length > 0 ? (
+                    usersList.filter(u => u.role === 'HR' || u.role === 'HR Executive' || u.role === 'HR Intern').map((u) => (
+                      <tr key={u.uid}>
+                        <td style={{ fontWeight: '700' }}>
+                          {u.fullName}
+                          {u.bankName && (
+                            <div style={{ fontSize: '0.75rem', color: 'var(--secondary-color)', fontWeight: 'normal', marginTop: '4px' }}>
+                              🏦 {u.bankName} (A/c: {u.accountNumber})<br/>
+                              IFSC: {u.ifscCode} | Name: {u.accountHolderName}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          <div>{u.email}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{u.mobile}</div>
+                        </td>
+                        <td>
+                          <span className={`badge ${u.role === 'HR Executive' ? 'badge-new' : 'badge-calling'}`}>
+                            {u.role === 'HR' ? 'HR Officer' : u.role}
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ fontSize: '0.9rem', color: u.profileComplete ? 'var(--primary-color)' : 'var(--danger-color)', fontWeight: '600' }}>
+                            {u.profileComplete ? 'Aadhar & Resume Uploaded' : 'Missing KYC Doc'}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`}>
+                            {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            <button 
+                              onClick={() => setSelectedUserForKYC(u)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
+                            >
+                              Review KYC
+                            </button>
+                            <button 
+                              onClick={() => handleEditCandidateClick(u)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem' }}
+                            >
+                              Edit Profile
+                            </button>
+                            <button 
+                              onClick={() => handleResetPasswordClick(u.uid, u.email)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--accent-color)', color: 'var(--accent-color)' }}
+                            >
+                              Reset Pass
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteCandidateClick(u.uid)}
+                              className="btn btn-outline" 
+                              style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--danger-color)', color: 'var(--danger-color)' }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
+                        No HR candidates found in the database.
                       </td>
                     </tr>
                   )}
