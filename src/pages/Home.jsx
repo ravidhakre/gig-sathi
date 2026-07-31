@@ -43,27 +43,27 @@ const Home = () => {
 
   const slides = [
     {
-      title: "Empowering Freelancers, Connecting Opportunities",
-      subtitle: "SRYN is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
-      badge: "🚀 INDIA'S #1 GIG PORTAL",
+      title: "Empowering Business Growth through Smart Hiring",
+      subtitle: "SRYN is India's premier corporate workforce solutions partner, helping top national brands scale their logistics, banking, and retail operations with certified field forces.",
+      badge: "🚀 INDIA'S LEADING RECRUITMENT PARTNER",
       btn1Text: "Apply For Work",
       btn1Link: "#apply",
       btn2Text: "Partner With Us",
       btn2Link: "#partner"
     },
     {
-      title: "Instant KYC Verification & Quick Onboarding",
-      subtitle: "Register as an executive, upload your Aadhar Card, complete address details, and submit your resume to activate your profile and start your campaign tracking instantly.",
-      badge: "🛡️ 100% SECURE PROFILE",
+      title: "Secure Profile Verification & Fast Account Activation",
+      subtitle: "Verify your credentials online to unlock premium corporate campaigns and track your campaign performance on a unified, high-performance platform.",
+      badge: "🛡️ 100% SECURE & VERIFIED PROFILES",
       btn1Text: "Register Now",
       btn1Link: "/auth?signup=true",
       btn2Text: "Explore Campaigns",
       btn2Link: "/projects"
     },
     {
-      title: "High Commissions & Direct Bank Payouts",
-      subtitle: "Earn competitive commissions like Rs. 2,500 per approved credit card or Rs. 1,200 for active delivery boy onboardings. Access comprehensive ledgers and real-time payouts.",
-      badge: "💰 EARN HIGHER PAYOUTS",
+      title: "Maximize Your Earnings with Direct Bank Payouts",
+      subtitle: "Access high-yielding campaigns, view complete real-time ledgers, and enjoy fast, direct weekly bank transfers with complete transactional transparency.",
+      badge: "💰 MAXIMUM COMMISSION PAYOUTS",
       btn1Text: "View Open Projects",
       btn1Link: "/projects",
       btn2Text: "Contact Helpline",
