@@ -3,16 +3,16 @@ import { useApp } from '../context/AppContext';
 import { Link } from 'react-router-dom';
 import { Shield, Users, Award, TrendingUp, ArrowRight, Briefcase, Mail, Phone, CheckCircle2 } from 'lucide-react';
 
-const BrandLogo = ({ domain, initial, bgColor, name }) => {
+const BrandLogo = ({ logoUrl, name }) => {
   const [imgError, setImgError] = useState(false);
   
   return (
     <div 
       className="brand-logo-circle" 
       style={{ 
-        backgroundColor: imgError ? bgColor : '#ffffff', 
+        backgroundColor: '#ffffff', 
         overflow: 'hidden', 
-        border: imgError ? 'none' : '1px solid var(--border-color)',
+        border: '1px solid var(--border-color)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,13 +21,13 @@ const BrandLogo = ({ domain, initial, bgColor, name }) => {
     >
       {!imgError ? (
         <img 
-          src={`https://logo.clearbit.com/${domain}`} 
+          src={logoUrl} 
           alt={`${name} Logo`} 
           onError={() => setImgError(true)} 
           style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '6px' }}
         />
       ) : (
-        initial
+        <Briefcase size={20} color="var(--text-secondary)" />
       )}
     </div>
   );
@@ -370,7 +370,7 @@ const Home = () => {
             {/* HDFC Bank */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(26, 59, 139, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#1a3b8b' }}></span>
-              <BrandLogo domain="hdfcbank.com" initial="H" bgColor="#1a3b8b" name="HDFC Bank" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/2/28/HDFC_Bank_Logo.svg" name="HDFC Bank" />
               <div className="brand-logo-card-content">
                 <h4>HDFC Bank</h4>
                 <span className="brand-type">Credit Cards</span>
@@ -379,7 +379,7 @@ const Home = () => {
             {/* SBI Card */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 163, 228, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
-              <BrandLogo domain="sbicard.com" initial="S" bgColor="#00a3e0" name="SBI Card" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/c/ca/SBI_Card_logo.svg" name="SBI Card" />
               <div className="brand-logo-card-content">
                 <h4>SBI Card</h4>
                 <span className="brand-type">Credit Cards</span>
@@ -388,7 +388,7 @@ const Home = () => {
             {/* Airtel KYC */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(228, 0, 0, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
-              <BrandLogo domain="airtel.in" initial="A" bgColor="#e40000" name="Airtel KYC" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/3/3a/Bharti_Airtel_Logo.svg" name="Airtel KYC" />
               <div className="brand-logo-card-content">
                 <h4>Airtel KYC</h4>
                 <span className="brand-type">Field Executives</span>
@@ -397,7 +397,7 @@ const Home = () => {
             {/* Zomato Fleet */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(203, 32, 45, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#cb202d' }}></span>
-              <BrandLogo domain="zomato.com" initial="Z" bgColor="#cb202d" name="Zomato Fleet" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/b/bd/Zomato_Logo.svg" name="Zomato Fleet" />
               <div className="brand-logo-card-content">
                 <h4>Zomato Fleet</h4>
                 <span className="brand-type">Delivery Partners</span>
@@ -406,7 +406,7 @@ const Home = () => {
             {/* Swiggy */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(252, 128, 25, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
-              <BrandLogo domain="swiggy.com" initial="S" bgColor="#fc8019" name="Swiggy" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/1/13/Swiggy_logo.svg" name="Swiggy" />
               <div className="brand-logo-card-content">
                 <h4>Swiggy</h4>
                 <span className="brand-type">Instamart Riders</span>
@@ -415,7 +415,7 @@ const Home = () => {
             {/* Delhivery */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 82, 155, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
-              <BrandLogo domain="delhivery.com" initial="D" bgColor="#00529b" name="Delhivery" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/b/b0/Delhivery_Logo.svg" name="Delhivery" />
               <div className="brand-logo-card-content">
                 <h4>Delhivery</h4>
                 <span className="brand-type">Logistics Execs</span>
@@ -424,7 +424,7 @@ const Home = () => {
             {/* Shadowfax */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(45, 0, 80, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2d0050' }}></span>
-              <BrandLogo domain="shadowfax.in" initial="S" bgColor="#2d0050" name="Shadowfax" />
+              <BrandLogo logoUrl="https://www.shadowfax.in/logo_header_tm.svg" name="Shadowfax" />
               <div className="brand-logo-card-content">
                 <h4>Shadowfax</h4>
                 <span className="brand-type">Delivery Riders</span>
@@ -433,7 +433,7 @@ const Home = () => {
             {/* Flipkart */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(40, 116, 240, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
-              <BrandLogo domain="flipkart.com" initial="F" bgColor="#2874f0" name="Flipkart" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/2/2a/Flipkart_Logo.svg" name="Flipkart" />
               <div className="brand-logo-card-content">
                 <h4>Flipkart</h4>
                 <span className="brand-type">Delivery Fleet</span>
