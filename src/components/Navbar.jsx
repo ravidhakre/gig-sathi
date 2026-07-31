@@ -74,7 +74,7 @@ const Navbar = () => {
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
           <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
-            <span style={{ fontWeight: 900, fontSize: '1.9rem', color: '#ffffff', letterSpacing: '-0.02em', fontFamily: "'Syne', 'Outfit', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
+            <span style={{ fontWeight: 700, fontSize: '1.9rem', color: '#ffffff', letterSpacing: '-0.06em', fontFamily: "'Syncopate', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
               SRYN
             </span>
             <span style={{ fontSize: '0.45rem', fontWeight: 800, letterSpacing: '0.22em', color: logoColor, textTransform: 'uppercase', lineHeight: 1, transition: 'color 0.3s' }}>
