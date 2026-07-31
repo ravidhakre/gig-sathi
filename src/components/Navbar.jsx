@@ -73,11 +73,11 @@ const Navbar = () => {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`} style={navbarStyle}>
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
-          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '4px', textDecoration: 'none' }}>
-            <span style={{ fontWeight: 'normal', fontSize: '2.8rem', color: '#ffffff', letterSpacing: '0.38em', marginRight: '-0.38em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.85, textTransform: 'uppercase' }}>
+          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
+            <span style={{ fontWeight: 'normal', fontSize: '3.2rem', color: '#ffffff', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase' }}>
               SRYN
             </span>
-            <span style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.02em', color: logoColor, textTransform: 'uppercase', lineHeight: 1, transition: 'color 0.3s' }}>
+            <span style={{ fontSize: '0.48rem', fontWeight: 800, letterSpacing: '0.07em', color: logoColor, textTransform: 'uppercase', lineHeight: 1, transition: 'color 0.3s' }}>
               SRYN MANAGEMENT PVT LTD
             </span>
           </Link>

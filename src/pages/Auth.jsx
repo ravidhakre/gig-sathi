@@ -90,11 +90,11 @@ const Auth = () => {
         
         {/* Header Logo */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '4px', textDecoration: 'none', marginBottom: '12px' }}>
-            <span style={{ fontWeight: 'normal', fontSize: '3.6rem', color: 'var(--text-primary)', letterSpacing: '0.38em', marginRight: '-0.38em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.85, textTransform: 'uppercase' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '2px', textDecoration: 'none', marginBottom: '12px' }}>
+            <span style={{ fontWeight: 'normal', fontSize: '4.2rem', color: 'var(--text-primary)', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase' }}>
               SRYN
             </span>
-            <span style={{ fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.02em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.07em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
               SRYN MANAGEMENT PVT LTD
             </span>
           </div>
