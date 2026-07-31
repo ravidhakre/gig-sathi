@@ -271,9 +271,9 @@ const Home = () => {
             {/* Step 2 */}
             <div className="process-card">
               <div className="process-number">02</div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Aadhaar KYC</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Verify Credentials</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
-                Securely upload your onboarding documents for immediate verification by our HR desk.
+                Securely upload your basic documents for quick activation and approval by our verification desk.
               </p>
             </div>
             {/* Step 3 */}
