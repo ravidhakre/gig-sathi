@@ -20,6 +20,9 @@ const About = () => {
           <p>
             We bridge the gap between large corporates requiring rapid workforce distribution and independent field executives seeking scalable earnings.
           </p>
+          <div style={{ marginTop: '16px', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.65)', fontWeight: '600', letterSpacing: '0.02em' }}>
+            GigSathi is managed and operated by SRYN Management PVT LTD.
+          </div>
         </div>
       </div>
 

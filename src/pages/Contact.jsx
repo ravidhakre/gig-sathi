@@ -26,6 +26,9 @@ const Contact = () => {
           <p>
             Have questions about payouts, projects, or bulk hirings? Get in touch with our helpdesk team.
           </p>
+          <div style={{ marginTop: '16px', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.65)', fontWeight: '600', letterSpacing: '0.02em' }}>
+            GigSathi is managed and operated by SRYN Management PVT LTD.
+          </div>
         </div>
       </div>
 

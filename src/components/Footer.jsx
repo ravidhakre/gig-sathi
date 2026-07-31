@@ -64,7 +64,7 @@ const Footer = () => {
       <hr style={dividerStyle} />
 
       <div className="container" style={bottomStyle}>
-        <div>&copy; {new Date().getFullYear()} GigSathi Solutions Pvt. Ltd. All rights reserved.</div>
+        <div>&copy; {new Date().getFullYear()} GigSathi. Managed by SRYN Management PVT LTD. All rights reserved.</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           Made with <Heart size={14} color="var(--primary-color)" fill="var(--primary-color)" /> in India
         </div>
