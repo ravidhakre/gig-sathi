@@ -90,10 +90,12 @@ const Auth = () => {
         
         {/* Header Logo */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '12px' }}>
-            <Briefcase size={32} color="var(--primary-color)" />
-            <span style={{ fontWeight: 800, fontSize: '1.8rem', color: 'var(--text-primary)' }}>
-              Gig<span style={{ color: 'var(--primary-color)' }}>Sathi</span>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '2px', textDecoration: 'none', marginBottom: '12px' }}>
+            <span style={{ fontWeight: 900, fontSize: '2.4rem', color: 'var(--text-primary)', letterSpacing: '-0.02em', fontFamily: "'Syne', 'Outfit', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
+              SRYN
+            </span>
+            <span style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '0.22em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
+              SRYN MANAGEMENT PVT LTD
             </span>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
@@ -214,9 +216,9 @@ const Auth = () => {
               <div style={credentialsBoxStyle}>
                 <h5 style={{ color: 'var(--primary-color)', marginBottom: '8px', fontSize: '0.85rem' }}>🔑 DEMO ACCOUNTS (Use password: password123)</h5>
                 <ul style={{ paddingLeft: '16px', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <li><strong>Admin:</strong> admin@gigsathi.com</li>
-                  <li><strong>HR Manager:</strong> hr@gigsathi.com</li>
-                  <li><strong>Candidate:</strong> candidate@gigsathi.com</li>
+                  <li><strong>Admin:</strong> admin@srynmanagement.com</li>
+                <li><strong>HR Manager:</strong> hr@srynmanagement.com</li>
+                <li><strong>Candidate:</strong> candidate@srynmanagement.com</li>
                 </ul>
               </div>
             )}

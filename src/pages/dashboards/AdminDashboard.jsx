@@ -246,7 +246,7 @@ const AdminDashboard = () => {
         <button onClick={() => setSidebarOpen(true)} className="mobile-toggle-btn">
           <Menu size={24} />
         </button>
-        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>GigSathi Admin Panel</span>
+        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>SRYN Admin Panel</span>
       </div>
 
       {/* Sidenav Overlay */}
@@ -258,7 +258,7 @@ const AdminDashboard = () => {
       <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div style={sidebarLogoStyle}>
           <Settings size={24} color="var(--primary-color)" />
-          <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>GigSathi <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)' }}>Admin</span></span>
+          <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>SRYN <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)' }}>Admin</span></span>
         </div>
 
         <div style={sidebarMenuStyle}>
@@ -804,7 +804,7 @@ const AdminDashboard = () => {
               <div className="glass-card" style={{ border: '1px solid rgba(99,102,241,0.15)' }}>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '14px' }}>Dynamic Placeholders Guide</h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '20px' }}>
-                  When candidates view their offer letter from their respective dashboard, the GigSathi portal matches these key template tokens dynamically.
+                  When candidates view their offer letter from their respective dashboard, the SRYN portal matches these key template tokens dynamically.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={placeholderRowStyle}>

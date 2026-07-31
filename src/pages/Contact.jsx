@@ -22,12 +22,12 @@ const Contact = () => {
       <div className="page-hero-banner">
         <div className="container">
           <span style={badgeStyle}>CONNECT WITH US</span>
-          <h1>Contact GigSathi</h1>
+          <h1>Contact SRYN</h1>
           <p>
             Have questions about payouts, projects, or bulk hirings? Get in touch with our helpdesk team.
           </p>
           <div style={{ marginTop: '16px', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.65)', fontWeight: '600', letterSpacing: '0.02em' }}>
-            GigSathi is managed and operated by SRYN Management PVT LTD.
+            SRYN is managed and operated by SRYN Management PVT LTD.
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ const Contact = () => {
                 <div style={iconBoxStyle}><Mail size={24} color="var(--primary-color)" /></div>
                 <div>
                   <h4 style={infoTitleStyle}>General Enquiries</h4>
-                  <p style={infoValueStyle}>info@gigsathi.com / support@gigsathi.com</p>
+                  <p style={infoValueStyle}>info@srynmanagement.com / support@srynmanagement.com</p>
                 </div>
               </div>
             </div>

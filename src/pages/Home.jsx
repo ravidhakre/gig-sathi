@@ -14,7 +14,7 @@ const Home = () => {
   const slides = [
     {
       title: "Empowering Freelancers, Connecting Opportunities",
-      subtitle: "GigSathi is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
+      subtitle: "SRYN is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
       badge: "🚀 INDIA'S #1 GIG PORTAL",
       btn1Text: "Apply For Work",
       btn1Link: "#apply",
@@ -73,7 +73,7 @@ const Home = () => {
 
   const hCMS = cms.home || {
     heroTitle: "Empowering Freelancers, Connecting Opportunities",
-    heroSubtitle: "GigSathi is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
+    heroSubtitle: "SRYN is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
     statsCandidates: "25,000+",
     statsPartners: "150+",
     statsCommission: "₹50 Lakhs+"
@@ -131,7 +131,7 @@ const Home = () => {
                   {/* Hero Decorative Glow Card */}
                   <div className="hero-glow-card" style={glowCardStyle}>
                     <div className="glass-card slider-glass-card">
-                      <h3 style={{ fontSize: '1.7rem', marginBottom: '16px', color: '#ffffff' }}>GigSathi Ecosystem</h3>
+                      <h3 style={{ fontSize: '1.7rem', marginBottom: '16px', color: '#ffffff' }}>SRYN Ecosystem</h3>
                       <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px', padding: 0 }}>
                         <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Instant Onboarding & Verification</li>
                         <li style={listItemStyle}><CheckCircle2 color="#ffffff" /> Direct-to-bank Payouts</li>
@@ -257,7 +257,7 @@ const Home = () => {
       <section className="section-padding">
         <div className="container why-grid-layout">
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem' }}>WHY PARTNER GIGSATHI</span>
+            <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem' }}>WHY PARTNER SRYN</span>
             <h2 className="section-heading" style={{ marginBottom: '24px' }}>Tech-Enabled Force Hiring Solutions</h2>
             <div style={whyFeatureItemStyle}>
               <div style={iconBoxStyle}><Award size={24} color="var(--primary-color)" /></div>

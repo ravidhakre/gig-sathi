@@ -29,7 +29,7 @@ const HRDashboard = () => {
     printWindow.document.write(`
       <html>
         <head>
-          <title>GigSathi Offer Letter - ${currentUser?.fullName}</title>
+          <title>SRYN Offer Letter - ${currentUser?.fullName}</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -150,7 +150,7 @@ const HRDashboard = () => {
 
   const renderOfferLetter = () => {
     const hrTemplate = templates.find(t => t.role === 'HR') || {
-      content: `<h3>GIGSATHI SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
+      content: `<h3>SRYN SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
     };
     
     const todayStr = new Date().toLocaleDateString('en-IN', {
@@ -246,7 +246,7 @@ const HRDashboard = () => {
         <button onClick={() => setSidebarOpen(true)} className="mobile-toggle-btn">
           <Menu size={24} />
         </button>
-        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>GigSathi HR Panel</span>
+        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>SRYN HR Panel</span>
       </div>
 
       {/* Sidenav Overlay */}
@@ -258,7 +258,7 @@ const HRDashboard = () => {
       <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div style={sidebarLogoStyle}>
           <Users size={24} color="var(--secondary-color)" />
-          <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>GigSathi <span style={{ fontSize: '0.75rem', color: 'var(--secondary-color)' }}>HR</span></span>
+          <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>SRYN <span style={{ fontSize: '0.75rem', color: 'var(--secondary-color)' }}>HR</span></span>
         </div>
 
         <div style={sidebarMenuStyle}>
@@ -544,7 +544,7 @@ const HRDashboard = () => {
         {activeTab === 'offer' && (
           <div style={tabContentStyle}>
             <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Employment Offer Agreement</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Please review the terms of your engagement as HR Officer / Recruitment Coordinator with GigSathi.</p>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Please review the terms of your engagement as HR Officer / Recruitment Coordinator with SRYN.</p>
 
             <div className="grid-2" style={{ gap: '30px', alignItems: 'start' }}>
               <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
@@ -566,7 +566,7 @@ const HRDashboard = () => {
               <div className="card">
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Sign & Accept Offer</h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
-                  By clicking accept, you acknowledge and agree to the roles, payout matrices, and code of conduct policies of GigSathi Recruiting Solutions.
+                  By clicking accept, you acknowledge and agree to the roles, payout matrices, and code of conduct policies of SRYN Recruiting Solutions.
                 </p>
 
                 {offerSigned ? (

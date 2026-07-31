@@ -16,12 +16,12 @@ const About = () => {
       <div className="page-hero-banner">
         <div className="container">
           <span style={badgeStyle}>WHO WE ARE</span>
-          <h1>About GigSathi</h1>
+          <h1>About SRYN</h1>
           <p>
             We bridge the gap between large corporates requiring rapid workforce distribution and independent field executives seeking scalable earnings.
           </p>
           <div style={{ marginTop: '16px', fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.65)', fontWeight: '600', letterSpacing: '0.02em' }}>
-            GigSathi is managed and operated by SRYN Management PVT LTD.
+            SRYN is managed and operated by SRYN Management PVT LTD.
           </div>
         </div>
       </div>
@@ -59,10 +59,10 @@ const About = () => {
           <div>
             <h2 style={{ fontSize: '2.2rem', marginBottom: '20px' }}>Unified Scaling for Enterprises</h2>
             <p style={textBlockStyle}>
-              GigSathi started with a clear realization: traditional staffing systems are too slow and rigid for modern fast-paced enterprises (especially banks, fintech platforms, and instant delivery apps).
+              SRYN started with a clear realization: traditional staffing systems are too slow and rigid for modern fast-paced enterprises (especially banks, fintech platforms, and instant delivery apps).
             </p>
             <p style={textBlockStyle}>
-              We created a flexible, contract-based hiring framework. Companies can deploy campaigns and specify target onboarding milestones. GigSathi utilizes its digital platform to verify candidates, provide them with dynamic dashboard updates, track leads, and handle KYC details.
+              We created a flexible, contract-based hiring framework. Companies can deploy campaigns and specify target onboarding milestones. SRYN utilizes its digital platform to verify candidates, provide them with dynamic dashboard updates, track leads, and handle KYC details.
             </p>
           </div>
           <div className="glass-card" style={{ padding: '36px' }}>

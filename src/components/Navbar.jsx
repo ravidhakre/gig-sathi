@@ -73,10 +73,12 @@ const Navbar = () => {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`} style={navbarStyle}>
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
-          <Link to="/" style={logoStyle}>
-            <Briefcase size={28} color={logoColor} style={{ transition: 'color 0.3s' }} />
-            <span style={{ fontWeight: 800, fontSize: '1.5rem', color: logoTextColor }}>
-              Gig<span style={{ color: logoColor, transition: 'color 0.3s' }}>Sathi</span>
+          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
+            <span style={{ fontWeight: 900, fontSize: '1.9rem', color: '#ffffff', letterSpacing: '-0.02em', fontFamily: "'Syne', 'Outfit', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
+              SRYN
+            </span>
+            <span style={{ fontSize: '0.45rem', fontWeight: 800, letterSpacing: '0.22em', color: logoColor, textTransform: 'uppercase', lineHeight: 1, transition: 'color 0.3s' }}>
+              SRYN MANAGEMENT PVT LTD
             </span>
           </Link>
 

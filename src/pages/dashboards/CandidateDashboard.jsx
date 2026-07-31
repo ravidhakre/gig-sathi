@@ -52,7 +52,7 @@ const CandidateDashboard = () => {
     printWindow.document.write(`
       <html>
         <head>
-          <title>GigSathi Offer Letter - ${currentUser?.fullName}</title>
+          <title>SRYN Offer Letter - ${currentUser?.fullName}</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -173,7 +173,7 @@ const CandidateDashboard = () => {
 
   const renderOfferLetter = () => {
     const candidateTemplate = templates.find(t => t.role === 'Candidate') || {
-      content: `<h3>GIGSATHI SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
+      content: `<h3>SRYN SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
     };
     
     // Replace placeholders with candidate details dynamically
@@ -211,7 +211,7 @@ const CandidateDashboard = () => {
         <button onClick={() => setSidebarOpen(true)} className="mobile-toggle-btn">
           <Menu size={24} />
         </button>
-        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>GigSathi Exec Panel</span>
+        <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>SRYN Exec Panel</span>
       </div>
 
       {/* Sidenav Overlay */}
@@ -223,7 +223,7 @@ const CandidateDashboard = () => {
       <aside className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div style={sidebarLogoStyle}>
           <ShieldCheck size={24} color="var(--primary-color)" />
-          <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>GigSathi <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)' }}>Exec</span></span>
+          <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>SRYN <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)' }}>Exec</span></span>
         </div>
 
         <div style={sidebarMenuStyle}>

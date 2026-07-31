@@ -49,7 +49,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return (
       <div style={loadingContainerStyle}>
         <div className="spinner" style={spinnerStyle}></div>
-        <p style={{ marginTop: '16px', color: 'var(--text-secondary)' }}>Loading GigSathi Portal...</p>
+        <p style={{ marginTop: '16px', color: 'var(--text-secondary)' }}>Loading SRYN Portal...</p>
       </div>
     );
   }

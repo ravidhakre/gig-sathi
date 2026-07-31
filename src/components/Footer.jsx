@@ -8,10 +8,12 @@ const Footer = () => {
       <div className="container" style={gridStyle}>
         {/* Info Column */}
         <div style={colStyle}>
-          <Link to="/" style={logoStyle}>
-            <Briefcase size={28} color="var(--primary-color)" />
-            <span style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-primary)' }}>
-              Gig<span style={{ color: 'var(--primary-color)' }}>Sathi</span>
+          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
+            <span style={{ fontWeight: 900, fontSize: '1.9rem', color: 'var(--text-primary)', letterSpacing: '-0.02em', fontFamily: "'Syne', 'Outfit', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
+              SRYN
+            </span>
+            <span style={{ fontSize: '0.45rem', fontWeight: 800, letterSpacing: '0.22em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
+              SRYN MANAGEMENT PVT LTD
             </span>
           </Link>
           <p style={descStyle}>
@@ -47,7 +49,7 @@ const Footer = () => {
           <ul style={{ ...listStyle, gap: '12px' }}>
             <li style={contactItemStyle}>
               <Mail size={16} color="var(--primary-color)" />
-              <span>info@gigsathi.com</span>
+              <span>info@srynmanagement.com</span>
             </li>
             <li style={contactItemStyle}>
               <Phone size={16} color="var(--primary-color)" />
@@ -64,7 +66,7 @@ const Footer = () => {
       <hr style={dividerStyle} />
 
       <div className="container" style={bottomStyle}>
-        <div>&copy; {new Date().getFullYear()} GigSathi. Managed by SRYN Management PVT LTD. All rights reserved.</div>
+        <div>&copy; {new Date().getFullYear()} SRYN Management PVT LTD. All rights reserved.</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           Made with <Heart size={14} color="var(--primary-color)" fill="var(--primary-color)" /> in India
         </div>

@@ -104,7 +104,7 @@ export const AppProvider = ({ children }) => {
       const user = await dbService.verifyOTP(uid, otp);
       localStorage.setItem('gs_current_user', JSON.stringify(user));
       setCurrentUser(user);
-      showToast(`Verification Successful! Welcome to GigSathi.`, 'success');
+      showToast(`Verification Successful! Welcome to SRYN.`, 'success');
       return user;
     } catch (error) {
       showToast(error.message, 'danger');
@@ -144,7 +144,7 @@ export const AppProvider = ({ children }) => {
 
       // Fetch active link configuration from admin configuration settings (or default)
       const targetProject = projects.find(p => p.title === customerData.project) || projects[0];
-      const link = targetProject?.workingLink || 'https://gigsathi.com/apply-fd-card';
+      const link = targetProject?.workingLink || 'https://srynmanagement.com/apply-fd-card';
 
       // Simulate sending email to customer with link
       showToast(

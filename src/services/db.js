@@ -52,13 +52,13 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
     firebaseFirestore = getFirestore(firebaseApp);
     firebaseStorage = getStorage(firebaseApp);
     dbMode = 'FIREBASE';
-    console.log('GigSathi: Connected to Firebase.');
+    console.log('SRYN: Connected to Firebase.');
   } catch (error) {
-    console.warn('GigSathi: Firebase failed to connect, falling back to Local Mock DB.', error);
+    console.warn('SRYN: Firebase failed to connect, falling back to Local Mock DB.', error);
     dbMode = 'MOCK';
   }
 } else {
-  console.log('GigSathi: Running in Local Mock DB mode.');
+  console.log('SRYN: Running in Local Mock DB mode.');
 }
 
 // -------------------------------------------------------------
@@ -68,7 +68,7 @@ const SEED_USERS = [
   {
     uid: 'admin-1',
     fullName: 'Rajesh Kumar',
-    email: 'admin@gigsathi.com',
+    email: 'admin@srynmanagement.com',
     mobile: '8265903984',
     role: 'Admin',
     verified: true,
@@ -85,7 +85,7 @@ const SEED_USERS = [
   {
     uid: 'hr-1',
     fullName: 'Anjali Sharma',
-    email: 'hr@gigsathi.com',
+    email: 'hr@srynmanagement.com',
     mobile: '9876543211',
     role: 'HR',
     verified: true,
@@ -102,7 +102,7 @@ const SEED_USERS = [
   {
     uid: 'candidate-1',
     fullName: 'Amit Patel',
-    email: 'candidate@gigsathi.com',
+    email: 'candidate@srynmanagement.com',
     mobile: '9876543212',
     role: 'Candidate',
     verified: true,
@@ -127,7 +127,7 @@ const SEED_PROJECTS = [
     commission: 'Rs. 2,500 per approved card',
     hiringCount: 150,
     status: 'Active',
-    workingLink: 'https://gigsathi.com/fd-apply/hdfc-cc'
+    workingLink: 'https://srynmanagement.com/fd-apply/hdfc-cc'
   },
   {
     id: 'proj-2',
@@ -137,7 +137,7 @@ const SEED_PROJECTS = [
     commission: 'Rs. 1,200 per active rider (onboarded)',
     hiringCount: 500,
     status: 'Active',
-    workingLink: 'https://gigsathi.com/fd-apply/zomato-rider'
+    workingLink: 'https://srynmanagement.com/fd-apply/zomato-rider'
   },
   {
     id: 'proj-3',
@@ -147,7 +147,7 @@ const SEED_PROJECTS = [
     commission: 'Rs. 1,000 per onboarded partner',
     hiringCount: 300,
     status: 'Active',
-    workingLink: 'https://gigsathi.com/fd-apply/swiggy-insta'
+    workingLink: 'https://srynmanagement.com/fd-apply/swiggy-insta'
   },
   {
     id: 'proj-4',
@@ -157,7 +157,7 @@ const SEED_PROJECTS = [
     commission: 'Rs. 150 per merchant KYC activation',
     hiringCount: 200,
     status: 'Active',
-    workingLink: 'https://gigsathi.com/fd-apply/airtel-kyc'
+    workingLink: 'https://srynmanagement.com/fd-apply/airtel-kyc'
   }
 ];
 
@@ -218,11 +218,11 @@ const SEED_TEMPLATES = [
     content: `<div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -236,10 +236,10 @@ const SEED_TEMPLATES = [
     <p><strong>Subject: Letter of Engagement as Independent Field Associate / Gig Partner</strong></p>
 
     <p>Dear {{name}},</p>
-    <p>It is with great pleasure that GigSathi Solutions Private Limited extends this formal Letter of Engagement for the position of Independent Field Associate. This document outlines the terms and conditions governing your business association with the Company.</p>
+    <p>It is with great pleasure that SRYN Management Private Limited extends this formal Letter of Engagement for the position of Independent Field Associate. This document outlines the terms and conditions governing your business association with the Company.</p>
 
     <h3>1. Commencement & Scope of Engagement</h3>
-    <p>Your engagement shall commence from the date of your digital acceptance of this letter. You will operate as an independent contractor. This engagement does not constitute a relationship of employer-employee, agency, or partnership between you and GigSathi. You shall be responsible for defining your work hours, methods, and tactics in onboarding customers for our client projects.</p>
+    <p>Your engagement shall commence from the date of your digital acceptance of this letter. You will operate as an independent contractor. This engagement does not constitute a relationship of employer-employee, agency, or partnership between you and SRYN. You shall be responsible for defining your work hours, methods, and tactics in onboarding customers for our client projects.</p>
 
     <h3>2. Client Project Sourcing</h3>
     <p>You shall execute field acquisition and promotional activities for top corporate entities, banks, and fintech providers as listed in the active projects directory of your portal. You are expected to deliver authentic onboarding campaigns with absolute transparency and code compliance.</p>
@@ -249,11 +249,11 @@ const SEED_TEMPLATES = [
 <div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -262,7 +262,7 @@ const SEED_TEMPLATES = [
     <ul>
       <li>Payouts are based strictly on the approved acquisitions list from verified fintech audits.</li>
       <li>All applicable taxes (TDS @ 5% under Section 194H of the Income Tax Act) will be deducted at source.</li>
-      <li>GigSathi reserves the right to reject payouts or terminate agreements for any onboarding containing false coordinates, duplicates, or fake Aadhaar uploads.</li>
+      <li>SRYN reserves the right to reject payouts or terminate agreements for any onboarding containing false coordinates, duplicates, or fake Aadhaar uploads.</li>
     </ul>
 
     <h3>4. Training & Compliance Updates</h3>
@@ -273,11 +273,11 @@ const SEED_TEMPLATES = [
 <div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -285,23 +285,23 @@ const SEED_TEMPLATES = [
     <p>During your association, you will have access to sensitive customer contact data and client databases. You agree to treat all such information as strictly confidential. You shall not download, copy, distribute, or use candidate or customer records for personal gain or share them with third parties. Any breach of confidentiality will result in immediate termination of portal access and forfeiture of all pending commissions, alongside legal proceedings under the IT Act.</p>
 
     <h3>6. Code of Conduct & Client Representation</h3>
-    <p>While promoting client services, you must behave ethically. You shall not collect cash payments from candidates or customers, misrepresent onboarding rewards, or use coercive practices. GigSathi maintains zero tolerance for field misconduct, and any reported infraction will lead to legal action.</p>
+    <p>While promoting client services, you must behave ethically. You shall not collect cash payments from candidates or customers, misrepresent onboarding rewards, or use coercive practices. SRYN maintains zero tolerance for field misconduct, and any reported infraction will lead to legal action.</p>
   </div>
 </div>
 
 <div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
     <h3>7. Separation & Notice Requirements</h3>
-    <p>Either party may terminate this business engagement at any time, with or without cause, by giving 7 days written notice. GigSathi reserves the right to terminate access immediately in case of breach of terms. All disputes are subject to the exclusive jurisdiction of the courts of New Delhi, India.</p>
+    <p>Either party may terminate this business engagement at any time, with or without cause, by giving 7 days written notice. SRYN reserves the right to terminate access immediately in case of breach of terms. All disputes are subject to the exclusive jurisdiction of the courts of New Delhi, India.</p>
 
     <h3>8. Execution & Acceptance of Contract</h3>
     <p>By clicking "Accept & Sign Contract" on your dashboard, you formally agree to all terms stated across this 4-page engagement contract.</p>
@@ -315,7 +315,7 @@ const SEED_TEMPLATES = [
         </div>
         <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #1e293b;">___________________________</p>
         <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #de3163;">Authorized Signatory</p>
-        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">GigSathi Solutions Pvt. Ltd.</p>
+        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">SRYN Management Private Limited</p>
       </div>
 
       <!-- Employee Digital Seal -->
@@ -345,11 +345,11 @@ const SEED_TEMPLATES = [
     content: `<div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -359,24 +359,24 @@ const SEED_TEMPLATES = [
     <strong>Address:</strong> {{address}}</p>
 
     <p>Dear Mr./Ms. {{name}},</p>
-    <p>It is with great pleasure that GigSathi Solutions Private Limited extends this formal Offer of Employment for the position of HR Executive. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time. By accepting this offer and commencing employment, you acknowledge that you have carefully read, understood, and voluntarily accepted all provisions contained herein and agree to comply with them throughout your association with the Company.</p>
+    <p>It is with great pleasure that SRYN Management Private Limited extends this formal Offer of Employment for the position of HR Executive. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time. By accepting this offer and commencing employment, you acknowledge that you have carefully read, understood, and voluntarily accepted all provisions contained herein and agree to comply with them throughout your association with the Company.</p>
 
     <h3>1. Appointment and Commencement of Employment</h3>
-    <p>You are hereby appointed as an HR Executive with GigSathi Solutions Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
+    <p>You are hereby appointed as an HR Executive with SRYN Management Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
 
     <h3>2. Nature of Employment</h3>
-    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of GigSathi Solutions Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment.</p>
+    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of SRYN Management Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment.</p>
   </div>
 </div>
 
 <div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -397,11 +397,11 @@ const SEED_TEMPLATES = [
 <div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -412,27 +412,27 @@ const SEED_TEMPLATES = [
     <p>The weekly holiday for employees shall ordinarily be Sunday, unless operational requirements necessitate otherwise. Except where specifically approved by the Management in writing, the Company shall not provide any paid leave or paid holiday during the course of employment. Failure to inform the Company before remaining absent shall be treated as unauthorized absence, and the concerned day shall be considered Leave Without Pay (LWP). If the Employee remains absent from duty for more than three (3) consecutive working days without prior approval, such conduct may be treated as abandonment of employment.</p>
 
     <h3>9. Professional Conduct and Workplace Discipline</h3>
-    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline throughout the period of employment. Every interaction with candidates, colleagues, clients, vendors, and business associates shall be conducted respectfully and in a manner that enhances the reputation and goodwill of GigSathi Solutions Private Limited. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, abusive language, breach of confidentiality, or conduct prejudicial to the Company's interests shall constitute a violation of employment obligations.</p>
+    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline throughout the period of employment. Every interaction with candidates, colleagues, clients, vendors, and business associates shall be conducted respectfully and in a manner that enhances the reputation and goodwill of SRYN Management Private Limited. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, abusive language, breach of confidentiality, or conduct prejudicial to the Company's interests shall constitute a violation of employment obligations.</p>
 
     <h3>10. Confidentiality and Non-Disclosure</h3>
     <p>During the course of your employment, you may have access to confidential information relating to the Company's business operations, recruitment strategies, client details, employee records, candidate databases, and other proprietary information. You shall treat all such information as strictly confidential and shall not disclose, copy, reproduce, publish, transmit, or use such information for any personal benefit or for the benefit of any third party without obtaining prior written authorization from the Company. This obligation shall continue even after the cessation of your employment.</p>
 
     <h3>11. Company Property and Data Protection</h3>
-    <p>All documents, files, databases, official email accounts, recruitment records, candidate information, and any other resources provided by the Company shall remain the exclusive property of GigSathi Solutions Private Limited. Upon resignation, termination, or whenever directed by the Management, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices.</p>
+    <p>All documents, files, databases, official email accounts, recruitment records, candidate information, and any other resources provided by the Company shall remain the exclusive property of SRYN Management Private Limited. Upon resignation, termination, or whenever directed by the Management, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices.</p>
 
     <h3>12. Conflict of Interest and Exclusive Employment</h3>
-    <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, partnership, commission-based activity, or commercial venture that may conflict with the interests of GigSathi Solutions Private Limited. Any violation of this provision shall constitute serious misconduct and may result in disciplinary action.</p>
+    <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, partnership, commission-based activity, or commercial venture that may conflict with the interests of SRYN Management Private Limited. Any violation of this provision shall constitute serious misconduct and may result in disciplinary action.</p>
   </div>
 </div>
 
 <div class="contract-page-sheet">
   <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
   <div class="letterhead-logo">
-    <div class="logo-main">GigSathi</div>
+    <div class="logo-main">SRYN</div>
     <div class="company-cin">
-      <strong>GIGSATHI SOLUTIONS PRIVATE LIMITED</strong><br/>
+      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
       Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@gigsathi.com | Web: www.gigsathi.com
+      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
     </div>
   </div>
   <div class="contract-body">
@@ -458,7 +458,7 @@ const SEED_TEMPLATES = [
     <p>I hereby confirm that I have carefully read and understood all terms, conditions, and obligations mentioned in this Appointment Letter. I voluntarily accept this offer of employment and agree that my association with the Company shall be governed by the provisions contained herein.</p>
 
     <h3>20. Acceptance of Appointment</h3>
-    <p>I hereby confirm my acceptance of the employment offer extended by GigSathi Solutions Private Limited for the position of HR Executive and agree to join the Company under the terms and conditions mentioned in this Appointment Letter.</p>
+    <p>I hereby confirm my acceptance of the employment offer extended by SRYN Management Private Limited for the position of HR Executive and agree to join the Company under the terms and conditions mentioned in this Appointment Letter.</p>
     
     <div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
       <!-- Employer Sign -->
@@ -469,7 +469,7 @@ const SEED_TEMPLATES = [
         </div>
         <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #1e293b;">___________________________</p>
         <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #de3163;">Authorized Signatory</p>
-        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">GigSathi Solutions Pvt. Ltd.</p>
+        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">SRYN Management Private Limited</p>
       </div>
 
       <!-- Employee Digital Seal -->
@@ -497,7 +497,7 @@ const SEED_TEMPLATES = [
 const SEED_CMS = {
   home: {
     heroTitle: "Empowering Freelancers, Connecting Opportunities",
-    heroSubtitle: "GigSathi is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
+    heroSubtitle: "SRYN is India's leading third-party hiring portal. We partner with India's largest brands in logistics, fintech, and retail to build robust field forces and delivery fleets.",
     statsCandidates: "25,000+",
     statsPartners: "150+",
     statsCommission: "₹50 Lakhs+"
@@ -538,7 +538,7 @@ const syncFirestoreSeeds = async () => {
     const projectsCol = collection(firebaseFirestore, 'projects');
     const projectsSnap = await getDocs(projectsCol);
     if (projectsSnap.empty) {
-      console.log('GigSathi: Seeding Firestore projects...');
+      console.log('SRYN: Seeding Firestore projects...');
       for (const proj of SEED_PROJECTS) {
         await setDoc(doc(firebaseFirestore, 'projects', proj.id), proj);
       }
@@ -549,10 +549,10 @@ const syncFirestoreSeeds = async () => {
         await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
       }
       await setDoc(doc(firebaseFirestore, 'settings', 'cms'), SEED_CMS);
-      console.log('GigSathi: Firestore seeded successfully.');
+      console.log('SRYN: Firestore seeded successfully.');
     }
   } catch (e) {
-    console.error('GigSathi: Failed to seed Firestore', e);
+    console.error('SRYN: Failed to seed Firestore', e);
   }
 };
 syncFirestoreSeeds();
@@ -618,19 +618,19 @@ export const dbService = {
           uid,
           email,
           fullName: email.split('@')[0],
-          role: email.toLowerCase() === 'admin@gigsathi.com' ? 'Admin' : (email.toLowerCase() === 'hr@gigsathi.com' ? 'HR' : 'Candidate'),
+          role: email.toLowerCase() === 'admin@srynmanagement.com' ? 'Admin' : (email.toLowerCase() === 'hr@srynmanagement.com' ? 'HR' : 'Candidate'),
           verified: true
         };
       } catch (e) {
         // Self-healing: If login fails for a demo account with the correct password, automatically register it in Firebase!
-        const isDemoEmail = ['admin@gigsathi.com', 'hr@gigsathi.com', 'candidate@gigsathi.com'].includes(email.toLowerCase());
+        const isDemoEmail = ['admin@srynmanagement.com', 'hr@srynmanagement.com', 'candidate@srynmanagement.com'].includes(email.toLowerCase());
         if (isDemoEmail && password === 'password123') {
           try {
-            console.log('GigSathi: Demo user not found in Firebase. Auto-registering...');
+            console.log('SRYN: Demo user not found in Firebase. Auto-registering...');
             const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
             const uid = userCredential.user.uid;
-            const role = email.toLowerCase() === 'admin@gigsathi.com' ? 'Admin' : (email.toLowerCase() === 'hr@gigsathi.com' ? 'HR' : 'Candidate');
-            const fullName = email.toLowerCase() === 'admin@gigsathi.com' ? 'Admin Manager' : (email.toLowerCase() === 'hr@gigsathi.com' ? 'HR Specialist' : 'Candidate User');
+            const role = email.toLowerCase() === 'admin@srynmanagement.com' ? 'Admin' : (email.toLowerCase() === 'hr@srynmanagement.com' ? 'HR' : 'Candidate');
+            const fullName = email.toLowerCase() === 'admin@srynmanagement.com' ? 'Admin Manager' : (email.toLowerCase() === 'hr@srynmanagement.com' ? 'HR Specialist' : 'Candidate User');
             
             const newUser = {
               uid,
@@ -1085,7 +1085,7 @@ export const dbService = {
           // Self-healing check: If HR template contains old footers or lacks new signature design, auto-upgrade in Firestore
           const hr = templates.find(t => t.role === 'HR');
           if (hr && hr.content && (hr.content.includes("Page 1 of 4") || !hr.content.includes("border: 2px solid #2563eb"))) {
-            console.log('GigSathi: Upgrading Firestore offer templates to creative signing 20-section layout...');
+            console.log('SRYN: Upgrading Firestore offer templates to creative signing 20-section layout...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
