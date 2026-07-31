@@ -8,13 +8,8 @@ const Footer = () => {
       <div className="container" style={gridStyle}>
         {/* Info Column */}
         <div style={colStyle}>
-          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
-            <span style={{ fontWeight: 700, fontSize: '1.9rem', color: 'var(--text-primary)', letterSpacing: '-0.06em', fontFamily: "'Syncopate', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
-              SRYN
-            </span>
-            <span style={{ fontSize: '0.45rem', fontWeight: 800, letterSpacing: '0.22em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
-              SRYN MANAGEMENT PVT LTD
-            </span>
+          <Link to="/" style={{ ...logoStyle, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+            <img src="/logo.png" alt="SRYN Logo" style={{ height: '42px', borderRadius: '6px', objectFit: 'contain' }} />
           </Link>
           <p style={descStyle}>
             India's most trusted recruitment scaling partner. We connect high-performing field forces and delivery riders with leading national brands.

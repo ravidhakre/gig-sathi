@@ -90,13 +90,8 @@ const Auth = () => {
         
         {/* Header Logo */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '2px', textDecoration: 'none', marginBottom: '12px' }}>
-            <span style={{ fontWeight: 700, fontSize: '2.4rem', color: 'var(--text-primary)', letterSpacing: '-0.06em', fontFamily: "'Syncopate', sans-serif", lineHeight: 1, textTransform: 'uppercase' }}>
-              SRYN
-            </span>
-            <span style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '0.22em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
-              SRYN MANAGEMENT PVT LTD
-            </span>
+          <div style={{ display: 'inline-flex', textDecoration: 'none', marginBottom: '12px' }}>
+            <img src="/logo.png" alt="SRYN Logo" style={{ height: '60px', borderRadius: '8px', objectFit: 'contain' }} />
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
             {step === 'otp' ? 'Email OTP Verification' : (isSignup ? 'Create your recruitment portal account' : 'Access your professional dashboard')}
