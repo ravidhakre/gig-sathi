@@ -1231,8 +1231,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .brand-logo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
   justify-content: center;
 }
 
@@ -1240,13 +1240,11 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 24px 20px;
+  border-radius: 16px;
+  padding: 20px 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+  gap: 16px;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: default;
@@ -1257,37 +1255,59 @@ h1, h2, h3, h4, h5, h6 {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(222, 49, 99, 0.03) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.brand-logo-card:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
   opacity: 1;
+  pointer-events: none;
 }
 
 .brand-logo-card:hover {
   transform: translateY(-6px);
   border-color: rgba(222, 49, 99, 0.25);
-  box-shadow: 0 12px 25px rgba(222, 49, 99, 0.06), 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08), 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.brand-logo-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-logo-card:hover .brand-logo-circle {
+  transform: scale(1.1) rotate(-8deg);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+
+.brand-logo-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .brand-logo-card h4 {
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0;
-  letter-spacing: -0.01em;
+  margin: 0 0 3px 0;
+  letter-spacing: -0.010em;
   line-height: 1.2;
 }
 
 .brand-logo-card span.brand-type {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   opacity: 0.8;
   margin: 0;
   line-height: 1;

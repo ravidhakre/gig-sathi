@@ -337,45 +337,77 @@ const Home = () => {
           <h2 className="section-heading" style={{ marginBottom: '48px', marginTop: '8px' }}>Brands We Work With</h2>
           
           <div className="brand-logo-grid">
-            <div className="brand-logo-card">
+            {/* HDFC Bank */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(26, 59, 139, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#1a3b8b' }}></span>
-              <h4>HDFC Bank</h4>
-              <span className="brand-type">Credit Cards</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#1a3b8b' }}>H</div>
+              <div className="brand-logo-card-content">
+                <h4>HDFC Bank</h4>
+                <span className="brand-type">Credit Cards</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* SBI Card */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 163, 228, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
-              <h4>SBI Card</h4>
-              <span className="brand-type">Credit Cards</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#00a3e0' }}>S</div>
+              <div className="brand-logo-card-content">
+                <h4>SBI Card</h4>
+                <span className="brand-type">Credit Cards</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* Airtel KYC */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(228, 0, 0, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
-              <h4>Airtel KYC</h4>
-              <span className="brand-type">Field Executives</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#e40000' }}>A</div>
+              <div className="brand-logo-card-content">
+                <h4>Airtel KYC</h4>
+                <span className="brand-type">Field Executives</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* Zomato Fleet */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(203, 32, 45, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#cb202d' }}></span>
-              <h4>Zomato Fleet</h4>
-              <span className="brand-type">Delivery Partners</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#cb202d' }}>Z</div>
+              <div className="brand-logo-card-content">
+                <h4>Zomato Fleet</h4>
+                <span className="brand-type">Delivery Partners</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* Swiggy */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(252, 128, 25, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
-              <h4>Swiggy</h4>
-              <span className="brand-type">Instamart Riders</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#fc8019' }}>S</div>
+              <div className="brand-logo-card-content">
+                <h4>Swiggy</h4>
+                <span className="brand-type">Instamart Riders</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* Delhivery */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 82, 155, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
-              <h4>Delhivery</h4>
-              <span className="brand-type">Logistics Execs</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#00529b' }}>D</div>
+              <div className="brand-logo-card-content">
+                <h4>Delhivery</h4>
+                <span className="brand-type">Logistics Execs</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* Shadowfax */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(45, 0, 80, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2d0050' }}></span>
-              <h4>Shadowfax</h4>
-              <span className="brand-type">Delivery Riders</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#2d0050' }}>S</div>
+              <div className="brand-logo-card-content">
+                <h4>Shadowfax</h4>
+                <span className="brand-type">Delivery Riders</span>
+              </div>
             </div>
-            <div className="brand-logo-card">
+            {/* Flipkart */}
+            <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(40, 116, 240, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
-              <h4>Flipkart</h4>
-              <span className="brand-type">Delivery Fleet</span>
+              <div className="brand-logo-circle" style={{ backgroundColor: '#2874f0' }}>F</div>
+              <div className="brand-logo-card-content">
+                <h4>Flipkart</h4>
+                <span className="brand-type">Delivery Fleet</span>
+              </div>
             </div>
           </div>
         </div>
