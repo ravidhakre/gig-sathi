@@ -218,28 +218,37 @@ const Home = () => {
 
         <div className="container grid-3">
           {/* Card 1 */}
-          <div className="card" style={serviceCardStyle}>
-            <TrendingUp size={40} color="var(--primary-color)" style={{ marginBottom: '20px' }} />
-            <h3 style={{ marginBottom: '12px', fontSize: '1.4rem' }}>Financial Products</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
-              We deploy certified field agents to acquire credit card customers, merchant scanner onboardings, and bank account accounts activations.
+          <div className="domain-card-premium">
+            <div className="domain-icon-box" style={{ color: 'var(--primary-color)', background: 'rgba(222, 49, 99, 0.06)' }}>
+              <TrendingUp size={28} />
+            </div>
+            <h3>Financial Products</h3>
+            <p>
+              We deploy certified field agents to acquire credit card customers, merchant scanner onboardings, and bank account activations.
             </p>
+            <div className="domain-accent-bar" style={{ background: 'var(--primary-color)' }}></div>
           </div>
           {/* Card 2 */}
-          <div className="card" style={serviceCardStyle}>
-            <Users size={40} color="var(--secondary-color)" style={{ marginBottom: '20px' }} />
-            <h3 style={{ marginBottom: '12px', fontSize: '1.4rem' }}>Delivery Fleet Sourcing</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
+          <div className="domain-card-premium">
+            <div className="domain-icon-box" style={{ color: 'var(--secondary-color)', background: 'rgba(99, 102, 241, 0.06)' }}>
+              <Users size={28} />
+            </div>
+            <h3>Delivery Fleet Sourcing</h3>
+            <p>
               High-volume sourcing of delivery partners for leading logistics, e-commerce, quick-commerce, and food delivery companies in India.
             </p>
+            <div className="domain-accent-bar" style={{ background: 'var(--secondary-color)' }}></div>
           </div>
           {/* Card 3 */}
-          <div className="card" style={serviceCardStyle}>
-            <Shield size={40} color="var(--accent-color)" style={{ marginBottom: '20px' }} />
-            <h3 style={{ marginBottom: '12px', fontSize: '1.4rem' }}>Third-Party Hiring & Verification</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
+          <div className="domain-card-premium">
+            <div className="domain-icon-box" style={{ color: 'var(--accent-color)', background: 'rgba(245, 158, 11, 0.06)' }}>
+              <Shield size={28} />
+            </div>
+            <h3>Third-Party Hiring & Verification</h3>
+            <p>
               Complete end-to-end recruitment process, background KYC checkups, document uploads, training module setups, and onboarding compliance.
             </p>
+            <div className="domain-accent-bar" style={{ background: 'var(--accent-color)' }}></div>
           </div>
         </div>
       </section>

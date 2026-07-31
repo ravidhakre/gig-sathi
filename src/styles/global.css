@@ -212,6 +212,93 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.15;
 }
 
+/* Premium Domain Service Cards */
+.domain-card-premium {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 40px 30px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  height: 100%;
+}
+
+.domain-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(222, 49, 99, 0.02) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.domain-card-premium:hover {
+  transform: translateY(-8px);
+  border-color: rgba(222, 49, 99, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), var(--shadow-glow);
+}
+
+.domain-card-premium:hover::before {
+  opacity: 1;
+}
+
+.domain-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--border-color);
+}
+
+.domain-card-premium:hover .domain-icon-box {
+  transform: scale(1.1) rotate(5deg);
+  border-color: rgba(222, 49, 99, 0.3);
+  box-shadow: 0 10px 20px rgba(222, 49, 99, 0.12);
+}
+
+.domain-card-premium h3 {
+  font-size: 1.4rem;
+  font-weight: 750;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.domain-card-premium:hover h3 {
+  color: var(--primary-color) !important;
+}
+
+.domain-card-premium p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.domain-accent-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.domain-card-premium:hover .domain-accent-bar {
+  width: 100%;
+}
+
 /* Form Controls */
 .form-group {
   margin-bottom: 20px;
