@@ -3,6 +3,36 @@ import { useApp } from '../context/AppContext';
 import { Link } from 'react-router-dom';
 import { Shield, Users, Award, TrendingUp, ArrowRight, Briefcase, Mail, Phone, CheckCircle2 } from 'lucide-react';
 
+const BrandLogo = ({ domain, initial, bgColor, name }) => {
+  const [imgError, setImgError] = useState(false);
+  
+  return (
+    <div 
+      className="brand-logo-circle" 
+      style={{ 
+        backgroundColor: imgError ? bgColor : '#ffffff', 
+        overflow: 'hidden', 
+        border: imgError ? 'none' : '1px solid var(--border-color)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0'
+      }}
+    >
+      {!imgError ? (
+        <img 
+          src={`https://logo.clearbit.com/${domain}`} 
+          alt={`${name} Logo`} 
+          onError={() => setImgError(true)} 
+          style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '6px' }}
+        />
+      ) : (
+        initial
+      )}
+    </div>
+  );
+};
+
 const Home = () => {
   const { cms, projects, showToast } = useApp();
 
@@ -340,7 +370,7 @@ const Home = () => {
             {/* HDFC Bank */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(26, 59, 139, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#1a3b8b' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#1a3b8b' }}>H</div>
+              <BrandLogo domain="hdfcbank.com" initial="H" bgColor="#1a3b8b" name="HDFC Bank" />
               <div className="brand-logo-card-content">
                 <h4>HDFC Bank</h4>
                 <span className="brand-type">Credit Cards</span>
@@ -349,7 +379,7 @@ const Home = () => {
             {/* SBI Card */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 163, 228, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#00a3e0' }}>S</div>
+              <BrandLogo domain="sbicard.com" initial="S" bgColor="#00a3e0" name="SBI Card" />
               <div className="brand-logo-card-content">
                 <h4>SBI Card</h4>
                 <span className="brand-type">Credit Cards</span>
@@ -358,7 +388,7 @@ const Home = () => {
             {/* Airtel KYC */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(228, 0, 0, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#e40000' }}>A</div>
+              <BrandLogo domain="airtel.in" initial="A" bgColor="#e40000" name="Airtel KYC" />
               <div className="brand-logo-card-content">
                 <h4>Airtel KYC</h4>
                 <span className="brand-type">Field Executives</span>
@@ -367,7 +397,7 @@ const Home = () => {
             {/* Zomato Fleet */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(203, 32, 45, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#cb202d' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#cb202d' }}>Z</div>
+              <BrandLogo domain="zomato.com" initial="Z" bgColor="#cb202d" name="Zomato Fleet" />
               <div className="brand-logo-card-content">
                 <h4>Zomato Fleet</h4>
                 <span className="brand-type">Delivery Partners</span>
@@ -376,7 +406,7 @@ const Home = () => {
             {/* Swiggy */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(252, 128, 25, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#fc8019' }}>S</div>
+              <BrandLogo domain="swiggy.com" initial="S" bgColor="#fc8019" name="Swiggy" />
               <div className="brand-logo-card-content">
                 <h4>Swiggy</h4>
                 <span className="brand-type">Instamart Riders</span>
@@ -385,7 +415,7 @@ const Home = () => {
             {/* Delhivery */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 82, 155, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#00529b' }}>D</div>
+              <BrandLogo domain="delhivery.com" initial="D" bgColor="#00529b" name="Delhivery" />
               <div className="brand-logo-card-content">
                 <h4>Delhivery</h4>
                 <span className="brand-type">Logistics Execs</span>
@@ -394,7 +424,7 @@ const Home = () => {
             {/* Shadowfax */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(45, 0, 80, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2d0050' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#2d0050' }}>S</div>
+              <BrandLogo domain="shadowfax.in" initial="S" bgColor="#2d0050" name="Shadowfax" />
               <div className="brand-logo-card-content">
                 <h4>Shadowfax</h4>
                 <span className="brand-type">Delivery Riders</span>
@@ -403,7 +433,7 @@ const Home = () => {
             {/* Flipkart */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(40, 116, 240, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
-              <div className="brand-logo-circle" style={{ backgroundColor: '#2874f0' }}>F</div>
+              <BrandLogo domain="flipkart.com" initial="F" bgColor="#2874f0" name="Flipkart" />
               <div className="brand-logo-card-content">
                 <h4>Flipkart</h4>
                 <span className="brand-type">Delivery Fleet</span>
