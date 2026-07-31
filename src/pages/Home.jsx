@@ -253,6 +253,49 @@ const Home = () => {
         </div>
       </section>
 
+      {/* How SRYN Works Section */}
+      <section className="section-padding" style={{ backgroundColor: 'rgba(255, 255, 255, 0.015)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>4-Step Fast Onboarding</span>
+          <h2 className="section-heading" style={{ marginBottom: '56px', marginTop: '8px' }}>How SRYN Works</h2>
+          
+          <div className="grid-4" style={{ gap: '32px' }}>
+            {/* Step 1 */}
+            <div className="process-card">
+              <div className="process-number">01</div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Register Profile</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                Create your candidate or partner account in under 60 seconds with simple OTP verification.
+              </p>
+            </div>
+            {/* Step 2 */}
+            <div className="process-card">
+              <div className="process-number">02</div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Aadhaar KYC</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                Securely upload your onboarding documents for immediate verification by our HR desk.
+              </p>
+            </div>
+            {/* Step 3 */}
+            <div className="process-card">
+              <div className="process-number">03</div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Trigger Campaigns</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                Select open logistics, retail, or banking campaigns and activate your instant tracking links.
+              </p>
+            </div>
+            {/* Step 4 */}
+            <div className="process-card">
+              <div className="process-number">04</div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Earn Weekly</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                Track lead conversions, check real-time ledgers, and receive secure payouts direct to your bank.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us */}
       <section className="section-padding">
         <div className="container why-grid-layout">
@@ -282,6 +325,49 @@ const Home = () => {
                 Deploy 100+ vetted field executives or delivery boy fleets within 72 hours.
               </p>
               <a href="#partner" className="btn btn-primary" style={{ width: '100%', display: 'block', textAlign: 'center', padding: '14px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em' }}>Get Corporate Consultation</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="section-padding" style={{ backgroundColor: 'rgba(255, 255, 255, 0.005)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <span style={{ color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>TRUSTED CAMPAIGN PARTNERS</span>
+          <h2 className="section-heading" style={{ marginBottom: '48px', marginTop: '8px' }}>Brands We Work With</h2>
+          
+          <div className="brand-logo-grid">
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#1a3b8b' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>HDFC Bank</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>SBI Card</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Airtel KYC</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#cb202d' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Zomato Fleet</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Swiggy</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Delhivery</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#2d0050' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Shadowfax</span>
+            </div>
+            <div className="brand-logo-card">
+              <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Flipkart</span>
             </div>
           </div>
         </div>
