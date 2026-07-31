@@ -108,7 +108,7 @@ const logoStyle = {
 
 const descStyle = {
   lineHeight: '1.6',
-  color: 'var(--text-secondary)',
+  color: '#94a3b8',
   maxWidth: '300px'
 };
 
