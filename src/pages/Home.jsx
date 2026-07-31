@@ -339,35 +339,43 @@ const Home = () => {
           <div className="brand-logo-grid">
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#1a3b8b' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>HDFC Bank</span>
+              <h4>HDFC Bank</h4>
+              <span className="brand-type">Credit Cards</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>SBI Card</span>
+              <h4>SBI Card</h4>
+              <span className="brand-type">Credit Cards</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Airtel KYC</span>
+              <h4>Airtel KYC</h4>
+              <span className="brand-type">Field Executives</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#cb202d' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Zomato Fleet</span>
+              <h4>Zomato Fleet</h4>
+              <span className="brand-type">Delivery Partners</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Swiggy</span>
+              <h4>Swiggy</h4>
+              <span className="brand-type">Instamart Riders</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Delhivery</span>
+              <h4>Delhivery</h4>
+              <span className="brand-type">Logistics Execs</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#2d0050' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Shadowfax</span>
+              <h4>Shadowfax</h4>
+              <span className="brand-type">Delivery Riders</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Flipkart</span>
+              <h4>Flipkart</h4>
+              <span className="brand-type">Delivery Fleet</span>
             </div>
           </div>
         </div>
