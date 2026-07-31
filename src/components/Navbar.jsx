@@ -74,7 +74,7 @@ const Navbar = () => {
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
           <Link to="/" style={{ ...logoStyle, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-            <img src="/logo.png" alt="SRYN Logo" style={{ height: '42px', borderRadius: '6px', objectFit: 'contain' }} />
+            <img src="/logo.jpeg" alt="SRYN Logo" style={{ height: '42px', borderRadius: '6px', objectFit: 'contain' }} />
           </Link>
 
           {/* Desktop Nav Links */}

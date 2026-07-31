@@ -91,7 +91,7 @@ const Auth = () => {
         {/* Header Logo */}
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <div style={{ display: 'inline-flex', textDecoration: 'none', marginBottom: '12px' }}>
-            <img src="/logo.png" alt="SRYN Logo" style={{ height: '60px', borderRadius: '8px', objectFit: 'contain' }} />
+            <img src="/logo.jpeg" alt="SRYN Logo" style={{ height: '60px', borderRadius: '8px', objectFit: 'contain' }} />
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
             {step === 'otp' ? 'Email OTP Verification' : (isSignup ? 'Create your recruitment portal account' : 'Access your professional dashboard')}

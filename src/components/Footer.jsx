@@ -9,7 +9,7 @@ const Footer = () => {
         {/* Info Column */}
         <div style={colStyle}>
           <Link to="/" style={{ ...logoStyle, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-            <img src="/logo.png" alt="SRYN Logo" style={{ height: '42px', borderRadius: '6px', objectFit: 'contain' }} />
+            <img src="/logo.jpeg" alt="SRYN Logo" style={{ height: '42px', borderRadius: '6px', objectFit: 'contain' }} />
           </Link>
           <p style={descStyle}>
             India's most trusted recruitment scaling partner. We connect high-performing field forces and delivery riders with leading national brands.
