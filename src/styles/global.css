@@ -1190,19 +1190,20 @@ h1, h2, h3, h4, h5, h6 {
    ============================================================= */
 .process-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 45px 24px 30px 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
+  box-shadow: var(--shadow-sm);
 }
 
 .process-card:hover {
   transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--bg-surface);
   border-color: rgba(222, 49, 99, 0.35);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .process-number {
@@ -1237,8 +1238,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .brand-logo-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 28px 20px;
   display: flex;
@@ -1247,12 +1248,13 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: default;
+  box-shadow: var(--shadow-sm);
 }
 
 .brand-logo-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background: var(--bg-surface);
+  border-color: rgba(222, 49, 99, 0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   transform: translateY(-4px);
 }
 

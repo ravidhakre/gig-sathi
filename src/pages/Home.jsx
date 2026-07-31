@@ -263,7 +263,7 @@ const Home = () => {
             {/* Step 1 */}
             <div className="process-card">
               <div className="process-number">01</div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Register Profile</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Register Profile</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
                 Create your candidate or partner account in under 60 seconds with simple OTP verification.
               </p>
@@ -271,7 +271,7 @@ const Home = () => {
             {/* Step 2 */}
             <div className="process-card">
               <div className="process-number">02</div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Aadhaar KYC</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Aadhaar KYC</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
                 Securely upload your onboarding documents for immediate verification by our HR desk.
               </p>
@@ -279,7 +279,7 @@ const Home = () => {
             {/* Step 3 */}
             <div className="process-card">
               <div className="process-number">03</div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Trigger Campaigns</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Trigger Campaigns</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
                 Select open logistics, retail, or banking campaigns and activate your instant tracking links.
               </p>
@@ -287,7 +287,7 @@ const Home = () => {
             {/* Step 4 */}
             <div className="process-card">
               <div className="process-number">04</div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: '#ffffff' }}>Earn Weekly</h3>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Earn Weekly</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
                 Track lead conversions, check real-time ledgers, and receive secure payouts direct to your bank.
               </p>
@@ -339,35 +339,35 @@ const Home = () => {
           <div className="brand-logo-grid">
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#1a3b8b' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>HDFC Bank</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>HDFC Bank</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>SBI Card</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>SBI Card</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Airtel KYC</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Airtel KYC</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#cb202d' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Zomato Fleet</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Zomato Fleet</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Swiggy</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Swiggy</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Delhivery</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Delhivery</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#2d0050' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Shadowfax</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Shadowfax</span>
             </div>
             <div className="brand-logo-card">
               <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#ffffff', letterSpacing: '0.02em' }}>Flipkart</span>
+              <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)', letterSpacing: '0.02em' }}>Flipkart</span>
             </div>
           </div>
         </div>
