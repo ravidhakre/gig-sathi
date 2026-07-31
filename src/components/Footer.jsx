@@ -8,11 +8,11 @@ const Footer = () => {
       <div className="container" style={gridStyle}>
         {/* Info Column */}
         <div style={colStyle}>
-          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
-            <span style={{ fontWeight: 'normal', fontSize: '3.2rem', color: 'var(--text-primary)', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase' }}>
+          <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '4px', textDecoration: 'none' }}>
+            <span style={{ fontWeight: 'normal', fontSize: '3.2rem', color: '#ffffff', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase' }}>
               SRYN
             </span>
-            <span style={{ fontSize: '0.48rem', fontWeight: 800, letterSpacing: '0.07em', color: 'var(--primary-color)', textTransform: 'uppercase', lineHeight: 1 }}>
+            <span style={{ fontSize: '0.48rem', fontWeight: 800, letterSpacing: '0.07em', color: '#ffffff', textTransform: 'uppercase', lineHeight: 1 }}>
               SRYN MANAGEMENT PVT LTD
             </span>
           </Link>
@@ -173,9 +173,7 @@ footerCSS.textContent = `
   }
 
   footer h4 {
-    background: linear-gradient(90deg, #DE3163 0%, #818cf8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ffffff !important;
     font-weight: 800 !important;
     font-size: 1.15rem !important;
     letter-spacing: 0.02em;
