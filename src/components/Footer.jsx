@@ -5,14 +5,15 @@ import { Briefcase, Mail, Phone, MapPin, Heart } from 'lucide-react';
 const Footer = () => {
   return (
     <footer style={footerStyle}>
+      <div className="footer-glow-blob"></div>
       <div className="container" style={gridStyle}>
         {/* Info Column */}
         <div style={colStyle}>
           <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '4px', textDecoration: 'none' }}>
-            <span style={{ fontWeight: 'normal', fontSize: '3.2rem', color: '#ffffff', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase' }}>
+            <span style={{ fontWeight: 'normal', fontSize: '3.2rem', color: '#ffffff', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase', textShadow: '0 0 15px rgba(255,255,255,0.1)' }}>
               SRYN
             </span>
-            <span style={{ fontSize: '0.48rem', fontWeight: 800, letterSpacing: '0.07em', color: '#ffffff', textTransform: 'uppercase', lineHeight: 1 }}>
+            <span style={{ fontSize: '0.48rem', fontWeight: 800, letterSpacing: '0.07em', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', lineHeight: 1 }}>
               SRYN MANAGEMENT PVT LTD
             </span>
           </Link>
@@ -47,17 +48,17 @@ const Footer = () => {
         <div style={colStyle}>
           <h4 style={titleStyle}>Get in Touch</h4>
           <ul style={{ ...listStyle, gap: '12px' }}>
-            <li style={contactItemStyle}>
-              <Mail size={16} color="var(--primary-color)" />
-              <span>info@srynmanagement.com</span>
+            <li className="footer-contact-item" style={{ ...contactItemStyle, cursor: 'default' }}>
+              <span className="footer-contact-icon"><Mail size={13} /></span>
+              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>info@srynmanagement.com</span>
             </li>
-            <li style={contactItemStyle}>
-              <Phone size={16} color="var(--primary-color)" />
-              <span>+91 82659 03984</span>
+            <li className="footer-contact-item" style={{ ...contactItemStyle, cursor: 'default' }}>
+              <span className="footer-contact-icon"><Phone size={13} /></span>
+              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>+91 82659 03984</span>
             </li>
-            <li style={contactItemStyle}>
-              <MapPin size={16} color="var(--primary-color)" />
-              <span>Sector 62, Noida, UP, India</span>
+            <li className="footer-contact-item" style={{ ...contactItemStyle, cursor: 'default' }}>
+              <span className="footer-contact-icon"><MapPin size={13} /></span>
+              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>Sector 62, Noida, UP, India</span>
             </li>
           </ul>
         </div>
@@ -158,9 +159,11 @@ const bottomStyle = {
 const footerCSS = document.createElement('style');
 footerCSS.textContent = `
   footer {
-    background: linear-gradient(180deg, #0b0f19 0%, #060911 100%) !important;
+    background: linear-gradient(135deg, #0b0f19 0%, #060911 55%, #100612 100%) !important;
     position: relative;
     overflow: hidden;
+    border-top: 2px solid rgba(222, 49, 99, 0.25) !important;
+    box-shadow: 0 -10px 40px rgba(222, 49, 99, 0.08) !important;
   }
   
   footer::before {
@@ -172,27 +175,92 @@ footerCSS.textContent = `
     pointer-events: none;
   }
 
+  .footer-glow-blob {
+    position: absolute;
+    bottom: -150px;
+    right: -100px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(222, 49, 99, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
   footer h4 {
     color: #ffffff !important;
-    font-weight: 800 !important;
-    font-size: 1.15rem !important;
-    letter-spacing: 0.02em;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
     margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+
+  footer h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--primary-color);
   }
   
   footer a {
-    transition: all 0.25s ease !important;
+    color: #94a3b8 !important;
+    font-weight: 500 !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     display: inline-block;
   }
   
   footer a:hover {
     color: #ffffff !important;
+    transform: translateX(6px) !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  }
+
+  .footer-contact-item {
+    transition: all 0.25s ease;
+  }
+
+  .footer-contact-item:hover {
+    color: #ffffff !important;
     transform: translateX(4px);
   }
+
+  .footer-contact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(222, 49, 99, 0.1);
+    border: 1px solid rgba(222, 49, 99, 0.18);
+    color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(222, 49, 99, 0.1);
+    transition: all 0.25s ease;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .footer-contact-item:hover .footer-contact-icon {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-glow);
+    transform: scale(1.08);
+  }
   
-  @media (max-width: 768px) {
-    footer .container { grid-template-columns: 1fr !important; gap: 30px !important; }
-    footer { padding-top: 40px !important; }
+  @media (max-width: 992px) {
+    footer .container:first-of-type { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+  }
+  @media (max-width: 576px) {
+    footer .container:first-of-type { grid-template-columns: 1fr !important; gap: 30px !important; }
+    footer { padding-top: 50px !important; }
   }
 `;
 document.head.appendChild(footerCSS);
