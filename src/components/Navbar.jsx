@@ -57,15 +57,15 @@ const Navbar = () => {
     top: 0,
     left: 0,
     zIndex: 1000,
-    backgroundColor: isScrolled ? '#0b0f19' : 'transparent',
-    borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.08)' : 'none',
-    boxShadow: isScrolled ? '0 10px 30px rgba(0, 0, 0, 0.25)' : 'none',
+    backgroundColor: isScrolled ? '#DE3163' : 'transparent',
+    borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.15)' : 'none',
+    boxShadow: isScrolled ? '0 10px 30px rgba(0, 0, 0, 0.2)' : 'none',
     display: 'flex',
     alignItems: 'center',
     transition: 'all 0.3s ease-in-out'
   };
 
-  const logoColor = isScrolled ? 'var(--primary-color)' : '#ffffff';
+  const logoColor = '#ffffff';
   const logoTextColor = '#ffffff';
 
   return (
@@ -74,7 +74,7 @@ const Navbar = () => {
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
           <Link to="/" style={{ ...logoStyle, textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-            <img src="/logo.jpeg" alt="SRYN Logo" style={{ height: '42px', borderRadius: '6px', objectFit: 'contain' }} />
+            <img src="/logo.jpeg" alt="SRYN Logo" style={{ height: '54px', borderRadius: '6px', objectFit: 'contain' }} />
           </Link>
 
           {/* Desktop Nav Links */}
@@ -86,9 +86,9 @@ const Navbar = () => {
                 style={{
                   ...navLinkStyle,
                   color: location.pathname === link.path 
-                    ? (isScrolled ? 'var(--primary-color)' : '#ffffff') 
-                    : (isScrolled ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.9)'),
-                  borderBottom: location.pathname === link.path ? `2px solid ${isScrolled ? 'var(--primary-color)' : '#ffffff'}` : 'none',
+                    ? '#ffffff' 
+                    : 'rgba(255, 255, 255, 0.85)',
+                  borderBottom: location.pathname === link.path ? '2px solid #ffffff' : 'none',
                   paddingBottom: '4px'
                 }}
               >
@@ -257,13 +257,14 @@ style.textContent = `
   
   /* Scrolled Navbar state */
   .navbar.scrolled .nav-links-desktop a:hover {
-    color: var(--primary-color) !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
 
   /* Premium Nav Action Buttons */
   .btn-nav-outline {
     background: transparent !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
     color: #ffffff !important;
     font-weight: 600 !important;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -278,14 +279,14 @@ style.textContent = `
   }
   
   .navbar.scrolled .btn-nav-outline {
-    border-color: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
   }
   
   .navbar.scrolled .btn-nav-outline:hover {
-    background: var(--primary-color) !important;
-    color: #ffffff !important;
-    border-color: var(--primary-color) !important;
-    box-shadow: var(--shadow-glow) !important;
+    background: #ffffff !important;
+    color: var(--primary-color) !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
   }
 
   .btn-nav-primary {
@@ -304,15 +305,15 @@ style.textContent = `
   }
   
   .navbar.scrolled .btn-nav-primary {
-    background-color: var(--primary-color) !important;
-    color: #ffffff !important;
-    border-color: var(--primary-color) !important;
+    background-color: #ffffff !important;
+    color: var(--primary-color) !important;
+    border-color: #ffffff !important;
   }
   
   .navbar.scrolled .btn-nav-primary:hover {
-    background-color: var(--primary-hover) !important;
-    border-color: var(--primary-hover) !important;
-    box-shadow: var(--shadow-glow) !important;
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
   }
 `;
 document.head.appendChild(style);

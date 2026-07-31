@@ -566,7 +566,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   width: 100%;
   position: relative;
-  background: radial-gradient(circle at 10% 20%, rgba(222, 49, 99, 1) 0%, rgba(162, 27, 80, 1) 45%, rgba(63, 7, 33, 1) 90%);
+  background: radial-gradient(circle at 50% 50%, #DE3163 0%, #c21b50 60%, #83123b 100%);
   color: #ffffff;
   padding-top: var(--navbar-height);
   overflow: hidden;
@@ -1086,8 +1086,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   width: 100%;
   padding: 110px 24px 70px 24px;
-  background: radial-gradient(circle at 10% 20%, rgba(222, 49, 99, 0.45) 0%, rgba(162, 27, 80, 0.6) 35%, rgba(11, 15, 25, 1) 90%),
-              radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.15), transparent 40%);
+  background: radial-gradient(circle at 50% 50%, #DE3163 0%, #c21b50 60%, #83123b 100%);
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
   text-align: left;
