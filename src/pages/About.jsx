@@ -13,11 +13,11 @@ const About = () => {
   return (
     <div className="fade-in">
       {/* Hero Banner */}
-      <div style={bannerStyle}>
+      <div className="page-hero-banner">
         <div className="container">
           <span style={badgeStyle}>WHO WE ARE</span>
-          <h1 style={{ fontSize: '3rem', marginTop: '12px' }}>About GigSathi</h1>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginTop: '12px', fontSize: '1.1rem' }}>
+          <h1>About GigSathi</h1>
+          <p>
             We bridge the gap between large corporates requiring rapid workforce distribution and independent field executives seeking scalable earnings.
           </p>
         </div>

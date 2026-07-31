@@ -19,11 +19,11 @@ const Contact = () => {
   return (
     <div className="fade-in">
       {/* Banner */}
-      <div style={bannerStyle}>
+      <div className="page-hero-banner">
         <div className="container">
           <span style={badgeStyle}>CONNECT WITH US</span>
-          <h1 style={{ fontSize: '3rem', marginTop: '12px' }}>Contact GigSathi</h1>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginTop: '12px', fontSize: '1.1rem' }}>
+          <h1>Contact GigSathi</h1>
+          <p>
             Have questions about payouts, projects, or bulk hirings? Get in touch with our helpdesk team.
           </p>
         </div>

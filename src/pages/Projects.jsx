@@ -25,11 +25,11 @@ const Projects = () => {
   return (
     <div className="fade-in">
       {/* Banner */}
-      <div style={bannerStyle}>
+      <div className="page-hero-banner">
         <div className="container">
           <span style={badgeStyle}>CAMPAIGNS & OPERATIONS</span>
-          <h1 style={{ fontSize: '3rem', marginTop: '12px' }}>Our Active Projects</h1>
-          <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginTop: '12px', fontSize: '1.1rem' }}>
+          <h1>Our Active Projects</h1>
+          <p>
             Earn high commissions onboarding users and scale delivery metrics for India's premium platforms.
           </p>
         </div>

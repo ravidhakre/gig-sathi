@@ -1080,3 +1080,59 @@ h1, h2, h3, h4, h5, h6 {
     padding-left: 10px !important;
   }
 }
+
+/* Premium Page Hero Banner (used across all inner pages) */
+.page-hero-banner {
+  position: relative;
+  width: 100%;
+  padding: 110px 24px 70px 24px;
+  background: radial-gradient(circle at 10% 20%, rgba(222, 49, 99, 0.45) 0%, rgba(162, 27, 80, 0.6) 35%, rgba(11, 15, 25, 1) 90%),
+              radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.15), transparent 40%);
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+  text-align: left;
+}
+
+.page-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.page-hero-banner .container {
+  position: relative;
+  z-index: 2;
+}
+
+.page-hero-banner h1 {
+  font-size: 3.2rem;
+  font-weight: 850;
+  color: #ffffff !important;
+  margin-top: 10px;
+  letter-spacing: -0.02em;
+}
+
+.page-hero-banner p {
+  color: rgba(255, 255, 255, 0.8) !important;
+  max-width: 680px;
+  margin-top: 12px;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .page-hero-banner {
+    padding: 90px 20px 50px 20px;
+  }
+  .page-hero-banner h1 {
+    font-size: 2.2rem;
+  }
+  .page-hero-banner p {
+    font-size: 0.95rem;
+  }
+}
