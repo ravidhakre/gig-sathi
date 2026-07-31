@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer style={footerStyle}>
       <div className="footer-glow-blob"></div>
-      <div className="container" style={gridStyle}>
+      <div className="container footer-grid" style={gridStyle}>
         {/* Info Column */}
         <div style={colStyle}>
           <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '4px', textDecoration: 'none' }}>
@@ -256,10 +256,10 @@ footerCSS.textContent = `
   }
   
   @media (max-width: 992px) {
-    footer .container:first-of-type { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+    .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
   }
-  @media (max-width: 576px) {
-    footer .container:first-of-type { grid-template-columns: 1fr !important; gap: 30px !important; }
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
     footer { padding-top: 50px !important; }
   }
 `;

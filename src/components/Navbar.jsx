@@ -74,10 +74,10 @@ const Navbar = () => {
         <div className="container" style={navContainerStyle}>
           {/* Logo */}
           <Link to="/" style={{ ...logoStyle, flexDirection: 'column', alignItems: 'flex-start', gap: '2px', textDecoration: 'none' }}>
-            <span style={{ fontWeight: 'normal', fontSize: '3.2rem', color: '#ffffff', letterSpacing: '0.11em', marginRight: '-0.11em', fontFamily: "'Frank Bellamy', 'Bangers', sans-serif", lineHeight: 0.8, textTransform: 'uppercase' }}>
+            <span className="navbar-brand-title">
               SRYN
             </span>
-            <span style={{ fontSize: '0.48rem', fontWeight: 800, letterSpacing: '0.07em', color: logoColor, textTransform: 'uppercase', lineHeight: 1, transition: 'color 0.3s' }}>
+            <span className="navbar-brand-subtitle" style={{ color: logoColor }}>
               SRYN MANAGEMENT PVT LTD
             </span>
           </Link>
@@ -319,6 +319,38 @@ style.textContent = `
     background-color: transparent !important;
     color: #ffffff !important;
     border-color: #ffffff !important;
+  }
+
+  .navbar-brand-title {
+    font-weight: normal;
+    font-size: 3.2rem;
+    color: #ffffff;
+    letter-spacing: 0.11em;
+    margin-right: -0.11em;
+    font-family: 'Frank Bellamy', 'Bangers', sans-serif;
+    line-height: 0.8;
+    text-transform: uppercase;
+  }
+
+  .navbar-brand-subtitle {
+    font-size: 0.48rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  @media (max-width: 576px) {
+    .navbar-brand-title {
+      font-size: 2.2rem !important;
+      letter-spacing: 0.09em !important;
+      margin-right: -0.09em !important;
+    }
+    .navbar-brand-subtitle {
+      font-size: 0.4rem !important;
+      letter-spacing: 0.04em !important;
+    }
   }
 `;
 document.head.appendChild(style);
