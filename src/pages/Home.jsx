@@ -276,12 +276,12 @@ const Home = () => {
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="glass-card" style={{ padding: '40px', border: '1px solid rgba(99, 102, 241, 0.2)', width: '100%' }}>
-              <h3 style={{ fontSize: '1.6rem', marginBottom: '12px' }}>Need Instant Scale?</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '24px', lineHeight: '1.6' }}>
+            <div className="premium-form-card" style={{ width: '100%', background: 'linear-gradient(135deg, rgba(222, 49, 99, 0.04) 0%, rgba(99, 102, 241, 0.08) 100%)', border: '1.5px solid rgba(222, 49, 99, 0.18)' }}>
+              <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '12px', color: '#fff' }}>Need Instant Scale?</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '28px', lineHeight: '1.6' }}>
                 Deploy 100+ vetted field executives or delivery boy fleets within 72 hours.
               </p>
-              <a href="#partner" className="btn btn-secondary" style={{ width: '100%' }}>Get Corporate Consultation</a>
+              <a href="#partner" className="btn btn-primary" style={{ width: '100%', display: 'block', textAlign: 'center', padding: '14px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em' }}>Get Corporate Consultation</a>
             </div>
           </div>
         </div>
@@ -292,17 +292,17 @@ const Home = () => {
         <div className="container grid-2" style={{ gap: '48px', alignItems: 'start' }}>
           
           {/* Candidate Apply Form */}
-          <div id="apply" className="glass-card fade-in" style={{ padding: '36px' }}>
-            <h3 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Apply For Open Projects</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '24px' }}>
+          <div id="apply" className="premium-form-card fade-in">
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>Apply For Open Projects</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '28px' }}>
               Register as an executive to earn weekly commissions. Fill the form below.
             </p>
             <form onSubmit={handleJobSubmit}>
               <div className="form-group">
-                <label>Full Name</label>
+                <label className="premium-label">Full Name</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="Enter your name"
                   value={jobForm.fullName}
                   onChange={(e) => setJobForm({ ...jobForm, fullName: e.target.value })}
@@ -310,10 +310,10 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Mobile Number</label>
+                <label className="premium-label">Mobile Number</label>
                 <input
                   type="tel"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="Enter 10-digit number"
                   value={jobForm.mobile}
                   onChange={(e) => setJobForm({ ...jobForm, mobile: e.target.value })}
@@ -321,10 +321,10 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Email Address</label>
+                <label className="premium-label">Email Address</label>
                 <input
                   type="email"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="Enter email address"
                   value={jobForm.email}
                   onChange={(e) => setJobForm({ ...jobForm, email: e.target.value })}
@@ -332,47 +332,47 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Select Project Interest</label>
+                <label className="premium-label">Select Project Interest</label>
                 <select
-                  className="form-control"
+                  className="premium-input"
                   value={jobForm.project}
                   onChange={(e) => setJobForm({ ...jobForm, project: e.target.value })}
                   required
                 >
                   <option value="">-- Choose Project --</option>
                   {projects.map((p) => (
-                    <option key={p.id} value={p.title}>{p.title} ({p.category})</option>
+                    <option key={p.id} value={p.title} style={{ background: '#0b0f19' }}>{p.title} ({p.category})</option>
                   ))}
                 </select>
               </div>
               <div className="form-group">
-                <label>Additional Notes / Experience</label>
+                <label className="premium-label">Additional Notes / Experience</label>
                 <textarea
                   rows="3"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="E.g., 1 year experience in credit cards or delivery boy work..."
                   value={jobForm.message}
                   onChange={(e) => setJobForm({ ...jobForm, message: e.target.value })}
                 ></textarea>
               </div>
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '15px', padding: '14px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Submit Application
               </button>
             </form>
           </div>
 
           {/* Corporate Client Onboard Form */}
-          <div id="partner" className="glass-card" style={{ padding: '36px', border: '1px solid rgba(99, 102, 241, 0.15)' }}>
-            <h3 style={{ fontSize: '1.8rem', marginBottom: '8px' }}><span className="text-gradient">Hire Gig Forces</span></h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '24px' }}>
+          <div id="partner" className="premium-form-card">
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}><span className="text-gradient">Hire Gig Forces</span></h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '28px' }}>
               Are you a brand looking for field resources? Let us manage your sourcing & KYC details.
             </p>
             <form onSubmit={handleClientSubmit}>
               <div className="form-group">
-                <label>Company Name</label>
+                <label className="premium-label">Company Name</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="E.g., Zomato, SBI, Airtel"
                   value={clientForm.companyName}
                   onChange={(e) => setClientForm({ ...clientForm, companyName: e.target.value })}
@@ -380,10 +380,10 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Contact Person</label>
+                <label className="premium-label">Contact Person</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="Enter contact person name"
                   value={clientForm.contactPerson}
                   onChange={(e) => setClientForm({ ...clientForm, contactPerson: e.target.value })}
@@ -391,10 +391,10 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Business Email ID</label>
+                <label className="premium-label">Business Email ID</label>
                 <input
                   type="email"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="corporate@company.com"
                   value={clientForm.email}
                   onChange={(e) => setClientForm({ ...clientForm, email: e.target.value })}
@@ -402,10 +402,10 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Business Mobile</label>
+                <label className="premium-label">Business Mobile</label>
                 <input
                   type="tel"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="Enter business phone number"
                   value={clientForm.mobile}
                   onChange={(e) => setClientForm({ ...clientForm, mobile: e.target.value })}
@@ -413,30 +413,30 @@ const Home = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Recruitment Division</label>
+                <label className="premium-label">Recruitment Division</label>
                 <select
-                  className="form-control"
+                  className="premium-input"
                   value={clientForm.hiringType}
                   onChange={(e) => setClientForm({ ...clientForm, hiringType: e.target.value })}
                   required
                 >
-                  <option value="Delivery Boy Hiring">Delivery Boy Hiring</option>
-                  <option value="Financial Products Sales">Financial Products Sales</option>
-                  <option value="Field Executive Sourcing">Field Executive Sourcing</option>
-                  <option value="Full Scale Hiring Program">Full Scale Third Party Hiring</option>
+                  <option value="Delivery Boy Hiring" style={{ background: '#0b0f19' }}>Delivery Boy Hiring</option>
+                  <option value="Financial Products Sales" style={{ background: '#0b0f19' }}>Financial Products Sales</option>
+                  <option value="Field Executive Sourcing" style={{ background: '#0b0f19' }}>Field Executive Sourcing</option>
+                  <option value="Full Scale Hiring Program" style={{ background: '#0b0f19' }}>Full Scale Third Party Hiring</option>
                 </select>
               </div>
               <div className="form-group">
-                <label>Hiring Scale / Requirements</label>
+                <label className="premium-label">Hiring Scale / Requirements</label>
                 <textarea
                   rows="3"
-                  className="form-control"
+                  className="premium-input"
                   placeholder="Describe your project, city requirements, and timeline..."
                   value={clientForm.description}
                   onChange={(e) => setClientForm({ ...clientForm, description: e.target.value })}
                 ></textarea>
               </div>
-              <button type="submit" className="btn btn-secondary" style={{ width: '100%', marginTop: '10px' }}>
+              <button type="submit" className="btn btn-secondary" style={{ width: '100%', marginTop: '15px', padding: '14px', fontWeight: '750', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Submit Corporate Request
               </button>
             </form>

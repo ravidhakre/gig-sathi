@@ -51,7 +51,7 @@ const Footer = () => {
             </li>
             <li style={contactItemStyle}>
               <Phone size={16} color="var(--primary-color)" />
-              <span>+91 98765 43210</span>
+              <span>+91 82659 03984</span>
             </li>
             <li style={contactItemStyle}>
               <MapPin size={16} color="var(--primary-color)" />
@@ -75,11 +75,12 @@ const Footer = () => {
 
 // Inline Styles
 const footerStyle = {
-  backgroundColor: 'var(--bg-surface)',
-  borderTop: '1px solid var(--border-color)',
-  padding: '60px 24px 30px 24px',
+  backgroundColor: '#070a13',
+  borderTop: '1.5px solid rgba(222, 49, 99, 0.15)',
+  padding: '80px 24px 40px 24px',
   color: 'var(--text-secondary)',
-  fontSize: '0.9rem'
+  fontSize: '0.92rem',
+  position: 'relative'
 };
 
 const gridStyle = {
@@ -154,7 +155,41 @@ const bottomStyle = {
 // Embed hover styling in CSS injected script
 const footerCSS = document.createElement('style');
 footerCSS.textContent = `
-  footer a:hover { color: var(--primary-color) !important; }
+  footer {
+    background: linear-gradient(180deg, #0b0f19 0%, #060911 100%) !important;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1.5px, transparent 1.5px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  footer h4 {
+    background: linear-gradient(90deg, #DE3163 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+    font-size: 1.15rem !important;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+  }
+  
+  footer a {
+    transition: all 0.25s ease !important;
+    display: inline-block;
+  }
+  
+  footer a:hover {
+    color: #ffffff !important;
+    transform: translateX(4px);
+  }
+  
   @media (max-width: 768px) {
     footer .container { grid-template-columns: 1fr !important; gap: 30px !important; }
     footer { padding-top: 40px !important; }

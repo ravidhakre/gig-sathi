@@ -1136,3 +1136,52 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.95rem;
   }
 }
+
+/* Premium Form & Input Designs */
+.premium-form-card {
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 40px 30px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.3s ease !important;
+}
+
+.premium-form-card:hover {
+  border-color: rgba(222, 49, 99, 0.15) !important;
+  box-shadow: 0 20px 40px rgba(222, 49, 99, 0.02), 0 0 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.premium-input {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px 16px !important;
+  font-size: 0.95rem !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  width: 100% !important;
+}
+
+.premium-input:focus {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 15px rgba(222, 49, 99, 0.2) !important;
+  outline: none !important;
+}
+
+.premium-label {
+  font-size: 0.78rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--text-secondary) !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+  transition: color 0.3s ease !important;
+}
+
+.form-group:focus-within .premium-label {
+  color: var(--primary-color) !important;
+}

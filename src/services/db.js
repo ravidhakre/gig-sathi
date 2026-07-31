@@ -69,7 +69,7 @@ const SEED_USERS = [
     uid: 'admin-1',
     fullName: 'Rajesh Kumar',
     email: 'admin@gigsathi.com',
-    mobile: '9876543210',
+    mobile: '8265903984',
     role: 'Admin',
     verified: true,
     profileComplete: true,
@@ -635,7 +635,7 @@ export const dbService = {
             const newUser = {
               uid,
               fullName,
-              mobile: '9876543210',
+              mobile: '8265903984',
               email,
               role,
               verified: true,

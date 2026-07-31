@@ -57,7 +57,7 @@ const Contact = () => {
                 <div style={iconBoxStyle}><Phone size={24} color="var(--primary-color)" /></div>
                 <div>
                   <h4 style={infoTitleStyle}>Support Desk</h4>
-                  <p style={infoValueStyle}>+91 98765 43210 / +91 120 4567890</p>
+                  <p style={infoValueStyle}>+91 82659 03984 / +91 120 4567890</p>
                 </div>
               </div>
 
