@@ -379,7 +379,7 @@ const Home = () => {
             {/* SBI Card */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 163, 228, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00a3e0' }}></span>
-              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/c/ca/SBI_Card_logo.svg" name="SBI Card" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/c/cc/State_Bank_of_India_logo.svg" name="SBI Card" />
               <div className="brand-logo-card-content">
                 <h4>SBI Card</h4>
                 <span className="brand-type">Credit Cards</span>
@@ -388,7 +388,7 @@ const Home = () => {
             {/* Airtel KYC */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(228, 0, 0, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#e40000' }}></span>
-              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/3/3a/Bharti_Airtel_Logo.svg" name="Airtel KYC" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/8/80/Bharti_Airtel_Logo.svg" name="Airtel KYC" />
               <div className="brand-logo-card-content">
                 <h4>Airtel KYC</h4>
                 <span className="brand-type">Field Executives</span>
@@ -406,7 +406,7 @@ const Home = () => {
             {/* Swiggy */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(252, 128, 25, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#fc8019' }}></span>
-              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/1/13/Swiggy_logo.svg" name="Swiggy" />
+              <BrandLogo logoUrl="https://cdn.worldvectorlogo.com/logos/swiggy-1.svg" name="Swiggy" />
               <div className="brand-logo-card-content">
                 <h4>Swiggy</h4>
                 <span className="brand-type">Instamart Riders</span>
@@ -415,7 +415,7 @@ const Home = () => {
             {/* Delhivery */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(0, 82, 155, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#00529b' }}></span>
-              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/b/b0/Delhivery_Logo.svg" name="Delhivery" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/b/b0/Delhivery_Logo_%282019%29.png" name="Delhivery" />
               <div className="brand-logo-card-content">
                 <h4>Delhivery</h4>
                 <span className="brand-type">Logistics Execs</span>
@@ -433,7 +433,7 @@ const Home = () => {
             {/* Flipkart */}
             <div className="brand-logo-card" style={{ boxShadow: '0 4px 15px rgba(40, 116, 240, 0.04)' }}>
               <span className="brand-logo-accent" style={{ backgroundColor: '#2874f0' }}></span>
-              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/2/2a/Flipkart_Logo.svg" name="Flipkart" />
+              <BrandLogo logoUrl="https://upload.wikimedia.org/wikipedia/commons/2/2a/Flipkart_logo.svg" name="Flipkart" />
               <div className="brand-logo-card-content">
                 <h4>Flipkart</h4>
                 <span className="brand-type">Delivery Fleet</span>
