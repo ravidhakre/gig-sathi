@@ -220,10 +220,11 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
         <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px;">Management Pvt Ltd</div>
       </div>
     </div>
-    <div class="company-cin" style="text-align: right; font-size: 0.7rem; color: #475569; line-height: 1.45;">
-      <strong style="color: #0f172a; font-size: 0.8rem;">SRYN MANAGEMENT PVT LTD</strong><br/>
-      21/272/1/4-A JEONI MANDI AGRA || Sector 62, Noida, UP, India<br/>
-      <a href="http://www.sryn.online" style="color: #de3163; text-decoration: none;">www.sryn.online</a> | Email: <a href="mailto:info@sryn.online" style="color: #de3163; text-decoration: none;">info@sryn.online</a> | Phone: 8265903984
+    <div class="company-cin" style="text-align: right; font-size: 0.72rem; color: #475569; line-height: 1.5;">
+      <strong style="color: #0f172a; font-size: 0.85rem; text-transform: uppercase;">SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
+      <strong>CIN Number:</strong> U74999DL2026PTC394850<br/>
+      <strong>Registered Address:</strong> 21/272/1/4-A JEONI MANDI AGRA || Sector 62, Noida, UP, India<br/>
+      <strong>Website:</strong> <a href="http://www.sryn.online" style="color: #de3163; text-decoration: none;">www.sryn.online</a> &nbsp;|&nbsp; <strong>Email ID:</strong> <a href="mailto:info@sryn.online" style="color: #de3163; text-decoration: none;">info@sryn.online</a> &nbsp;|&nbsp; <strong>Mobile:</strong> 8265903984
     </div>
   </div>
 

@@ -49,7 +49,7 @@ const Contact = () => {
                 <div style={iconBoxStyle}><MapPin size={24} color="var(--primary-color)" /></div>
                 <div>
                   <h4 style={infoTitleStyle}>Address</h4>
-                  <p style={infoValueStyle}>3rd Floor, Tower B, Sector 62, Noida, Uttar Pradesh, 201301</p>
+                  <p style={infoValueStyle}>21/272/1/4-A JEONI MANDI AGRA || Sector 62, Noida, Uttar Pradesh, India</p>
                 </div>
               </div>
 
@@ -57,7 +57,7 @@ const Contact = () => {
                 <div style={iconBoxStyle}><Phone size={24} color="var(--primary-color)" /></div>
                 <div>
                   <h4 style={infoTitleStyle}>Support Desk</h4>
-                  <p style={infoValueStyle}>+91 82659 03984 / +91 120 4567890</p>
+                  <p style={infoValueStyle}>+91 82659 03984</p>
                 </div>
               </div>
 
@@ -65,7 +65,7 @@ const Contact = () => {
                 <div style={iconBoxStyle}><Mail size={24} color="var(--primary-color)" /></div>
                 <div>
                   <h4 style={infoTitleStyle}>General Enquiries</h4>
-                  <p style={infoValueStyle}>info@srynmanagement.com / support@srynmanagement.com</p>
+                  <p style={infoValueStyle}>info@sryn.online</p>
                 </div>
               </div>
             </div>

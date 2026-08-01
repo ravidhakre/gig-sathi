@@ -50,7 +50,7 @@ const Footer = () => {
           <ul style={{ ...listStyle, gap: '12px' }}>
             <li className="footer-contact-item" style={{ ...contactItemStyle, cursor: 'default' }}>
               <span className="footer-contact-icon"><Mail size={13} /></span>
-              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>info@srynmanagement.com</span>
+              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>info@sryn.online</span>
             </li>
             <li className="footer-contact-item" style={{ ...contactItemStyle, cursor: 'default' }}>
               <span className="footer-contact-icon"><Phone size={13} /></span>
@@ -58,7 +58,7 @@ const Footer = () => {
             </li>
             <li className="footer-contact-item" style={{ ...contactItemStyle, cursor: 'default' }}>
               <span className="footer-contact-icon"><MapPin size={13} /></span>
-              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>Sector 62, Noida, UP, India</span>
+              <span style={{ fontSize: '0.92rem', color: '#94a3b8' }}>21/272/1/4-A Jeoni Mandi Agra || Noida, UP</span>
             </li>
           </ul>
         </div>
