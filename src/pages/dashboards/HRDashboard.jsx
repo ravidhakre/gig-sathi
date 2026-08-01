@@ -20,20 +20,28 @@ const HRDashboard = () => {
 
   // Share JD & Dynamic Campaign State
   const assignedProjects = (projects || []).filter(p => !p.assignedHR || p.assignedHR === 'ALL' || p.assignedHR === currentUser?.uid);
-  const [selectedProjId, setSelectedProjId] = useState('');
+  const handleSelectProject = (projId) => {
+    setSelectedProjId(projId);
+    const found = (projects || []).find(p => p.id === projId);
+    if (found) {
+      setJdRole(found.title || '');
+      setJdSalary(found.salary || found.commission || '₹15,000 / month + Incentives');
+      setJdLocation(found.location || 'Hometown / Local Area');
+      showToast(`Switched campaign to: ${found.title}`, 'info');
+    }
+  };
 
-  const activeProj = assignedProjects.find(p => p.id === selectedProjId) || assignedProjects[0] || (projects && projects[0]) || {};
-
-  const [jdCandidateName, setJdCandidateName] = useState('');
-  const [jdCandidateMobile, setJdCandidateMobile] = useState('');
-  const [jdRole, setJdRole] = useState('');
-  const [jdSalary, setJdSalary] = useState('');
-  const [jdLocation, setJdLocation] = useState('');
-  const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
-
-  const [offerSigned, setOfferSigned] = useState(() => {
-    return localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true';
-  });
+  React.useEffect(() => {
+    if (assignedProjects && assignedProjects.length > 0) {
+      const current = assignedProjects.find(p => p.id === selectedProjId) || assignedProjects[0];
+      if (!selectedProjId) {
+        setSelectedProjId(current.id);
+      }
+      if (!jdRole) setJdRole(current.title || 'Customer Relationship Executive');
+      if (!jdSalary) setJdSalary(current.salary || current.commission || '₹15,000 / month + Incentives');
+      if (!jdLocation) setJdLocation(current.location || 'Hometown / Local Area');
+    }
+  }, [projects]);
 
   const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);
@@ -838,7 +846,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                   <select
                     className="form-control"
                     value={selectedProjId}
-                    onChange={(e) => setSelectedProjId(e.target.value)}
+                    onChange={(e) => handleSelectProject(e.target.value)}
                     style={{ background: 'none', border: 'none', color: 'var(--primary-color)', outline: 'none', fontSize: '0.85rem', fontWeight: 'bold', padding: '0 4px', cursor: 'pointer' }}
                   >
                     {assignedProjects.map(p => (
@@ -1266,7 +1274,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                   <select
                     className="form-control"
                     value={selectedProjId}
-                    onChange={(e) => setSelectedProjId(e.target.value)}
+                    onChange={(e) => handleSelectProject(e.target.value)}
                     style={{ background: 'none', border: 'none', color: 'var(--primary-color)', outline: 'none', fontSize: '0.85rem', fontWeight: 'bold', padding: '0 4px', cursor: 'pointer' }}
                   >
                     {assignedProjects.map(p => (
