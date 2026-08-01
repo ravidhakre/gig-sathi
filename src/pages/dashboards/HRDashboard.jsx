@@ -23,6 +23,17 @@ const HRDashboard = () => {
   const assignedProjects = (projects || []).filter(p => !p.assignedHR || p.assignedHR === 'ALL' || p.assignedHR === currentUser?.uid);
   const activeProj = (assignedProjects || []).find(p => p.id === selectedProjId) || assignedProjects[0] || (projects && projects[0]) || {};
 
+  const [jdCandidateName, setJdCandidateName] = useState('');
+  const [jdCandidateMobile, setJdCandidateMobile] = useState('');
+  const [jdRole, setJdRole] = useState('');
+  const [jdSalary, setJdSalary] = useState('');
+  const [jdLocation, setJdLocation] = useState('');
+  const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
+
+  const effectiveRole = jdRole || activeProj?.title || 'Customer Relationship Executive';
+  const effectiveSalary = jdSalary || activeProj?.salary || activeProj?.commission || '₹15,000 / month + Incentives';
+  const effectiveLocation = jdLocation || activeProj?.location || 'Hometown / Local Area';
+
   const handleSelectProject = (projId) => {
     setSelectedProjId(projId);
     const found = (projects || []).find(p => p.id === projId);
@@ -35,18 +46,6 @@ const HRDashboard = () => {
       }
     }
   };
-
-  React.useEffect(() => {
-    if (assignedProjects && assignedProjects.length > 0) {
-      const current = assignedProjects.find(p => p.id === selectedProjId) || assignedProjects[0];
-      if (!selectedProjId) {
-        setSelectedProjId(current.id);
-      }
-      if (!jdRole) setJdRole(current.title || 'Customer Relationship Executive');
-      if (!jdSalary) setJdSalary(current.salary || current.commission || '₹15,000 / month + Incentives');
-      if (!jdLocation) setJdLocation(current.location || 'Hometown / Local Area');
-    }
-  }, [projects, selectedProjId]);
 
   const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);
@@ -69,9 +68,9 @@ const HRDashboard = () => {
 
   const getWhatsAppJDText = () => {
     const candidateName = jdCandidateName || '[Candidate Name]';
-    const roleName = jdRole || activeProj?.title || 'Customer Relationship Executive';
-    const salaryVal = jdSalary || activeProj?.salary || activeProj?.commission || '₹15,000 / month + Incentives';
-    const locationVal = jdLocation || activeProj?.location || 'Hometown / Local District';
+    const roleName = effectiveRole;
+    const salaryVal = effectiveSalary;
+    const locationVal = effectiveLocation;
     const hrName = currentUser?.fullName || 'HR Specialist';
 
     // Admin Custom Overrides per Project
@@ -1380,16 +1379,12 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
 
                 <div className="form-group">
                   <label style={{ fontSize: '0.85rem', fontWeight: '600' }}>Position / Job Title</label>
-                  <select
+                  <input
+                    type="text"
                     className="form-control"
-                    value={jdRole}
+                    value={effectiveRole}
                     onChange={(e) => setJdRole(e.target.value)}
-                  >
-                    <option value="Customer Relationship Executive">Customer Relationship Executive</option>
-                    <option value="Field Executive">Field Executive</option>
-                    <option value="Team Leader Agent">Team Leader Agent</option>
-                    <option value="HR Coordinator">HR Recruitment Coordinator</option>
-                  </select>
+                  />
                 </div>
 
                 <div className="form-group">
@@ -1397,7 +1392,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                   <input
                     type="text"
                     className="form-control"
-                    value={jdSalary}
+                    value={effectiveSalary}
                     onChange={(e) => setJdSalary(e.target.value)}
                   />
                 </div>
@@ -1407,7 +1402,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                   <input
                     type="text"
                     className="form-control"
-                    value={jdLocation}
+                    value={effectiveLocation}
                     onChange={(e) => setJdLocation(e.target.value)}
                   />
                 </div>
