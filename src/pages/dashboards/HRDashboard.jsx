@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import Profile from '../Profile';
 import { 
   LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2, Menu,
-  BookOpen, Copy, Check, Globe, Video, MessageSquare, Target, Award, ShieldCheck, Sparkles, ChevronRight, HelpCircle
+  BookOpen, Copy, Check, Globe, Video, MessageSquare, Target, Award, ShieldCheck, Sparkles, ChevronRight, HelpCircle, Send, Share2, ExternalLink, MessageCircle, Briefcase, MapPin, Building2, Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,14 @@ const HRDashboard = () => {
   const [copiedSnippet, setCopiedSnippet] = useState(null);
   const [scriptCandidateName, setScriptCandidateName] = useState('');
 
+  // Share JD State
+  const [jdCandidateName, setJdCandidateName] = useState('');
+  const [jdCandidateMobile, setJdCandidateMobile] = useState('');
+  const [jdRole, setJdRole] = useState('Customer Relationship Executive');
+  const [jdSalary, setJdSalary] = useState('₹15,000 / month + Incentives');
+  const [jdLocation, setJdLocation] = useState('Hometown / Local District');
+  const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
+
   const [offerSigned, setOfferSigned] = useState(() => {
     return localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true';
   });
@@ -25,8 +33,165 @@ const HRDashboard = () => {
   const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);
     setCopiedSnippet(id);
-    showToast("Script copied to clipboard!", "success");
+    showToast("Copied to clipboard!", "success");
     setTimeout(() => setCopiedSnippet(null), 2500);
+  };
+
+  const handleShareWhatsAppJD = (text) => {
+    let cleanMobile = (jdCandidateMobile || '').replace(/\D/g, '');
+    if (cleanMobile.length === 10) {
+      cleanMobile = '91' + cleanMobile;
+    }
+    const url = cleanMobile 
+      ? `https://api.whatsapp.com/send?phone=${cleanMobile}&text=${encodeURIComponent(text)}`
+      : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    showToast("Opening WhatsApp to share Job Description...", "success");
+  };
+
+  const getWhatsAppJDText = () => {
+    const candidateName = jdCandidateName || '[Candidate Name]';
+    const roleName = jdRole || 'Customer Relationship Executive';
+    const salaryVal = jdSalary || '₹15,000 / month + Incentives';
+    const locationVal = jdLocation || 'Hometown / Local District';
+    const hrName = currentUser?.fullName || 'HR Specialist';
+
+    if (jdFormat === 'whatsapp_en') {
+      return `🏢 *SRYN MANAGEMENT PVT. LTD.*
+📍 *Career Opportunity in Your Hometown!*
+
+Dear *${candidateName}*,
+
+Greetings from SRYN Management Pvt. Ltd.!
+
+We are pleased to inform you that your profile has been shortlisted for the position of *${roleName}*.
+
+━━━━━━━━━━━━━━━━━━━━━━
+💼 *JOB SUMMARY:*
+━━━━━━━━━━━━━━━━━━━━━━
+🔹 *Position:* ${roleName}
+🔹 *Fixed Salary:* ${salaryVal}
+🔹 *Location:* ${locationVal} (No Relocation Required!)
+🔹 *Company:* SRYN Management Pvt. Ltd. (CIN: U51900UP2022PTC169096)
+
+━━━━━━━━━━━━━━━━━━━━━━
+🎯 *ROLE RESPONSIBILITIES:*
+━━━━━━━━━━━━━━━━━━━━━━
+• Educate and assist customers with our FD Card financial product.
+• Explain FD options ranging from ₹2,000 to ₹5,00,000 at 7% annual interest.
+• Help customers build and enhance their CIBIL credit score.
+• Pure customer relationship role (No field cash collection).
+
+━━━━━━━━━━━━━━━━━━━━━━
+🎁 *WHAT WE OFFER:*
+━━━━━━━━━━━━━━━━━━━━━━
+✅ Official Offer Letter & Employee ID Card
+✅ Personal Employee Portal & Dashboard Access
+✅ Comprehensive Product & Sales Conversation Training
+✅ Marketing Materials (Brochures, WhatsApp & Social Media Creatives)
+✅ Dedicated Managerial Support & Hometown Placement
+
+━━━━━━━━━━━━━━━━━━━━━━
+🚀 *HIRING STEPS:*
+━━━━━━━━━━━━━━━━━━━━━━
+1️⃣ Round 1: Telephonic Interview
+2️⃣ Round 2: Video Interview (15-20 mins)
+
+Please confirm your availability for the *2nd Round Video Interview*.
+
+Best Regards,
+👤 *${hrName}* | SRYN HR Desk
+📞 *Phone:* 8265903984
+🌐 *Website:* www.sryn.online`;
+    }
+
+    if (jdFormat === 'email') {
+      return `Subject: Job Opportunity - ${roleName} at SRYN Management Pvt. Ltd.
+
+Dear ${candidateName},
+
+We are pleased to invite you to apply for the position of ${roleName} at SRYN Management Pvt. Ltd.
+
+Job Overview:
+- Designation: ${roleName}
+- Fixed Remuneration: ${salaryVal}
+- Work Location: ${locationVal}
+- Organization: SRYN Management Pvt. Ltd. (CIN: U51900UP2022PTC169096)
+
+Key Responsibilities:
+1. Assist customers regarding FD Card financial products (FDs starting from ₹2,000 to ₹5,00,000 at 7% annual interest).
+2. Guide customers in building their CIBIL credit score.
+3. Complete customer onboarding through the official digital portal.
+4. Maintain high standards of customer relationship management.
+
+Employee Support & Benefits:
+- Official Appointment Cum Offer Letter
+- Authorized Employee ID Card & Personal Dashboard Access
+- Complete Product & Communication Skill Training
+- Marketing Collaterals & Promotional Creatives
+- Work opportunities in your hometown with long-term growth prospects.
+
+Selection Process:
+1st Round: Telephonic Screening Interview
+2nd Round: Video Interview
+
+Please reply to this email or contact the undersigned to schedule your Video Interview.
+
+Sincerely,
+${hrName}
+Recruitment Specialist | SRYN Management Pvt. Ltd.
+Email: info@sryn.online | Phone: 8265903984 | Web: www.sryn.online`;
+    }
+
+    // Default: 'whatsapp_hi' (Hindi / Hinglish WhatsApp format)
+    return `🏢 *SRYN MANAGEMENT PVT. LTD.*
+📍 *Job Opportunity in Your Hometown!*
+
+Dear *${candidateName}*,
+
+Greetings! Aapki profile SRYN Management Pvt. Ltd. mein *${roleName}* ki position ke liye shortlist hui hai.
+
+━━━━━━━━━━━━━━━━━━━━━━
+💼 *JOB DETAILS & HIGHLIGHTS:*
+━━━━━━━━━━━━━━━━━━━━━━
+🔹 *Designation:* ${roleName}
+🔹 *Offered Salary:* ${salaryVal}
+🔹 *Work Location:* ${locationVal} (Aapke Apne City/District Mein!)
+🔹 *Company:* SRYN Management Pvt. Ltd.
+🔹 *Division:* Financial Services (FD Card Division)
+
+━━━━━━━━━━━━━━━━━━━━━━
+🎯 *KEY RESPONSIBILITIES:*
+━━━━━━━━━━━━━━━━━━━━━━
+• Customers ko hamare FD-backed Credit Card ke baare mein guide karna.
+• FD options (₹2,000 se ₹5,00,000 tak 7% interest par) explain karna.
+• Customers ko unka CIBIL Score banane aur improve karne mein help karna.
+• No field cash collection involved! Pure relationship & guidance role.
+
+━━━━━━━━━━━━━━━━━━━━━━
+🎁 *EMPLOYEE BENEFITS & SUPPORT:*
+━━━━━━━━━━━━━━━━━━━━━━
+✅ Official Appointment Cum Offer Letter
+✅ Employee ID Card & Personal Employee Dashboard Access
+✅ 100% Complete Product & Communication Skill Training
+✅ Product Brochures, WhatsApp & Social Media Marketing Creatives
+✅ Hometown Work Opportunity & Fast Career Growth
+
+━━━━━━━━━━━━━━━━━━━━━━
+🚀 *SELECTION PROCESS:*
+━━━━━━━━━━━━━━━━━━━━━━
+1️⃣ *Round 1:* Telephonic Interview
+2️⃣ *Round 2:* 15-20 Min Video Interview
+
+📌 *Next Step:*
+Kripya second round *Video Interview* ke liye apna time confirm karein.
+
+For any questions, reply to this message:
+👤 *${hrName}* | SRYN HR Desk
+📞 *Phone:* 8265903984
+🌐 *Website:* www.sryn.online
+
+We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderful day!`;
   };
 
   const handleSignOffer = () => {
@@ -308,6 +473,12 @@ const HRDashboard = () => {
             style={{ ...sidebarLinkStyle, ...(activeTab === 'scripts' ? activeLinkStyle : {}) }}
           >
             <BookOpen size={18} /> Interview Scripts
+          </button>
+          <button 
+            onClick={() => { setActiveTab('jd'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'jd' ? activeLinkStyle : {}) }}
+          >
+            <Send size={18} /> Share Job Description (JD)
           </button>
           <button 
             onClick={() => { setActiveTab('reports'); setSidebarOpen(false); }}
@@ -1044,6 +1215,202 @@ const HRDashboard = () => {
             )}
           </div>
         )}
+        {/* --- SHARE JOB DESCRIPTION (JD) TAB --- */}
+        {activeTab === 'jd' && (
+          <div style={tabContentStyle}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.8rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Send size={26} color="var(--primary-color)" /> Job Description (JD) & WhatsApp Sharer
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>
+                  Send branded Job Descriptions directly to candidate WhatsApp numbers or copy formatted email templates.
+                </p>
+              </div>
+
+              {/* Format Switcher */}
+              <div style={{ display: 'flex', background: 'var(--surface-color)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                <button
+                  onClick={() => setJdFormat('whatsapp_hi')}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    border: 'none',
+                    fontSize: '0.8rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    background: jdFormat === 'whatsapp_hi' ? '#25D366' : 'transparent',
+                    color: jdFormat === 'whatsapp_hi' ? '#fff' : 'var(--text-secondary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <MessageCircle size={14} /> WhatsApp (Hindi)
+                </button>
+                <button
+                  onClick={() => setJdFormat('whatsapp_en')}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    border: 'none',
+                    fontSize: '0.8rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    background: jdFormat === 'whatsapp_en' ? '#25D366' : 'transparent',
+                    color: jdFormat === 'whatsapp_en' ? '#fff' : 'var(--text-secondary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Globe size={14} /> WhatsApp (English)
+                </button>
+                <button
+                  onClick={() => setJdFormat('email')}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    border: 'none',
+                    fontSize: '0.8rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    background: jdFormat === 'email' ? 'var(--primary-color)' : 'transparent',
+                    color: jdFormat === 'email' ? '#fff' : 'var(--text-secondary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <FileText size={14} /> Formal Email
+                </button>
+              </div>
+            </div>
+
+            <div className="grid-2" style={{ gap: '30px', alignItems: 'start' }}>
+              {/* Left Column: Candidate & Job Parameters Form */}
+              <div className="card">
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Briefcase size={18} color="var(--primary-color)" /> Customize Job Description
+                </h3>
+
+                <div className="form-group">
+                  <label style={{ fontSize: '0.85rem', fontWeight: '600' }}>Candidate Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. Rahul Sharma"
+                    value={jdCandidateName}
+                    onChange={(e) => setJdCandidateName(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label style={{ fontSize: '0.85rem', fontWeight: '600' }}>Candidate Mobile Number (WhatsApp)</label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    placeholder="e.g. 9876543210"
+                    value={jdCandidateMobile}
+                    onChange={(e) => setJdCandidateMobile(e.target.value)}
+                  />
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Include country code or 10-digit mobile number for direct WhatsApp messaging.</span>
+                </div>
+
+                <div className="form-group">
+                  <label style={{ fontSize: '0.85rem', fontWeight: '600' }}>Position / Job Title</label>
+                  <select
+                    className="form-control"
+                    value={jdRole}
+                    onChange={(e) => setJdRole(e.target.value)}
+                  >
+                    <option value="Customer Relationship Executive">Customer Relationship Executive</option>
+                    <option value="Field Executive">Field Executive</option>
+                    <option value="Team Leader Agent">Team Leader Agent</option>
+                    <option value="HR Coordinator">HR Recruitment Coordinator</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label style={{ fontSize: '0.85rem', fontWeight: '600' }}>Offered Salary Package</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={jdSalary}
+                    onChange={(e) => setJdSalary(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label style={{ fontSize: '0.85rem', fontWeight: '600' }}>Job Location</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={jdLocation}
+                    onChange={(e) => setJdLocation(e.target.value)}
+                  />
+                </div>
+
+                {/* Quick Highlights Summary Card */}
+                <div style={{ background: 'var(--surface-color)', padding: '14px', borderRadius: '8px', border: '1px solid var(--border-color)', marginTop: '20px' }}>
+                  <strong style={{ fontSize: '0.85rem', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>
+                    ⚡ Key Highlights Included:
+                  </strong>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <div>• <strong>Fixed Salary:</strong> ₹15,000 / month</div>
+                    <div>• <strong>Work Placement:</strong> Hometown / Local Area</div>
+                    <div>• <strong>Product Division:</strong> SRYN CIBIL FD Card (7% Returns)</div>
+                    <div>• <strong>Official Benefits:</strong> Offer Letter, ID Card, Employee Portal</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: WhatsApp Live Preview & Action Buttons */}
+              <div className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid #10b981' }}>
+                {/* WhatsApp Header Bar */}
+                <div style={{ background: '#075e54', color: '#ffffff', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <MessageCircle size={22} color="#25D366" />
+                    <div>
+                      <div style={{ fontWeight: '800', fontSize: '0.95rem' }}>WhatsApp JD Preview</div>
+                      <span style={{ fontSize: '0.7rem', color: '#e2e8f0' }}>SRYN Management Pvt. Ltd. Official HR Desk</span>
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '0.7rem', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '12px' }}>
+                    ✓ Verified Template
+                  </span>
+                </div>
+
+                {/* Message Body Preview Area */}
+                <div style={{ padding: '20px', background: '#efeae2', maxHeight: '480px', overflowY: 'auto', fontFamily: 'system-ui, sans-serif' }}>
+                  <div style={{ background: '#ffffff', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.12)', fontSize: '0.88rem', lineHeight: '1.65', color: '#111b21', whiteSpace: 'pre-wrap' }}>
+                    {getWhatsAppJDText()}
+                  </div>
+                </div>
+
+                {/* Bottom Share & Copy Toolbar */}
+                <div style={{ padding: '16px', background: '#f0f2f5', borderTop: '1px solid #e9edef', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => handleShareWhatsAppJD(getWhatsAppJDText())}
+                    className="btn btn-primary"
+                    style={{ flex: 1, minWidth: '180px', background: '#25D366', borderColor: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 'bold' }}
+                  >
+                    <Send size={18} /> Send Directly via WhatsApp
+                  </button>
+
+                  <button
+                    onClick={() => copyToClipboard(getWhatsAppJDText(), 'jd-text')}
+                    className="btn btn-outline"
+                    style={{ padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    {copiedSnippet === 'jd-text' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Text
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'profile' && (
           <div style={tabContentStyle}>
             <Profile />
