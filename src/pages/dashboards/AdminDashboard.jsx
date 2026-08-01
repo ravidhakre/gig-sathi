@@ -156,7 +156,7 @@ const AdminDashboard = () => {
 
   // Project save updates
   const handleProjSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!projForm.title || !projForm.description || !projForm.commission) {
       showToast("Please fill all required project parameters.", "warning");
       return;
@@ -169,13 +169,30 @@ const AdminDashboard = () => {
       }
       setShowProjModal(false);
       setEditingProj(null);
-      setProjForm({ title: '', category: 'Financial Products', description: '', commission: '', workingLink: '' });
+      setProjForm({ 
+        title: '', category: 'Financial Products', description: '', commission: '', workingLink: '',
+        salary: '₹15,000 / month + Incentives', location: 'Hometown / Local Area', assignedHR: 'ALL',
+        jdHindi: '', jdEnglish: '', scriptRound1Hindi: '', scriptRound2Hindi: ''
+      });
     } catch (err) {}
   };
 
   const handleEditProjClick = (p) => {
     setEditingProj(p);
-    setProjForm({ title: p.title, category: p.category, description: p.description, commission: p.commission, workingLink: p.workingLink || '' });
+    setProjForm({ 
+      title: p.title || '', 
+      category: p.category || 'Financial Products', 
+      description: p.description || '', 
+      commission: p.commission || '', 
+      workingLink: p.workingLink || '',
+      salary: p.salary || '₹15,000 / month + Incentives',
+      location: p.location || 'Hometown / Local Area',
+      assignedHR: p.assignedHR || 'ALL',
+      jdHindi: p.jdHindi || '',
+      jdEnglish: p.jdEnglish || '',
+      scriptRound1Hindi: p.scriptRound1Hindi || '',
+      scriptRound2Hindi: p.scriptRound2Hindi || ''
+    });
     setShowProjModal(true);
   };
 
@@ -943,75 +960,160 @@ const AdminDashboard = () => {
       {/* --- ADD / EDIT PROJECT CAMPAIGN MODAL --- */}
       {showProjModal && (
         <div className="modal-overlay">
-          <div className="modal-content fade-in">
+          <div className="modal-content fade-in" style={{ maxWidth: '800px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={modalHeaderStyle}>
-              <h3>{editingProj ? 'Modify Project Details' : 'Create New Campaign'}</h3>
+              <h3>{editingProj ? 'Modify Campaign Details & Scripts' : 'Create New Hiring Campaign'}</h3>
               <button onClick={() => { setShowProjModal(false); setEditingProj(null); }}><X size={20} /></button>
             </div>
-            <form onSubmit={projForm.title ? handleProjSubmit : (e) => e.preventDefault()}>
-              <div className="form-group">
-                <label>Campaign Title</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={projForm.title}
-                  onChange={(e) => setProjForm({ ...projForm, title: e.target.value })}
-                  placeholder="E.g., HDFC Credit Card Sales"
-                  required
-                />
+            <form onSubmit={projForm.title ? handleProjSubmit : (e) => e.preventDefault()} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div className="grid-2" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label>Campaign Title / Hiring Role</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={projForm.title}
+                    onChange={(e) => setProjForm({ ...projForm, title: e.target.value })}
+                    placeholder="E.g., SRYN FD Card Customer Relationship Executive"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Campaign Category</label>
+                  <select
+                    className="form-control"
+                    value={projForm.category}
+                    onChange={(e) => setProjForm({ ...projForm, category: e.target.value })}
+                  >
+                    <option value="Financial Products">Financial Products</option>
+                    <option value="Delivery Boy Hiring">Delivery Boy Hiring</option>
+                    <option value="Third Party Hiring">Third Party Hiring</option>
+                    <option value="Field Executive">Field Executive Sourcing</option>
+                  </select>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Category</label>
-                <select
-                  className="form-control"
-                  value={projForm.category}
-                  onChange={(e) => setProjForm({ ...projForm, category: e.target.value })}
-                >
-                  <option value="Financial Products">Financial Products</option>
-                  <option value="Delivery Boy Hiring">Delivery Boy Hiring</option>
-                  <option value="Third Party Hiring">Third Party Hiring</option>
-                </select>
+
+              <div className="grid-3" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label>Offered Fixed Salary</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={projForm.salary}
+                    onChange={(e) => setProjForm({ ...projForm, salary: e.target.value })}
+                    placeholder="E.g., ₹15,000 / month + Incentives"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Work Location</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={projForm.location}
+                    onChange={(e) => setProjForm({ ...projForm, location: e.target.value })}
+                    placeholder="E.g., Hometown / Local District"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Assign to HR Manager</label>
+                  <select
+                    className="form-control"
+                    value={projForm.assignedHR}
+                    onChange={(e) => setProjForm({ ...projForm, assignedHR: e.target.value })}
+                  >
+                    <option value="ALL">All HR Officers (Global)</option>
+                    {hrOfficers.map(hr => (
+                      <option key={hr.uid} value={hr.uid}>{hr.fullName} ({hr.role})</option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Commission structure text</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={projForm.commission}
-                  onChange={(e) => setProjForm({ ...projForm, commission: e.target.value })}
-                  placeholder="E.g., Rs. 2,500 per approved card"
-                  required
-                />
+
+              <div className="grid-2" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label>Commission / Remuneration Structure</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={projForm.commission}
+                    onChange={(e) => setProjForm({ ...projForm, commission: e.target.value })}
+                    placeholder="E.g., Rs. 2,500 per approved card / ₹15,000 fixed"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Working Signup / Onboarding Link</label>
+                  <input
+                    type="url"
+                    className="form-control"
+                    value={projForm.workingLink}
+                    onChange={(e) => setProjForm({ ...projForm, workingLink: e.target.value })}
+                    placeholder="https://sryn.online/apply-link"
+                  />
+                </div>
               </div>
+
               <div className="form-group">
-                <label>Working Onboarding / Card link (Sent to customers)</label>
-                <input
-                  type="url"
-                  className="form-control"
-                  value={projForm.workingLink}
-                  onChange={(e) => setProjForm({ ...projForm, workingLink: e.target.value })}
-                  placeholder="https://hdfc.com/cc-apply-link"
-                />
-              </div>
-              <div className="form-group">
-                <label>Brief description</label>
+                <label>Brief Campaign Overview & Description</label>
                 <textarea
-                  rows="3"
+                  rows="2"
                   className="form-control"
                   value={projForm.description}
                   onChange={(e) => setProjForm({ ...projForm, description: e.target.value })}
-                  placeholder="Campaign outlines and terms..."
+                  placeholder="Overview of this hiring drive..."
                   required
                 ></textarea>
               </div>
-              <button 
-                type="submit" 
-                className="btn btn-primary" 
-                style={{ width: '100%', marginTop: '10px' }}
-                onClick={handleProjSubmit}
-              >
-                {editingProj ? 'Save Project Details' : 'Generate Campaign'}
-              </button>
+
+              <hr style={{ borderColor: 'var(--border-color)', margin: '5px 0' }} />
+              <h4 style={{ color: 'var(--primary-color)', fontSize: '1.05rem' }}>📝 Custom Job Description (JD) Overrides</h4>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                Tokens available: <code>{"{{name}}"}</code>, <code>{"{{role}}"}</code>, <code>{"{{salary}}"}</code>, <code>{"{{location}}"}</code>, <code>{"{{hrName}}"}</code>
+              </p>
+
+              <div className="grid-2" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label>WhatsApp JD Text (Hindi / Hinglish)</label>
+                  <textarea
+                    rows="5"
+                    className="form-control"
+                    value={projForm.jdHindi}
+                    onChange={(e) => setProjForm({ ...projForm, jdHindi: e.target.value })}
+                    placeholder="Custom Hindi WhatsApp JD text..."
+                    style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}
+                  ></textarea>
+                </div>
+                <div className="form-group">
+                  <label>WhatsApp JD Text (English)</label>
+                  <textarea
+                    rows="5"
+                    className="form-control"
+                    value={projForm.jdEnglish}
+                    onChange={(e) => setProjForm({ ...projForm, jdEnglish: e.target.value })}
+                    placeholder="Custom English WhatsApp JD text..."
+                    style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}
+                  ></textarea>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                <button 
+                  type="submit" 
+                  className="btn btn-primary" 
+                  style={{ flex: 1 }}
+                  onClick={handleProjSubmit}
+                >
+                  {editingProj ? 'Save Campaign & Script Updates' : 'Generate Campaign'}
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => { setShowProjModal(false); setEditingProj(null); }}
+                  className="btn btn-outline"
+                  style={{ flex: 0.4 }}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>

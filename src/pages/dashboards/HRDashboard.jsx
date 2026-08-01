@@ -18,12 +18,17 @@ const HRDashboard = () => {
   const [copiedSnippet, setCopiedSnippet] = useState(null);
   const [scriptCandidateName, setScriptCandidateName] = useState('');
 
-  // Share JD State
+  // Share JD & Dynamic Campaign State
+  const assignedProjects = (projects || []).filter(p => !p.assignedHR || p.assignedHR === 'ALL' || p.assignedHR === currentUser?.uid);
+  const [selectedProjId, setSelectedProjId] = useState('');
+
+  const activeProj = assignedProjects.find(p => p.id === selectedProjId) || assignedProjects[0] || (projects && projects[0]) || {};
+
   const [jdCandidateName, setJdCandidateName] = useState('');
   const [jdCandidateMobile, setJdCandidateMobile] = useState('');
-  const [jdRole, setJdRole] = useState('Customer Relationship Executive');
-  const [jdSalary, setJdSalary] = useState('₹15,000 / month + Incentives');
-  const [jdLocation, setJdLocation] = useState('Hometown / Local District');
+  const [jdRole, setJdRole] = useState('');
+  const [jdSalary, setJdSalary] = useState('');
+  const [jdLocation, setJdLocation] = useState('');
   const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
 
   const [offerSigned, setOfferSigned] = useState(() => {
@@ -51,13 +56,32 @@ const HRDashboard = () => {
 
   const getWhatsAppJDText = () => {
     const candidateName = jdCandidateName || '[Candidate Name]';
-    const roleName = jdRole || 'Customer Relationship Executive';
-    const salaryVal = jdSalary || '₹15,000 / month + Incentives';
-    const locationVal = jdLocation || 'Hometown / Local District';
+    const roleName = jdRole || activeProj?.title || 'Customer Relationship Executive';
+    const salaryVal = jdSalary || activeProj?.salary || activeProj?.commission || '₹15,000 / month + Incentives';
+    const locationVal = jdLocation || activeProj?.location || 'Hometown / Local District';
     const hrName = currentUser?.fullName || 'HR Specialist';
 
+    // Admin Custom Overrides per Project
+    if (jdFormat === 'whatsapp_hi' && activeProj?.jdHindi && activeProj.jdHindi.trim()) {
+      return activeProj.jdHindi
+        .replace(/{{name}}/g, candidateName)
+        .replace(/{{role}}/g, roleName)
+        .replace(/{{salary}}/g, salaryVal)
+        .replace(/{{location}}/g, locationVal)
+        .replace(/{{hrName}}/g, hrName);
+    }
+
+    if (jdFormat === 'whatsapp_en' && activeProj?.jdEnglish && activeProj.jdEnglish.trim()) {
+      return activeProj.jdEnglish
+        .replace(/{{name}}/g, candidateName)
+        .replace(/{{role}}/g, roleName)
+        .replace(/{{salary}}/g, salaryVal)
+        .replace(/{{location}}/g, locationVal)
+        .replace(/{{hrName}}/g, hrName);
+    }
+
     if (jdFormat === 'whatsapp_en') {
-      return `🏢 *SRYN MANAGEMENT PVT. LTD.*
+      return `🏢 *${(activeProj?.title || 'SRYN MANAGEMENT PVT. LTD.').toUpperCase()}*
 📍 *Career Opportunity in Your Hometown!*
 
 Dear *${candidateName}*,
@@ -77,10 +101,10 @@ We are pleased to inform you that your profile has been shortlisted for the posi
 ━━━━━━━━━━━━━━━━━━━━━━
 🎯 *ROLE RESPONSIBILITIES:*
 ━━━━━━━━━━━━━━━━━━━━━━
-• Educate and assist customers with our FD Card financial product.
-• Explain FD options ranging from ₹2,000 to ₹5,00,000 at 7% annual interest.
-• Help customers build and enhance their CIBIL credit score.
-• Pure customer relationship role (No field cash collection).
+• Educate and assist customers with our ${roleName} services.
+• Provide product details and clear customer queries.
+• Assist interested customers through the official digital portal.
+• Relationship management & customer acquisition role.
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎁 *WHAT WE OFFER:*
@@ -119,16 +143,14 @@ Job Overview:
 - Organization: SRYN Management Pvt. Ltd. (CIN: U51900UP2022PTC169096)
 
 Key Responsibilities:
-1. Assist customers regarding FD Card financial products (FDs starting from ₹2,000 to ₹5,00,000 at 7% annual interest).
-2. Guide customers in building their CIBIL credit score.
-3. Complete customer onboarding through the official digital portal.
-4. Maintain high standards of customer relationship management.
+1. Assist customers regarding ${roleName} operations and services.
+2. Complete customer onboarding through the official digital portal.
+3. Maintain high standards of customer relationship management.
 
 Employee Support & Benefits:
 - Official Appointment Cum Offer Letter
 - Authorized Employee ID Card & Personal Dashboard Access
 - Complete Product & Communication Skill Training
-- Marketing Collaterals & Promotional Creatives
 - Work opportunities in your hometown with long-term growth prospects.
 
 Selection Process:
@@ -144,7 +166,7 @@ Email: info@sryn.online | Phone: 8265903984 | Web: www.sryn.online`;
     }
 
     // Default: 'whatsapp_hi' (Hindi / Hinglish WhatsApp format)
-    return `🏢 *SRYN MANAGEMENT PVT. LTD.*
+    return `🏢 *${(activeProj?.title || 'SRYN MANAGEMENT PVT. LTD.').toUpperCase()}*
 📍 *Job Opportunity in Your Hometown!*
 
 Dear *${candidateName}*,
@@ -158,14 +180,14 @@ Greetings! Aapki profile SRYN Management Pvt. Ltd. mein *${roleName}* ki positio
 🔹 *Offered Salary:* ${salaryVal}
 🔹 *Work Location:* ${locationVal} (Aapke Apne City/District Mein!)
 🔹 *Company:* SRYN Management Pvt. Ltd.
-🔹 *Division:* Financial Services (FD Card Division)
+🔹 *Campaign:* ${activeProj?.title || 'Financial Services'}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎯 *KEY RESPONSIBILITIES:*
 ━━━━━━━━━━━━━━━━━━━━━━
-• Customers ko hamare FD-backed Credit Card ke baare mein guide karna.
-• FD options (₹2,000 se ₹5,00,000 tak 7% interest par) explain karna.
-• Customers ko unka CIBIL Score banane aur improve karne mein help karna.
+• Customers ko hamari ${roleName} services ke baare mein guide karna.
+• Key benefits aur process explain karna.
+• Customers ko application process complete karwane mein assist karna.
 • No field cash collection involved! Pure relationship & guidance role.
 
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -805,12 +827,25 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                   <BookOpen size={26} color="var(--primary-color)" /> HR Interview Calling & Pitch Scripts
                 </h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>
-                  Interactive multi-lingual pitch guide for SRYN Customer Relationship Executive hiring.
+                  Interactive multi-lingual pitch guide for SRYN hiring campaigns.
                 </p>
               </div>
 
               {/* Language & Candidate Name Toolbar */}
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', background: 'var(--surface-color)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.8rem', marginRight: '8px', color: 'var(--text-muted)' }}>Hiring Campaign:</span>
+                  <select
+                    className="form-control"
+                    value={selectedProjId}
+                    onChange={(e) => setSelectedProjId(e.target.value)}
+                    style={{ background: 'none', border: 'none', color: 'var(--primary-color)', outline: 'none', fontSize: '0.85rem', fontWeight: 'bold', padding: '0 4px', cursor: 'pointer' }}
+                  >
+                    {assignedProjects.map(p => (
+                      <option key={p.id} value={p.id}>{p.title}</option>
+                    ))}
+                  </select>
+                </div>
                 <div style={{ display: 'flex', alignItems: 'center', background: 'var(--surface-color)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                   <span style={{ fontSize: '0.8rem', marginRight: '8px', color: 'var(--text-muted)' }}>Live Candidate Name:</span>
                   <input
@@ -1226,6 +1261,19 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>
                   Send branded Job Descriptions directly to candidate WhatsApp numbers or copy formatted email templates.
                 </p>
+                <div style={{ display: 'inline-flex', alignItems: 'center', background: 'var(--surface-color)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--border-color)', marginTop: '8px' }}>
+                  <span style={{ fontSize: '0.8rem', marginRight: '8px', color: 'var(--text-muted)' }}>Active Hiring Campaign:</span>
+                  <select
+                    className="form-control"
+                    value={selectedProjId}
+                    onChange={(e) => setSelectedProjId(e.target.value)}
+                    style={{ background: 'none', border: 'none', color: 'var(--primary-color)', outline: 'none', fontSize: '0.85rem', fontWeight: 'bold', padding: '0 4px', cursor: 'pointer' }}
+                  >
+                    {assignedProjects.map(p => (
+                      <option key={p.id} value={p.id}>{p.title}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Format Switcher */}
