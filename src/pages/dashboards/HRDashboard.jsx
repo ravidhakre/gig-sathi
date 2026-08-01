@@ -19,7 +19,10 @@ const HRDashboard = () => {
   const [scriptCandidateName, setScriptCandidateName] = useState('');
 
   // Share JD & Dynamic Campaign State
+  const [selectedProjId, setSelectedProjId] = useState('');
   const assignedProjects = (projects || []).filter(p => !p.assignedHR || p.assignedHR === 'ALL' || p.assignedHR === currentUser?.uid);
+  const activeProj = (assignedProjects || []).find(p => p.id === selectedProjId) || assignedProjects[0] || (projects && projects[0]) || {};
+
   const handleSelectProject = (projId) => {
     setSelectedProjId(projId);
     const found = (projects || []).find(p => p.id === projId);
@@ -27,7 +30,9 @@ const HRDashboard = () => {
       setJdRole(found.title || '');
       setJdSalary(found.salary || found.commission || '₹15,000 / month + Incentives');
       setJdLocation(found.location || 'Hometown / Local Area');
-      showToast(`Switched campaign to: ${found.title}`, 'info');
+      if (typeof showToast === 'function') {
+        showToast(`Switched campaign to: ${found.title}`, 'info');
+      }
     }
   };
 
@@ -41,7 +46,7 @@ const HRDashboard = () => {
       if (!jdSalary) setJdSalary(current.salary || current.commission || '₹15,000 / month + Incentives');
       if (!jdLocation) setJdLocation(current.location || 'Hometown / Local Area');
     }
-  }, [projects]);
+  }, [projects, selectedProjId]);
 
   const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);

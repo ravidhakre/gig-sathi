@@ -58,16 +58,26 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: '60px 20px', textAlign: 'center', maxWidth: '600px', margin: '80px auto', background: '#ffffff', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ color: '#de3163', fontSize: '1.6rem', marginBottom: '12px' }}>SRYN Management Portal</h2>
-          <p style={{ color: '#475569', marginBottom: '24px' }}>Session update detected. Please click below to reload your dashboard.</p>
-          <button 
-            onClick={() => { window.location.href = '/auth'; }} 
-            className="btn btn-primary"
-            style={{ padding: '12px 24px', background: '#de3163', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
-          >
-            Reload SRYN Portal Login
-          </button>
+        <div style={{ padding: '50px 24px', textAlign: 'center', maxWidth: '540px', margin: '80px auto', background: '#ffffff', borderRadius: '14px', boxShadow: '0 20px 40px rgba(0,0,0,0.12)', border: '1px solid rgba(222,49,99,0.2)' }}>
+          <h2 style={{ color: '#de3163', fontSize: '1.6rem', marginBottom: '8px', fontWeight: '800' }}>SRYN Management Portal</h2>
+          <p style={{ color: '#475569', fontSize: '0.95rem', marginBottom: '24px', lineHeight: '1.5' }}>
+            Portal session synced. Please reload your dashboard or reset session if required.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button 
+              onClick={() => { window.location.reload(); }} 
+              className="btn btn-primary"
+              style={{ padding: '12px 24px', background: '#de3163', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem' }}
+            >
+              🔄 Reload SRYN Portal
+            </button>
+            <button 
+              onClick={() => { localStorage.removeItem('gs_user'); window.location.href = '/auth'; }} 
+              style={{ padding: '12px 20px', background: 'transparent', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.88rem' }}
+            >
+              Clear Session & Re-Login
+            </button>
+          </div>
         </div>
       );
     }
