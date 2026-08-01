@@ -820,6 +820,22 @@ const AdminDashboard = () => {
                     <span>Candidate's Mobile Number</span>
                   </div>
                   <div style={placeholderRowStyle}>
+                    <code>{"{{address}}"}</code>
+                    <span>Candidate's Address</span>
+                  </div>
+                  <div style={placeholderRowStyle}>
+                    <code>{"{{position}}"}</code>
+                    <span>Designation / Position Role</span>
+                  </div>
+                  <div style={placeholderRowStyle}>
+                    <code>{"{{salary}}"}</code>
+                    <span>Salary / Consolidated Remuneration</span>
+                  </div>
+                  <div style={placeholderRowStyle}>
+                    <code>{"{{working_hours}}"}</code>
+                    <span>Working Schedule / Hours</span>
+                  </div>
+                  <div style={placeholderRowStyle}>
                     <code>{"{{date}}"}</code>
                     <span>The current calendar date of opening</span>
                   </div>

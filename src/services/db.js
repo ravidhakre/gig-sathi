@@ -210,287 +210,139 @@ const SEED_LEADS = [
   }
 ];
 
+const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
+  <div class="watermark-text">CONFIDENTIAL – SRYN MANAGEMENT PRIVATE LIMITED</div>
+  <div class="letterhead-logo" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #de3163; padding-bottom: 14px; margin-bottom: 24px;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <img src="/logo.jpeg" alt="SRYN Logo" style="height: 52px; width: auto; object-fit: contain;" onError="this.style.display='none'" />
+      <div>
+        <div style="font-size: 1.6rem; font-weight: 900; color: #de3163; letter-spacing: 0.02em; line-height: 1;">SRYN</div>
+        <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px;">Management Pvt Ltd</div>
+      </div>
+    </div>
+    <div class="company-cin" style="text-align: right; font-size: 0.7rem; color: #475569; line-height: 1.45;">
+      <strong style="color: #0f172a; font-size: 0.8rem;">SRYN MANAGEMENT PVT LTD</strong><br/>
+      21/272/1/4-A JEONI MANDI AGRA || Sector 62, Noida, UP, India<br/>
+      <a href="http://www.sryn.online" style="color: #de3163; text-decoration: none;">www.sryn.online</a> | Email: <a href="mailto:info@sryn.online" style="color: #de3163; text-decoration: none;">info@sryn.online</a> | Phone: 8265903984
+    </div>
+  </div>
+
+  <div class="contract-body">
+    <h2 style="text-align: center; color: #de3163; margin-top: 10px; margin-bottom: 24px; font-size: 1.5rem; font-weight: 800; border-bottom: 2px solid #de3163; padding-bottom: 8px; letter-spacing: 0.03em;">APPOINTMENT CUM OFFER LETTER</h2>
+    
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; font-size: 0.9rem; line-height: 1.7;">
+      <p style="margin: 0 0 6px 0;"><strong>Date:</strong> {{date}}</p>
+      <p style="margin: 0 0 6px 0;"><strong>Employee Name:</strong> {{name}}</p>
+      <p style="margin: 0 0 6px 0;"><strong>Address:</strong> {{address}}</p>
+      <p style="margin: 0 0 6px 0;"><strong>Email:</strong> {{email}} &nbsp;|&nbsp; <strong>Mobile:</strong> {{mobile}}</p>
+      <p style="margin: 0;"><strong>Designation / Role:</strong> {{position}}</p>
+    </div>
+
+    <p style="font-weight: 600; margin-bottom: 14px;">Dear Mr./Ms. {{name}},</p>
+    <p>It is with great pleasure that SRYN Management Private Limited extends this formal Offer of Employment for the position of <strong>{{position}}</strong>. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time. By accepting this offer and commencing employment, you acknowledge that you have carefully read, understood, and voluntarily accepted all provisions contained herein and agree to comply with them throughout your association with the Company.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">1. APPOINTMENT AND COMMENCEMENT OF EMPLOYMENT</h3>
+    <p>You are hereby appointed as an <strong>{{position}}</strong> with SRYN Management Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">2. NATURE OF EMPLOYMENT</h3>
+    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of SRYN Management Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment. You acknowledge that flexibility, adaptability, and cooperation form an essential part of your employment and agree to perform every lawful assignment with sincerity and professionalism. Your designation represents your present role within the organization and may be revised, upgraded, or modified by the Company depending upon organizational restructuring, business expansion, operational requirements, or demonstrated professional capability.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">3. PROBATION PERIOD</h3>
+    <p>Your employment shall initially remain on probation for a continuous period of Three (3) Months commencing from your official date of joining. The objective of this probationary period is to enable the Company to evaluate your professional competence, recruitment skills, communication ability, attendance, punctuality, discipline, adaptability, work ethics, and overall suitability for continued employment. During this period, your performance shall be reviewed periodically by the Management based upon your contribution towards organizational objectives and adherence to Company policies. Successful completion of three months shall not automatically result in confirmation of employment, and the Company may, at its sole discretion, confirm your services, extend the probation period, or discontinue your employment whenever your performance, conduct, attendance, or commitment is found to be unsatisfactory. You acknowledge that confirmation of employment shall become effective only after receiving a written confirmation issued by the authorized representative of the Company.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">4. ROLES AND RESPONSIBILITIES</h3>
+    <p>As an <strong>{{position}}</strong>, you shall play a vital role in strengthening the Company's workforce by identifying, attracting, evaluating, and coordinating suitable candidates for various positions. Your responsibilities shall include sourcing candidates through different recruitment channels, conducting initial telephonic screenings, scheduling interviews, maintaining regular communication with applicants, collecting and verifying required documents, coordinating with reporting managers, and ensuring the smooth completion of the hiring process. You shall maintain accurate recruitment records, prepare daily and monthly recruitment reports, update candidate databases, and ensure that all information entered into the Company's systems is complete and authentic. You are expected to maintain professional communication with every candidate and represent the Company in a courteous, ethical, and responsible manner. The Management may assign additional HR, recruitment, administrative, or operational responsibilities depending upon business requirements, and you shall perform such duties diligently without objection. Negligence, deliberate delay, inaccurate reporting, or failure to discharge assigned responsibilities may adversely affect your performance evaluation and may invite disciplinary action in accordance with Company policies.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">5. WORKING HOURS AND ATTENDANCE</h3>
+    <p>The normal working schedule for this position shall be from <strong>{{working_hours}}</strong>, comprising eight working hours together with the applicable break period as determined by the Company. Employees are expected to report for duty punctually and complete their daily responsibilities within the prescribed working hours. Regular attendance and punctuality are considered essential conditions of employment, and every employee is expected to remain available throughout the scheduled working period unless otherwise authorized by the Management. In the event an employee fails to log in or report for work by 11:00 A.M. without obtaining prior approval, the Company reserves the right to treat such attendance as a Half-Day, irrespective of the actual reporting time thereafter. Repeated instances of late reporting, irregular attendance, early departure, extended breaks, or habitual delays shall be viewed as a serious breach of workplace discipline and may influence performance assessments as well as future employment decisions. The weekly holiday for employees shall ordinarily be Sunday, unless operational requirements necessitate otherwise.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">6. PERFORMANCE EVALUATION AND RECRUITMENT EXPECTATIONS</h3>
+    <p>The position of <strong>{{position}}</strong> is a performance-oriented role in which productivity and recruitment efficiency are important factors for evaluating professional contribution. The Company expects every {{position}} to actively participate in recruitment activities with commitment and sincerity to achieve organizational hiring objectives. As part of the performance framework, the Employee shall be expected to facilitate the successful hiring of <strong>{{performance_target}}</strong> during each monthly evaluation cycle. This expectation has been established after considering business requirements and operational planning and shall serve as one of the primary parameters for assessing overall performance. The Company further expects every employee to demonstrate consistent effort, proactive communication, accurate reporting, and professional conduct while executing recruitment responsibilities. For the purpose of salary eligibility, the Employee shall be required to achieve at least Sixty Percent (60%) of the prescribed monthly performance expectation together with satisfactory attendance and compliance with Company policies. Where performance remains below the minimum acceptable benchmark, the Company may determine the monthly remuneration proportionately based upon actual performance, attendance, work quality, and overall contribution. The Management's evaluation in this regard shall be final and binding, and continued unsatisfactory performance over successive review periods may result in counselling, extension of probation, disciplinary proceedings, or termination of employment, depending upon the circumstances.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">7. COMPENSATION AND SALARY ADMINISTRATION</h3>
+    <p>Your monthly consolidated salary for the position of <strong>{{position}}</strong> shall be <strong>{{salary}}</strong>, subject to statutory deductions, if applicable, and the terms contained in this Appointment Letter. The salary offered by the Company is based upon the expectation that the Employee shall perform assigned duties diligently, maintain satisfactory attendance, comply with Company policies, and achieve the minimum performance standards prescribed by the Management. Salary shall become due only after the successful completion of each thirty (30) days of continuous service, and the Company shall process the salary within the following seven (7) days through the approved mode of payment. The Employee understands that salary is linked with actual attendance, performance, and fulfillment of assigned responsibilities. In cases involving unauthorized absence, poor performance, misconduct, or failure to meet the minimum performance requirements, the Company reserves the right to determine the payable remuneration in accordance with the applicable employment terms and performance evaluation process. No verbal commitment regarding salary revision, incentives, bonuses, or additional benefits shall be considered valid unless expressly approved in writing by the authorized Management.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">8. LEAVE, HOLIDAYS AND ABSENTEEISM</h3>
+    <p>The Company believes that regular attendance is essential for maintaining operational efficiency and ensuring uninterrupted recruitment activities. Accordingly, the Employee shall ordinarily be entitled to Sunday as the weekly holiday, subject to business requirements. Except where specifically approved by the Management in writing, the Company shall not provide any paid leave or paid holiday during the course of employment. Whenever the Employee is unable to attend work due to unavoidable circumstances, prior intimation must be given to the Reporting Manager through the prescribed communication channel. Failure to inform the Company before remaining absent shall be treated as unauthorized absence, and the concerned day shall be considered Leave Without Pay (LWP) or any other attendance status deemed appropriate by the Company. If the Employee remains absent from duty for more than three (3) consecutive working days without prior approval or without establishing communication with the Company, such conduct may be treated as abandonment of employment, and the Company shall have the right to terminate the employment without any further obligation. Repeated absenteeism, irregular attendance, or habitual disregard of attendance procedures shall be considered misconduct and may invite disciplinary action.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">9. PROFESSIONAL CONDUCT AND WORKPLACE DISCIPLINE</h3>
+    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline throughout the period of employment. Every interaction with candidates, colleagues, clients, vendors, and business associates shall be conducted respectfully and in a manner that enhances the reputation and goodwill of SRYN Management Private Limited. The Employee shall comply with all lawful instructions, operational procedures, reporting requirements, and workplace policies issued by the Management from time to time. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, abusive language, breach of confidentiality, or conduct prejudicial to the Company's interests shall constitute a violation of employment obligations. The Company reserves the right to initiate appropriate disciplinary proceedings whenever an employee fails to maintain acceptable standards of conduct or repeatedly disregards organizational policies. Depending upon the seriousness of the violation, disciplinary measures may include verbal counselling, written warning, suspension, withholding of benefits where permissible, or termination of employment. The Employee acknowledges that continued employment is dependent not only upon performance but also upon maintaining exemplary professional behaviour, ethical standards, and full compliance with the Company's rules and regulations.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">10. CONFIDENTIALITY AND NON-DISCLOSURE</h3>
+    <p>During the course of your employment, you may have access to confidential information relating to the Company's business operations, recruitment strategies, client details, employee records, candidate databases, financial information, software, documents, policies, business plans, marketing activities, and other proprietary information. You shall treat all such information as strictly confidential and shall not disclose, copy, reproduce, publish, transmit, or use such information for any personal benefit or for the benefit of any third party without obtaining prior written authorization from the Company. This obligation shall continue even after the cessation of your employment. Any unauthorized disclosure or misuse of confidential information shall be considered a serious breach of trust and may result in immediate termination of employment together with appropriate legal action, including claims for damages wherever applicable. The Employee further agrees to return all confidential records, documents, electronic data, and other Company materials upon demand or immediately upon separation from employment.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">11. COMPANY PROPERTY AND DATA PROTECTION</h3>
+    <p>All documents, files, databases, software, systems, login credentials, official email accounts, recruitment records, candidate information, business communications, and any other resources provided by the Company shall remain the exclusive property of SRYN Management Private Limited. The Employee shall exercise reasonable care while using Company assets and shall ensure that such resources are used solely for official business purposes. The Employee shall neither remove, duplicate, modify, nor distribute any Company property without prior written approval. Any passwords, confidential files, or access credentials assigned during employment shall be kept secure and shall not be shared with unauthorized persons under any circumstances. Upon resignation, termination, or whenever directed by the Management, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices. Failure to return Company assets or unauthorized retention of confidential information may attract disciplinary and legal proceedings under the applicable laws.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">12. CONFLICT OF INTEREST AND EXCLUSIVE EMPLOYMENT</h3>
+    <p>The Employee acknowledges that this appointment is based upon the expectation of complete professional commitment towards the Company. During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, partnership, commission-based activity, or commercial venture that may conflict with the interests of SRYN Management Private Limited. The Employee shall immediately disclose to the Management any actual or potential conflict of interest that may arise during the course of employment. Any financial interest, personal relationship, or outside engagement capable of influencing the Employee's professional judgment must be reported promptly. The Employee further agrees not to solicit the Company's clients, candidates, employees, or business partners for personal gain or on behalf of any competing organization during employment. Any violation of this provision shall constitute serious misconduct and may result in disciplinary action, including immediate termination of employment and such legal remedies as may be available to the Company.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">13. TRAINING, PERFORMANCE IMPROVEMENT AND PROFESSIONAL DEVELOPMENT</h3>
+    <p>The Company may, at its discretion, provide induction programs, process training, skill development sessions, or other learning opportunities to assist the Employee in performing assigned responsibilities efficiently. Participation in such programs shall form part of the Employee's official duties. Where the Management identifies deficiencies in performance, communication, productivity, attendance, or professional conduct, the Employee may be placed under a Performance Improvement Process for a reasonable period to provide an opportunity for improvement. During this period, the Employee shall cooperate fully with the Reporting Manager, accept constructive feedback, and make sincere efforts to achieve the prescribed standards. However, participation in any training or performance improvement process shall not be construed as a guarantee of continued employment, and the Company reserves the right to take appropriate decisions regarding continuation or discontinuation of employment based upon the Employee's overall performance, conduct, and organizational requirements.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">14. DISCIPLINARY ACTION AND CORRECTIVE MEASURES</h3>
+    <p>SRYN Management Private Limited maintains a professional work environment based upon mutual respect, accountability, transparency, and adherence to organizational standards. Every employee is expected to perform duties responsibly and comply with all policies, procedures, instructions, and professional expectations established by the Company. In situations where an employee fails to maintain acceptable standards of performance, attendance, behaviour, discipline, or compliance, the Company reserves the right to initiate appropriate corrective and disciplinary measures after reviewing the circumstances of the matter. Such measures may include counselling, verbal communication, written warnings, performance monitoring, restriction of certain responsibilities, extension of probation period, suspension of duties, or termination of employment depending upon the seriousness and frequency of the violation. The Employee acknowledges that negligence in assigned responsibilities, repeated failure to achieve expected performance standards, unauthorized absence, habitual late login, refusal to follow lawful instructions, misconduct with candidates or colleagues, misuse of Company information, inaccurate reporting, violation of confidentiality obligations, or any activity causing financial, operational, or reputational damage to the Company shall be considered a breach of employment obligations. The Company shall have the authority to investigate such matters and take decisions based on available records, performance reports, attendance information, communication history, and other relevant evidence. The Employee agrees to cooperate during any internal review or investigation process and shall provide accurate information whenever required by the Management.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">15. TERMINATION OF EMPLOYMENT</h3>
+    <p>The employment relationship between the Company and the Employee may be discontinued in accordance with the terms mentioned herein and applicable Company policies. SRYN Management Private Limited reserves the right to terminate employment where the Employee demonstrates unsatisfactory performance, repeated failure to meet assigned responsibilities, violation of Company policies, misconduct, breach of confidentiality, unauthorized absence, unethical behaviour, or any act detrimental to the Company's interests. In cases where an employee remains absent from work for more than three consecutive working days without prior approval or without establishing communication with the Company, such absence may be treated as abandonment of employment and the Company may initiate termination proceedings. The Company may also discontinue employment during the probation period if the Employee's performance, conduct, attendance, adaptability, or professional suitability does not meet organizational expectations. The Employee understands that employment continuation is dependent upon maintaining satisfactory standards throughout the tenure of service. Upon termination or separation from employment for any reason, the Employee shall immediately complete all required formalities, return Company property, transfer pending work, and ensure that no confidential information remains in personal possession. Any pending financial settlement shall be processed after completion of necessary verification and clearance procedures as determined by the Company.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">16. RESIGNATION AND NOTICE REQUIREMENTS</h3>
+    <p>In case the Employee wishes to voluntarily discontinue employment with SRYN Management Private Limited, the Employee shall provide written communication to the Management in advance as per the Company's applicable separation procedure. The resignation shall become effective only after acceptance by the authorized representative of the Company and completion of required handover responsibilities. The Employee shall ensure proper transfer of assigned tasks, candidate records, documents, Company information, and other responsibilities before the final date of employment. The Company reserves the right to accept, reject, or modify the separation timeline depending upon operational requirements and business continuity needs. Unauthorized absence during the resignation period, failure to complete assigned responsibilities, non-cooperation during handover, or retention of Company information may result in appropriate action. The Employee shall not represent themselves as an authorized representative of the Company after the effective date of separation. All access provided to official systems, databases, communication channels, and Company resources shall be withdrawn upon completion of the employment relationship.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">17. GENERAL TERMS AND CONDITIONS</h3>
+    <p>This Appointment Letter represents the complete understanding between SRYN Management Private Limited and the Employee concerning the terms of employment and supersedes any previous verbal discussions, communications, or informal commitments relating to the appointment. Any modification, amendment, or revision to the employment terms shall only be valid when communicated through an authorized written document issued by the Company. The Employee confirms that all personal information, educational details, professional records, and documents submitted during the recruitment process are accurate and authentic. The Company reserves the right to conduct verification whenever considered necessary. Any discrepancy discovered at any stage may result in appropriate action, including cancellation of employment. The Employee agrees to comply with all applicable laws, Company policies, workplace guidelines, and ethical standards during the employment period. The Company shall have the right to introduce, modify, or update policies whenever required for operational improvement, legal compliance, or business development. Such policies shall become applicable to employees from the date communicated by the Management.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">18. GOVERNING LAW AND JURISDICTION</h3>
+    <p>This Appointment Letter and the employment relationship between SRYN Management Private Limited and the Employee shall be governed, interpreted, and enforced in accordance with the applicable laws of India. Any dispute, disagreement, question, or matter arising out of or relating to this employment agreement, including interpretation of any clause, performance obligations, separation procedures, confidentiality obligations, or any other employment-related matter, shall first be attempted to be resolved through mutual discussion and internal resolution mechanisms established by the Company. Both parties agree to make reasonable efforts to resolve any concerns amicably through professional communication and cooperation before pursuing any other legal remedy. In the event that any dispute cannot be resolved through mutual discussion, the matter shall be subject to the exclusive jurisdiction of the competent courts located in New Delhi, India. The Employee acknowledges and agrees that the Company's registered office location shall be considered the appropriate jurisdiction for matters arising from this employment relationship. The Employee further agrees to comply with all lawful requirements, notices, directions, and procedures issued by the Company during and after the employment period wherever applicable. If any provision contained in this Appointment Letter is found to be invalid, unenforceable, or inconsistent with applicable law, such provision shall be modified or interpreted to the minimum extent necessary to make it legally valid, while the remaining provisions shall continue to remain effective and binding upon both parties. The failure of the Company to enforce any particular provision at any given time shall not be considered a waiver of its right to enforce the same provision in the future.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">19. EMPLOYEE DECLARATION AND UNDERTAKING</h3>
+    <p>I, <strong>{{name}}</strong>, hereby confirm that I have carefully read and understood all terms, conditions, policies, responsibilities, and obligations mentioned in this Appointment Letter issued by SRYN Management Private Limited. I voluntarily accept this offer of employment and agree that my association with the Company shall be governed by the provisions contained herein along with all internal policies, procedures, guidelines, and amendments communicated by the Company from time to time. I confirm that all information, documents, qualifications, experience details, personal records, and declarations provided by me during the recruitment and appointment process are true, complete, and accurate to the best of my knowledge. I understand that any false information, concealment of material facts, or submission of incorrect documents may result in cancellation of my employment or termination of services without further obligation from the Company. I acknowledge that my role as an {{position}} requires professional responsibility, confidentiality, discipline, and continuous performance improvement. I agree to maintain complete confidentiality regarding candidate information, employee records, Company processes, business strategies, and any other confidential information accessed during my employment. I further agree to maintain professional behaviour, follow attendance requirements, comply with performance expectations, and perform assigned duties sincerely and responsibly. I understand that my employment is subject to satisfactory performance, adherence to Company policies, organizational requirements, and professional conduct. I accept that failure to comply with Company rules, repeated performance deficiencies, unauthorized absence, misconduct, or violation of employment obligations may result in appropriate disciplinary action, including termination of employment as per Company policy.</p>
+
+    <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">20. ACCEPTANCE OF APPOINTMENT</h3>
+    <p>I hereby confirm my acceptance of the employment offer extended by SRYN Management Private Limited for the position of <strong>{{position}}</strong> and agree to join the Company under the terms and conditions mentioned in this Appointment Letter. I understand that this document represents an important employment agreement between myself and the Company and that my continued association shall depend upon my commitment, professional performance, discipline, ethical conduct, and compliance with organizational expectations. I further acknowledge that I have received sufficient opportunity to review this Appointment Letter, understand its contents, and seek clarification regarding any provision before accepting the same. By signing below, I confirm that I have accepted all terms voluntarily and agree to fulfill my responsibilities with dedication, honesty, and professionalism.</p>
+
+    <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; page-break-inside: avoid;">
+      <!-- Employer Sign -->
+      <div style="border: 1px solid #cbd5e1; padding: 16px; border-radius: 8px; background-color: #f8fafc;">
+        <div style="font-size: 0.7rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-bottom: 20px;">FOR SRYN MANAGEMENT PVT LTD</div>
+        <div style="height: 50px; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1; border-radius: 4px; background: #fff; margin-bottom: 12px; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
+          Authorized Signatory & Stamp
+        </div>
+        <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 0.85rem; color: #0f172a;">SRYN Management Pvt Ltd</p>
+        <p style="margin: 0; font-size: 0.75rem; color: #de3163; font-weight: 600;">Authorized Signatory</p>
+      </div>
+
+      <!-- Employee Digital Sign -->
+      <div style="border: 2px solid #de3163; padding: 16px; border-radius: 8px; background-color: #fff5f7; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="position: absolute; top: -10px; right: 15px; background: #de3163; color: white; font-size: 0.65rem; font-weight: bold; padding: 2px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
+          ✓ SECURE SIGNED
+        </div>
+        <div style="font-size: 0.7rem; color: #de3163; font-weight: bold; text-transform: uppercase; margin-bottom: 10px;">EMPLOYEE ACCEPTANCE</div>
+        <div style="text-align: center; margin-bottom: 10px;">
+          <span style="font-family: cursive; font-size: 1.3rem; color: #de3163; font-weight: bold; display: block; border-bottom: 1px dashed #fbcfe8; padding-bottom: 4px;">{{name}}</span>
+          <span style="font-size: 0.65rem; color: #9d174d; display: block; margin-top: 4px;">Digitally Signed & Authenticated</span>
+        </div>
+        <div style="font-size: 0.7rem; color: #475569; line-height: 1.4;">
+          <strong>Date:</strong> {{date}}<br/>
+          <strong>Status:</strong> Legally Binding Employment Agreement
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
 const SEED_TEMPLATES = [
   {
     id: 'temp-candidate',
     role: 'Candidate',
-    title: 'Candidate / Field Executive Offer Letter',
-    content: `<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.5rem; font-weight: 800;">CONTRACT OF ENGAGEMENT</h2>
-    <p><strong>Date:</strong> {{date}}</p>
-    <p><strong>To,</strong><br/>
-    <strong>Name:</strong> {{name}}<br/>
-    <strong>Email:</strong> {{email}}<br/>
-    <strong>Mobile:</strong> {{mobile}}</p>
-
-    <p><strong>Subject: Letter of Engagement as Independent Field Associate / Gig Partner</strong></p>
-
-    <p>Dear {{name}},</p>
-    <p>It is with great pleasure that SRYN Management Private Limited extends this formal Letter of Engagement for the position of Independent Field Associate. This document outlines the terms and conditions governing your business association with the Company.</p>
-
-    <h3>1. Commencement & Scope of Engagement</h3>
-    <p>Your engagement shall commence from the date of your digital acceptance of this letter. You will operate as an independent contractor. This engagement does not constitute a relationship of employer-employee, agency, or partnership between you and SRYN. You shall be responsible for defining your work hours, methods, and tactics in onboarding customers for our client projects.</p>
-
-    <h3>2. Client Project Sourcing</h3>
-    <p>You shall execute field acquisition and promotional activities for top corporate entities, banks, and fintech providers as listed in the active projects directory of your portal. You are expected to deliver authentic onboarding campaigns with absolute transparency and code compliance.</p>
-  </div>
-</div>
-
-<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h3>3. Deliverables & Payout Commission Matrices</h3>
-    <p>Your compensation structure is linked directly to valid acquisitions approved by our client auditors. Commissions will be verified and disbursed on a weekly cycle as follows:</p>
-    <ul>
-      <li>Payouts are based strictly on the approved acquisitions list from verified fintech audits.</li>
-      <li>All applicable taxes (TDS @ 5% under Section 194H of the Income Tax Act) will be deducted at source.</li>
-      <li>SRYN reserves the right to reject payouts or terminate agreements for any onboarding containing false coordinates, duplicates, or fake Aadhaar uploads.</li>
-    </ul>
-
-    <h3>4. Training & Compliance Updates</h3>
-    <p>The Company will provide digital process training materials and campaign orientation on your portal dashboard. You are required to stay updated with product guidelines and policy revisions issued from time to time. Deficiencies in onboarding quality may result in temporary suspension of specific project campaigns on your dashboard.</p>
-  </div>
-</div>
-
-<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h3>5. Confidentiality & Non-Disclosure Agreement</h3>
-    <p>During your association, you will have access to sensitive customer contact data and client databases. You agree to treat all such information as strictly confidential. You shall not download, copy, distribute, or use candidate or customer records for personal gain or share them with third parties. Any breach of confidentiality will result in immediate termination of portal access and forfeiture of all pending commissions, alongside legal proceedings under the IT Act.</p>
-
-    <h3>6. Code of Conduct & Client Representation</h3>
-    <p>While promoting client services, you must behave ethically. You shall not collect cash payments from candidates or customers, misrepresent onboarding rewards, or use coercive practices. SRYN maintains zero tolerance for field misconduct, and any reported infraction will lead to legal action.</p>
-  </div>
-</div>
-
-<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h3>7. Separation & Notice Requirements</h3>
-    <p>Either party may terminate this business engagement at any time, with or without cause, by giving 7 days written notice. SRYN reserves the right to terminate access immediately in case of breach of terms. All disputes are subject to the exclusive jurisdiction of the courts of New Delhi, India.</p>
-
-    <h3>8. Execution & Acceptance of Contract</h3>
-    <p>By clicking "Accept & Sign Contract" on your dashboard, you formally agree to all terms stated across this 4-page engagement contract.</p>
-    
-    <div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
-      <!-- Employer Sign -->
-      <div style="border: 1px solid #e2e8f0; padding: 16px; border-radius: 8px; background-color: #fafafa; position: relative;">
-        <div style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px;">For the Company</div>
-        <div style="height: 60px; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1; border-radius: 4px; background: #fff; margin-bottom: 12px; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
-          Corporate Seal / Authorized Stamp
-        </div>
-        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #1e293b;">___________________________</p>
-        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #de3163;">Authorized Signatory</p>
-        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">SRYN Management Private Limited</p>
-      </div>
-
-      <!-- Employee Digital Seal -->
-      <div style="border: 2px solid #2563eb; padding: 16px; border-radius: 8px; background-color: #eff6ff; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
-        <div style="position: absolute; top: -10px; right: 15px; background: #2563eb; color: white; font-size: 0.6rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
-          ✓ SECURE SIGN
-        </div>
-        <div style="font-size: 0.65rem; color: #2563eb; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Employee Acceptance</div>
-        <div style="text-align: center; margin-bottom: 10px;">
-          <span style="font-family: cursive; font-size: 1.4rem; color: #1d4ed8; font-weight: bold; display: block; border-bottom: 1px dashed #bfdbfe; padding-bottom: 4px;">{{name}}</span>
-          <span style="font-size: 0.6rem; color: #60a5fa; display: block; margin-top: 4px;">Digitally Signed & Authenticated</span>
-        </div>
-        <div style="font-size: 0.65rem; color: #1e3a8a; line-height: 1.35;">
-          <strong>IP:</strong> Logged & Hash-Verified<br/>
-          <strong>Authentication:</strong> Registered Mobile OTP<br/>
-          <strong>Document Status:</strong> Legally Enforceable & Executed
-        </div>
-      </div>
-    </div>
-  </div>
-</div>`
+    title: 'Candidate / Field Executive Appointment Cum Offer Letter',
+    content: OFFER_LETTER_WORD_TEMPLATE
   },
   {
     id: 'temp-hr',
     role: 'HR',
-    title: 'HR Officer / Manager Offer Letter',
-    content: `<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h2 style="text-align: center; color: #de3163; margin-bottom: 20px; font-size: 1.4rem; font-weight: 800; border-bottom: 2px solid #de3163; padding-bottom: 6px;">APPOINTMENT CUM OFFER LETTER</h2>
-    <p><strong>Date:</strong> {{date}}</p>
-    <p><strong>Employee Name:</strong> {{name}}<br/>
-    <strong>Address:</strong> {{address}}</p>
-
-    <p>Dear Mr./Ms. {{name}},</p>
-    <p>It is with great pleasure that SRYN Management Private Limited extends this formal Offer of Employment for the position of HR Executive. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time. By accepting this offer and commencing employment, you acknowledge that you have carefully read, understood, and voluntarily accepted all provisions contained herein and agree to comply with them throughout your association with the Company.</p>
-
-    <h3>1. Appointment and Commencement of Employment</h3>
-    <p>You are hereby appointed as an HR Executive with SRYN Management Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
-
-    <h3>2. Nature of Employment</h3>
-    <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of SRYN Management Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment.</p>
-  </div>
-</div>
-
-<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h3>3. Probation Period</h3>
-    <p>Your employment shall initially remain on probation for a continuous period of Three (3) Months commencing from your official date of joining. The objective of this probationary period is to enable the Company to evaluate your professional competence, recruitment skills, communication ability, attendance, punctuality, discipline, adaptability, work ethics, and overall suitability for continued employment. During this period, your performance shall be reviewed periodically by the Management based upon your contribution towards organizational objectives and adherence to Company policies. Successful completion of three months shall not automatically result in confirmation of employment, and the Company may, at its sole discretion, confirm your services, extend the probation period, or discontinue your employment whenever your performance, conduct, attendance, or commitment is found to be unsatisfactory. You acknowledge that confirmation of employment shall become effective only after receiving a written confirmation issued by the authorized representative of the Company.</p>
-
-    <h3>4. Roles and Responsibilities</h3>
-    <p>As an HR Executive, you shall play a vital role in strengthening the Company's workforce by identifying, attracting, evaluating, and coordinating suitable candidates for various positions. Your responsibilities shall include sourcing candidates through different recruitment channels, conducting initial telephonic screenings, scheduling interviews, maintaining regular communication with applicants, collecting and verifying required documents, coordinating with reporting managers, and ensuring the smooth completion of the hiring process. You shall maintain accurate recruitment records, prepare daily and monthly recruitment reports, update candidate databases, and ensure that all information entered into the Company's systems is complete and authentic. You are expected to maintain professional communication with every candidate and represent the Company in a courteous, ethical, and responsible manner.</p>
-
-    <h3>5. Working Hours and Attendance</h3>
-    <p>The normal working schedule for this position shall be from 11:00 A.M. to 7:30 P.M., comprising eight working hours together with the applicable break period as determined by the Company. Employees are expected to report for duty punctually and complete their daily responsibilities within the prescribed working hours. Regular attendance and punctuality are considered essential conditions of employment, and every employee is expected to remain available throughout the scheduled working period unless otherwise authorized by the Management. In the event an employee fails to log in or report for work by 11:00 A.M. without obtaining prior approval, the Company reserves the right to treat such attendance as a Half-Day, irrespective of the actual reporting time thereafter. Repeated instances of late reporting or habitual delays shall be viewed as a serious breach of discipline.</p>
-
-    <h3>6. Performance Evaluation and Recruitment Expectations</h3>
-    <p>The position of HR Executive is a performance-oriented role in which productivity and recruitment efficiency are important factors for evaluating professional contribution. As part of the performance framework, the Employee shall be expected to facilitate the successful hiring of Forty (40) candidates during each monthly evaluation cycle. For the purpose of salary eligibility, the Employee shall be required to achieve at least Sixty Percent (60%) of the prescribed monthly performance expectation together with satisfactory attendance and compliance with Company policies. Where performance remains below the minimum acceptable benchmark, the Company may determine the monthly remuneration proportionately based upon actual performance, attendance, work quality, and overall contribution.</p>
-  </div>
-</div>
-
-<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h3>7. Compensation and Salary Administration</h3>
-    <p>Your monthly consolidated salary for the position of HR Executive shall be ₹9,000/- (Rupees Nine Thousand Only), subject to statutory deductions, if applicable, and the terms contained in this Appointment Letter. Salary shall become due only after the successful completion of each thirty (30) days of continuous service, and the Company shall process the salary within the following seven (7) days through the approved mode of payment. The Employee understands that salary is linked with actual attendance, performance, and fulfillment of assigned responsibilities. In cases involving unauthorized absence, poor performance, misconduct, or failure to meet the minimum performance requirements, the Company reserves the right to determine the payable remuneration in accordance with the applicable employment terms.</p>
-
-    <h3>8. Leave, Holidays and Absenteeism</h3>
-    <p>The weekly holiday for employees shall ordinarily be Sunday, unless operational requirements necessitate otherwise. Except where specifically approved by the Management in writing, the Company shall not provide any paid leave or paid holiday during the course of employment. Failure to inform the Company before remaining absent shall be treated as unauthorized absence, and the concerned day shall be considered Leave Without Pay (LWP). If the Employee remains absent from duty for more than three (3) consecutive working days without prior approval, such conduct may be treated as abandonment of employment.</p>
-
-    <h3>9. Professional Conduct and Workplace Discipline</h3>
-    <p>The Employee is expected to maintain the highest standards of professionalism, honesty, integrity, courtesy, and discipline throughout the period of employment. Every interaction with candidates, colleagues, clients, vendors, and business associates shall be conducted respectfully and in a manner that enhances the reputation and goodwill of SRYN Management Private Limited. Any act involving insubordination, negligence, misuse of Company resources, falsification of records, misrepresentation of recruitment data, inappropriate behaviour, harassment, abusive language, breach of confidentiality, or conduct prejudicial to the Company's interests shall constitute a violation of employment obligations.</p>
-
-    <h3>10. Confidentiality and Non-Disclosure</h3>
-    <p>During the course of your employment, you may have access to confidential information relating to the Company's business operations, recruitment strategies, client details, employee records, candidate databases, and other proprietary information. You shall treat all such information as strictly confidential and shall not disclose, copy, reproduce, publish, transmit, or use such information for any personal benefit or for the benefit of any third party without obtaining prior written authorization from the Company. This obligation shall continue even after the cessation of your employment.</p>
-
-    <h3>11. Company Property and Data Protection</h3>
-    <p>All documents, files, databases, official email accounts, recruitment records, candidate information, and any other resources provided by the Company shall remain the exclusive property of SRYN Management Private Limited. Upon resignation, termination, or whenever directed by the Management, the Employee shall immediately return all Company property and permanently delete any official data stored on personal devices.</p>
-
-    <h3>12. Conflict of Interest and Exclusive Employment</h3>
-    <p>During the period of employment, the Employee shall not directly or indirectly engage in any other employment, consultancy, recruitment business, freelancing assignment, partnership, commission-based activity, or commercial venture that may conflict with the interests of SRYN Management Private Limited. Any violation of this provision shall constitute serious misconduct and may result in disciplinary action.</p>
-  </div>
-</div>
-
-<div class="contract-page-sheet">
-  <div class="watermark-text">CONFIDENTIAL – PRIVATE & EMPLOYMENT DOCUMENT</div>
-  <div class="letterhead-logo">
-    <div class="logo-main">SRYN</div>
-    <div class="company-cin">
-      <strong>SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      Registered Office: Office No. 402, 4th Floor, Vardhman Plaza, Sector 11, Dwarka, New Delhi - 110075<br/>
-      CIN: U74999DL2026PTC394850 | Email: support@srynmanagement.com | Web: www.srynmanagement.com
-    </div>
-  </div>
-  <div class="contract-body">
-    <h3>13. Training, Performance Improvement and Professional Development</h3>
-    <p>The Company may, at its discretion, provide induction programs, process training, or other learning opportunities to assist the Employee in performing assigned responsibilities efficiently. Where the Management identifies deficiencies in performance, communication, productivity, attendance, or professional conduct, the Employee may be placed under a Performance Improvement Process for a reasonable period to provide an opportunity for improvement. However, participation in any training shall not be construed as a guarantee of continued employment.</p>
-
-    <h3>14. Disciplinary Action and Corrective Measures</h3>
-    <p>In situations where an employee fails to maintain acceptable standards of performance, attendance, behaviour, discipline, or compliance, the Company reserves the right to initiate appropriate corrective and disciplinary measures. Such measures may include counselling, warnings, suspension of duties, or termination of employment depending upon the seriousness and frequency of the violation.</p>
-
-    <h3>15. Termination of Employment</h3>
-    <p>The Company reserves the right to terminate employment where the Employee demonstrates unsatisfactory performance, repeated failure to meet assigned responsibilities, violation of Company policies, misconduct, breach of confidentiality, unauthorized absence, or any act detrimental to the Company's interests. If the Employee remains absent from work for more than three consecutive working days without prior approval, it will be treated as abandonment.</p>
-
-    <h3>16. Resignation and Notice Requirements</h3>
-    <p>In case the Employee wishes to voluntarily discontinue employment, the Employee shall provide written communication to the Management in advance as per the separation procedure. Resignation shall become effective only after acceptance and handover.</p>
-
-    <h3>17. General Terms and Conditions</h3>
-    <p>This Appointment Letter represents the complete understanding between the Company and the Employee concerning the terms of employment and supersedes any previous verbal discussions or commitments. The Employee confirms that all personal information and documents submitted during the recruitment process are accurate.</p>
-
-    <h3>18. Governing Law and Jurisdiction</h3>
-    <p>This Appointment Letter and the employment relationship shall be governed by and interpreted in accordance with the applicable laws of India. Any dispute arising out of this agreement shall be subject to the exclusive jurisdiction of the competent courts located in New Delhi, India.</p>
-
-    <h3>19. Employee Declaration & Undertaking</h3>
-    <p>I hereby confirm that I have carefully read and understood all terms, conditions, and obligations mentioned in this Appointment Letter. I voluntarily accept this offer of employment and agree that my association with the Company shall be governed by the provisions contained herein.</p>
-
-    <h3>20. Acceptance of Appointment</h3>
-    <p>I hereby confirm my acceptance of the employment offer extended by SRYN Management Private Limited for the position of HR Executive and agree to join the Company under the terms and conditions mentioned in this Appointment Letter.</p>
-    
-    <div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; page-break-inside: avoid;">
-      <!-- Employer Sign -->
-      <div style="border: 1px solid #e2e8f0; padding: 16px; border-radius: 8px; background-color: #fafafa; position: relative;">
-        <div style="font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px;">For the Company</div>
-        <div style="height: 60px; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1; border-radius: 4px; background: #fff; margin-bottom: 12px; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
-          Corporate Seal / Authorized Stamp
-        </div>
-        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #1e293b;">___________________________</p>
-        <p style="margin-bottom: 2px; font-weight: bold; font-size: 0.85rem; color: #de3163;">Authorized Signatory</p>
-        <p style="margin: 0; font-size: 0.75rem; color: #64748b;">SRYN Management Private Limited</p>
-      </div>
-
-      <!-- Employee Digital Seal -->
-      <div style="border: 2px solid #2563eb; padding: 16px; border-radius: 8px; background-color: #eff6ff; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
-        <div style="position: absolute; top: -10px; right: 15px; background: #2563eb; color: white; font-size: 0.6rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
-          ✓ SECURE SIGN
-        </div>
-        <div style="font-size: 0.65rem; color: #2563eb; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Employee Acceptance</div>
-        <div style="text-align: center; margin-bottom: 10px;">
-          <span style="font-family: cursive; font-size: 1.4rem; color: #1d4ed8; font-weight: bold; display: block; border-bottom: 1px dashed #bfdbfe; padding-bottom: 4px;">{{name}}</span>
-          <span style="font-size: 0.6rem; color: #60a5fa; display: block; margin-top: 4px;">Digitally Signed & Authenticated</span>
-        </div>
-        <div style="font-size: 0.65rem; color: #1e3a8a; line-height: 1.35;">
-          <strong>IP:</strong> Logged & Hash-Verified<br/>
-          <strong>Authentication:</strong> Registered Mobile OTP<br/>
-          <strong>Document Status:</strong> Legally Enforceable & Executed
-        </div>
-      </div>
-    </div>
-  </div>
-</div>`
+    title: 'HR Officer / Manager Appointment Cum Offer Letter',
+    content: OFFER_LETTER_WORD_TEMPLATE
   }
 ];
 
@@ -1082,10 +934,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: If HR template contains old footers or lacks new signature design, auto-upgrade in Firestore
+          // Self-healing check: Upgrade templates to 20-section Word document layout if old
           const hr = templates.find(t => t.role === 'HR');
-          if (hr && hr.content && (hr.content.includes("Page 1 of 4") || !hr.content.includes("border: 2px solid #2563eb"))) {
-            console.log('SRYN: Upgrading Firestore offer templates to creative signing 20-section layout...');
+          if (!hr || !hr.content || !hr.content.includes("21/272/1/4-A JEONI MANDI AGRA")) {
+            console.log('SRYN: Upgrading Firestore offer templates to 20-section Word document layout...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -1097,10 +949,10 @@ export const dbService = {
         console.error(e);
       }
     }
-    // Fallback logic for Local Storage: Upgrade if old HR template
+    // Fallback logic for Local Storage: Upgrade if old template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (localHR && localHR.content && (localHR.content.includes("Page 1 of 4") || !localHR.content.includes("border: 2px solid #2563eb"))) {
+    if (!localHR || !localHR.content || !localHR.content.includes("21/272/1/4-A JEONI MANDI AGRA")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }

@@ -22,14 +22,15 @@ const HRDashboard = () => {
     showToast("Offer letter accepted and signed successfully!", "success");
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = (person = null) => {
+    const target = person || currentUser;
     const printWindow = window.open('', '_blank');
-    const content = renderOfferLetter();
+    const content = renderOfferLetter(target);
     
     printWindow.document.write(`
       <html>
         <head>
-          <title>SRYN Offer Letter - ${currentUser?.fullName}</title>
+          <title>SRYN Offer Letter - ${target?.fullName || 'Candidate'}</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -65,7 +66,6 @@ const HRDashboard = () => {
               user-select: none;
               white-space: nowrap;
               letter-spacing: 0.12em;
-              z-index: 1;
             }
             .contract-page-sheet .letterhead-logo {
               display: flex;
@@ -94,6 +94,7 @@ const HRDashboard = () => {
               font-size: 0.92rem;
               line-height: 1.62;
               text-align: justify;
+              color: #334155;
             }
             .contract-page-sheet .contract-body p {
               margin-bottom: 12px;
@@ -148,30 +149,41 @@ const HRDashboard = () => {
     printWindow.document.close();
   };
 
-  const renderOfferLetter = () => {
-    const hrTemplate = templates.find(t => t.role === 'HR') || {
-      content: `<h3>SRYN SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
+  const renderOfferLetter = (targetPerson = null) => {
+    const person = targetPerson || currentUser;
+    const hrTemplate = templates.find(t => t.role === (person?.role || 'HR')) || templates.find(t => t.role === 'Candidate') || templates.find(t => t.role === 'HR') || {
+      content: `<h3>SRYN MANAGEMENT PVT LTD</h3><p>Dear {{name}}, offer letter loading...</p>`
     };
     
-    const todayStr = new Date().toLocaleDateString('en-IN', {
+    const todayStr = person?.date || new Date().toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     });
 
     const userAddress = [
-      currentUser?.address,
-      currentUser?.city,
-      currentUser?.state,
-      currentUser?.pincode
-    ].filter(Boolean).join(', ') || 'Not Provided (Complete KYC Profile)';
+      person?.address,
+      person?.city,
+      person?.state,
+      person?.pincode
+    ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
 
-    let html = hrTemplate.content
-      .replace(/{{name}}/g, currentUser?.fullName || 'HR Officer')
-      .replace(/{{email}}/g, currentUser?.email || '')
-      .replace(/{{mobile}}/g, currentUser?.mobile || '')
+    const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Field Executive');
+    const userSalary = person?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
+    const userWorkingHours = person?.workingHours || '11:00 A.M. to 7:30 P.M.';
+    const userPerformanceTarget = person?.performanceTarget || 'Forty (40) candidates';
+
+    let html = (hrTemplate.content || '')
+      .replace(/{{name}}/g, person?.fullName || 'Candidate')
+      .replace(/{{email}}/g, person?.email || 'N/A')
+      .replace(/{{mobile}}/g, person?.mobile || 'N/A')
       .replace(/{{address}}/g, userAddress)
-      .replace(/{{date}}/g, todayStr);
+      .replace(/{{date}}/g, todayStr)
+      .replace(/{{position}}/g, userRole)
+      .replace(/{{role}}/g, userRole)
+      .replace(/{{salary}}/g, userSalary)
+      .replace(/{{working_hours}}/g, userWorkingHours)
+      .replace(/{{performance_target}}/g, userPerformanceTarget);
 
     return html;
   };
@@ -188,6 +200,7 @@ const HRDashboard = () => {
 
   // Manual Add Lead states
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedLeadOffer, setSelectedLeadOffer] = useState(null);
   const [newLeadForm, setNewLeadForm] = useState({ fullName: '', mobile: '', email: '', project: '', roleApplied: 'Field Executive' });
 
   // Filtered Leads
@@ -478,9 +491,12 @@ const HRDashboard = () => {
                         <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {l.feedback || 'No logs entered.'}
                         </td>
-                        <td>
+                        <td style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
                           <button onClick={() => triggerCallSimulation(l)} className="btn btn-outline" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
                             <PhoneCall size={14} color="var(--primary-color)" /> Call & Update
+                          </button>
+                          <button onClick={() => setSelectedLeadOffer(l)} className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
+                            <FileText size={14} /> Offer Letter
                           </button>
                         </td>
                       </tr>
@@ -720,6 +736,34 @@ const HRDashboard = () => {
                 Insert Lead to CRM
               </button>
             </form>
+          </div>
+        </div>
+      )}
+      {/* --- CANDIDATE OFFER LETTER MODAL --- */}
+      {selectedLeadOffer && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content fade-in" style={{ maxWidth: '850px', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+              <div>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Appointment Cum Offer Letter – {selectedLeadOffer.fullName}</h3>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Position: {selectedLeadOffer.roleApplied || selectedLeadOffer.project}</span>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button onClick={() => handleDownloadPDF(selectedLeadOffer)} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+                  <Printer size={16} /> Print / Save PDF
+                </button>
+                <button onClick={() => setSelectedLeadOffer(null)} className="btn btn-outline" style={{ padding: '8px 12px' }}>
+                  <X size={18} />
+                </button>
+              </div>
+            </div>
+            
+            <div className="contract-document-wrapper" style={{ maxHeight: '70vh', overflowY: 'auto', background: '#f8fafc', padding: '20px', borderRadius: '8px' }}>
+              <div 
+                dangerouslySetInnerHTML={{ __html: renderOfferLetter(selectedLeadOffer) }} 
+                style={{ textAlign: 'left' }}
+              />
+            </div>
           </div>
         </div>
       )}

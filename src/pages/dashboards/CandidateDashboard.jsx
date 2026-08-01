@@ -172,8 +172,8 @@ const CandidateDashboard = () => {
   };
 
   const renderOfferLetter = () => {
-    const candidateTemplate = templates.find(t => t.role === 'Candidate') || {
-      content: `<h3>SRYN SOLUTIONS PVT. LTD.</h3><p>Dear {{name}}, offer letter loading...</p>`
+    const candidateTemplate = templates.find(t => t.role === 'Candidate') || templates.find(t => t.role === 'HR') || {
+      content: `<h3>SRYN MANAGEMENT PVT LTD</h3><p>Dear {{name}}, offer letter loading...</p>`
     };
     
     // Replace placeholders with candidate details dynamically
@@ -188,14 +188,24 @@ const CandidateDashboard = () => {
       currentUser?.city,
       currentUser?.state,
       currentUser?.pincode
-    ].filter(Boolean).join(', ') || 'Not Provided (Complete KYC Profile)';
+    ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
 
-    let html = candidateTemplate.content
+    const userRole = currentUser?.roleApplied || currentUser?.position || 'Field Executive';
+    const userSalary = currentUser?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
+    const userWorkingHours = currentUser?.workingHours || '11:00 A.M. to 7:30 P.M.';
+    const userPerformanceTarget = currentUser?.performanceTarget || 'Forty (40) candidates';
+
+    let html = (candidateTemplate.content || '')
       .replace(/{{name}}/g, currentUser?.fullName || 'Candidate')
-      .replace(/{{email}}/g, currentUser?.email || '')
-      .replace(/{{mobile}}/g, currentUser?.mobile || '')
+      .replace(/{{email}}/g, currentUser?.email || 'N/A')
+      .replace(/{{mobile}}/g, currentUser?.mobile || 'N/A')
       .replace(/{{address}}/g, userAddress)
-      .replace(/{{date}}/g, todayStr);
+      .replace(/{{date}}/g, todayStr)
+      .replace(/{{position}}/g, userRole)
+      .replace(/{{role}}/g, userRole)
+      .replace(/{{salary}}/g, userSalary)
+      .replace(/{{working_hours}}/g, userWorkingHours)
+      .replace(/{{performance_target}}/g, userPerformanceTarget);
 
     return html;
   };
