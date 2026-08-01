@@ -222,7 +222,7 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
     </div>
     <div class="company-cin" style="text-align: right; font-size: 0.72rem; color: #475569; line-height: 1.5;">
       <strong style="color: #0f172a; font-size: 0.85rem; text-transform: uppercase;">SRYN MANAGEMENT PRIVATE LIMITED</strong><br/>
-      <strong>CIN Number:</strong> U74999DL2026PTC394850<br/>
+      <strong>CIN Number:</strong> U51900UP2022PTC169096<br/>
       <strong>Registered Address:</strong> 21/272/1/4-A JEONI MANDI AGRA || Sector 62, Noida, UP, India<br/>
       <strong>Website:</strong> <a href="http://www.sryn.online" style="color: #de3163; text-decoration: none;">www.sryn.online</a> &nbsp;|&nbsp; <strong>Email ID:</strong> <a href="mailto:info@sryn.online" style="color: #de3163; text-decoration: none;">info@sryn.online</a> &nbsp;|&nbsp; <strong>Mobile:</strong> 8265903984
     </div>
@@ -937,8 +937,8 @@ export const dbService = {
         if (templates.length > 0) {
           // Self-healing check: Upgrade templates to 20-section Word document layout if old
           const hr = templates.find(t => t.role === 'HR');
-          if (!hr || !hr.content || !hr.content.includes("21/272/1/4-A JEONI MANDI AGRA")) {
-            console.log('SRYN: Upgrading Firestore offer templates to 20-section Word document layout...');
+          if (!hr || !hr.content || !hr.content.includes("U51900UP2022PTC169096")) {
+            console.log('SRYN: Upgrading Firestore offer templates with updated CIN U51900UP2022PTC169096...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -953,7 +953,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (!localHR || !localHR.content || !localHR.content.includes("21/272/1/4-A JEONI MANDI AGRA")) {
+    if (!localHR || !localHR.content || !localHR.content.includes("U51900UP2022PTC169096")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
