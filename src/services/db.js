@@ -308,15 +308,15 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
         <div style="font-size: 0.7rem; color: #475569; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">FOR SRYN MANAGEMENT PVT LTD</div>
         
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; min-height: 85px;">
-          <!-- Praveen Kumar Executive Signature SVG -->
+          <!-- Naveen Sharma Director Executive Signature SVG -->
           <div style="flex: 1; text-align: left;">
-            <svg width="140" height="55" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" style="display: block;">
-              <path d="M 15 50 C 20 20, 25 15, 30 35 C 32 45, 35 50, 42 38 C 45 32, 50 34, 52 42 C 55 48, 60 38, 65 35 C 70 32, 75 42, 80 40 C 85 38, 88 32, 92 36 C 98 42, 102 28, 108 22 C 115 15, 110 45, 112 52 C 114 55, 120 32, 128 30 C 135 28, 138 42, 145 38 C 150 35, 155 38, 160 36 C 165 34, 172 25, 180 20 M 10 58 C 50 62, 110 58, 185 48" 
+            <svg width="145" height="55" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+              <path d="M 12 52 C 16 18, 22 12, 28 32 C 30 42, 34 50, 40 36 C 44 28, 48 30, 52 40 C 56 46, 62 34, 68 32 C 72 30, 78 40, 84 38 C 88 36, 92 28, 96 34 C 102 40, 106 24, 114 18 C 122 12, 116 48, 120 54 C 124 58, 132 30, 140 28 C 148 26, 152 40, 158 36 C 164 32, 170 36, 176 34 C 182 32, 188 22, 194 18 M 8 60 C 48 64, 115 60, 190 50" 
                     fill="none" stroke="#0f2b5c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M 28 32 C 18 28, 12 40, 22 46 C 30 50, 38 42, 48 40" fill="none" stroke="#0f2b5c" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M 24 30 C 14 26, 8 38, 18 44 C 26 48, 34 40, 44 38" fill="none" stroke="#0f2b5c" stroke-width="2.2" stroke-linecap="round"/>
             </svg>
-            <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-top: 4px;">Praveen Kumar</div>
-            <div style="font-size: 0.72rem; color: #de3163; font-weight: 700;">Authorized Signatory / Director</div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-top: 4px;">Naveen Sharma</div>
+            <div style="font-size: 0.72rem; color: #de3163; font-weight: 700;">Director</div>
           </div>
 
           <!-- Official Corporate Seal Stamp SVG -->
@@ -972,10 +972,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: Upgrade templates to include Corporate Seal and Praveen Kumar signature
+          // Self-healing check: Upgrade templates to include Corporate Seal and Naveen Sharma (Director) signature
           const hr = templates.find(t => t.role === 'HR');
-          if (!hr || !hr.content || !hr.content.includes("Praveen Kumar")) {
-            console.log('SRYN: Upgrading Firestore offer templates with Corporate Seal & Praveen Kumar Signature...');
+          if (!hr || !hr.content || !hr.content.includes("Naveen Sharma")) {
+            console.log('SRYN: Upgrading Firestore offer templates with Corporate Seal & Naveen Sharma (Director) Signature...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -990,7 +990,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (!localHR || !localHR.content || !localHR.content.includes("Praveen Kumar")) {
+    if (!localHR || !localHR.content || !localHR.content.includes("Naveen Sharma")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
