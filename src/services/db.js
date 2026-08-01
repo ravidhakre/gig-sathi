@@ -320,26 +320,26 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
           </div>
 
           <!-- Official Corporate Seal Stamp SVG -->
-          <div style="width: 85px; height: 85px; flex-shrink: 0; transform: rotate(-5deg);">
-            <svg width="85" height="85" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <div style="width: 90px; height: 90px; flex-shrink: 0; transform: rotate(-4deg);">
+            <svg width="90" height="90" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
               <circle cx="60" cy="60" r="56" fill="none" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="8 2"/>
               <circle cx="60" cy="60" r="48" fill="none" stroke="#1e3a8a" stroke-width="1.8"/>
               <circle cx="60" cy="60" r="32" fill="rgba(30, 58, 138, 0.04)" stroke="#1e3a8a" stroke-width="1.2"/>
               
-              <path id="sealArcTop" d="M 18,60 A 42,42 0 1,1 102,60" fill="none"/>
-              <path id="sealArcBottom" d="M 102,60 A 42,42 0 0,1 18,60" fill="none"/>
+              <path id="sealArcTop" d="M 17,60 A 43,43 0 1,1 103,60" fill="none"/>
+              <path id="sealArcBottom" d="M 103,60 A 43,43 0 0,1 17,60" fill="none"/>
               
-              <text font-size="7.5" font-weight="900" fill="#1e3a8a" letter-spacing="0.8">
-                <textPath href="#sealArcTop" startOffset="50%" text-anchor="middle">SRYN MANAGEMENT PVT LTD</textPath>
+              <text font-size="5.8" font-weight="900" fill="#1e3a8a" letter-spacing="0.3">
+                <textPath href="#sealArcTop" startOffset="50%" text-anchor="middle">SRYN MANAGEMENT PRIVATE LIMITED</textPath>
               </text>
-              <text font-size="6.2" font-weight="800" fill="#1e3a8a" letter-spacing="0.5">
+              <text font-size="6.0" font-weight="800" fill="#1e3a8a" letter-spacing="0.4">
                 <textPath href="#sealArcBottom" startOffset="50%" text-anchor="middle">CIN: U51900UP2022PTC169096</textPath>
               </text>
               
-              <text x="60" y="52" font-size="9" font-weight="900" fill="#1e3a8a" text-anchor="middle" letter-spacing="1">SRYN</text>
-              <line x1="38" y1="56" x2="82" y2="56" stroke="#1e3a8a" stroke-width="1"/>
-              <text x="60" y="64" font-size="5.5" font-weight="800" fill="#de3163" text-anchor="middle" letter-spacing="0.5">CORPORATE SEAL</text>
-              <text x="60" y="72" font-size="5" font-weight="700" fill="#1e3a8a" text-anchor="middle">AGRA / NOIDA</text>
+              <text x="60" y="51" font-size="9.5" font-weight="900" fill="#1e3a8a" text-anchor="middle" letter-spacing="1">SRYN</text>
+              <line x1="36" y1="55" x2="84" y2="55" stroke="#1e3a8a" stroke-width="1"/>
+              <text x="60" y="63" font-size="5.5" font-weight="800" fill="#de3163" text-anchor="middle" letter-spacing="0.5">CORPORATE SEAL</text>
+              <text x="60" y="71" font-size="4.8" font-weight="700" fill="#1e3a8a" text-anchor="middle">★ OFFICIAL STAMP ★</text>
             </svg>
           </div>
         </div>
@@ -972,10 +972,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: Upgrade templates to include Corporate Seal and Naveen Sharma (Director) signature
+          // Self-healing check: Upgrade templates to include updated Corporate Seal with full name
           const hr = templates.find(t => t.role === 'HR');
-          if (!hr || !hr.content || !hr.content.includes("Naveen Sharma")) {
-            console.log('SRYN: Upgrading Firestore offer templates with Corporate Seal & Naveen Sharma (Director) Signature...');
+          if (!hr || !hr.content || !hr.content.includes("OFFICIAL STAMP")) {
+            console.log('SRYN: Upgrading Firestore offer templates with full company name Corporate Seal...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -990,7 +990,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (!localHR || !localHR.content || !localHR.content.includes("Naveen Sharma")) {
+    if (!localHR || !localHR.content || !localHR.content.includes("OFFICIAL STAMP")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
