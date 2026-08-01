@@ -204,10 +204,13 @@ const HRDashboard = () => {
   const [newLeadForm, setNewLeadForm] = useState({ fullName: '', mobile: '', email: '', project: '', roleApplied: 'Field Executive' });
 
   // Filtered Leads
-  const hrLeads = leads.filter(l => l.assignedTo === currentUser?.uid || currentUser?.role === 'Admin'); // HR sees assigned leads
+  const hrLeads = (leads || []).filter(l => l && (l.assignedTo === currentUser?.uid || currentUser?.role === 'Admin'));
   const filteredLeads = hrLeads.filter(lead => {
-    const matchesSearch = lead.fullName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          lead.mobile.includes(searchTerm);
+    if (!lead) return false;
+    const nameStr = (lead.fullName || '').toLowerCase();
+    const mobileStr = lead.mobile || '';
+    const searchStr = (searchTerm || '').toLowerCase();
+    const matchesSearch = nameStr.includes(searchStr) || mobileStr.includes(searchTerm || '');
     const matchesStatus = statusFilter === 'All' || lead.status === statusFilter;
     const matchesDate = !dateFilter || lead.date === dateFilter;
 
@@ -392,7 +395,7 @@ const HRDashboard = () => {
                         <strong>{l.fullName}</strong>
                         <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Project: {l.project}</div>
                       </div>
-                      <span className={`badge badge-${l.status.toLowerCase()}`}>{l.status}</span>
+                      <span className={`badge badge-${(l.status || 'new').toLowerCase()}`}>{l.status || 'New'}</span>
                     </div>
                   ))}
                 </div>
@@ -486,7 +489,7 @@ const HRDashboard = () => {
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{l.project}</div>
                         </td>
                         <td>
-                          <span className={`badge badge-${l.status.toLowerCase()}`}>{l.status}</span>
+                          <span className={`badge badge-${(l.status || 'new').toLowerCase()}`}>{l.status || 'New'}</span>
                         </td>
                         <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {l.feedback || 'No logs entered.'}

@@ -41,6 +41,40 @@ const AppLayout = ({ children }) => {
   );
 };
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("SRYN Portal Render Error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '60px 20px', textAlign: 'center', maxWidth: '600px', margin: '80px auto', background: '#ffffff', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+          <h2 style={{ color: '#de3163', fontSize: '1.6rem', marginBottom: '12px' }}>SRYN Management Portal</h2>
+          <p style={{ color: '#475569', marginBottom: '24px' }}>Session update detected. Please click below to reload your dashboard.</p>
+          <button 
+            onClick={() => { window.location.href = '/auth'; }} 
+            className="btn btn-primary"
+            style={{ padding: '12px 24px', background: '#de3163', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            Reload SRYN Portal Login
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // Route protection wrappers
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { currentUser, loading } = useApp();
@@ -58,10 +92,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/auth" replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
-    // If logged in but not authorized for this specific dashboard, redirect to their home dashboard
-    if (currentUser.role === 'Admin') return <Navigate to="/admin" replace />;
-    if (currentUser.role === 'HR' || currentUser.role === 'HR Executive' || currentUser.role === 'HR Intern') return <Navigate to="/hr" replace />;
+  const role = currentUser?.role || 'Candidate';
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    if (role === 'Admin') return <Navigate to="/admin" replace />;
+    if (role === 'HR' || role === 'HR Executive' || role === 'HR Intern') return <Navigate to="/hr" replace />;
     return <Navigate to="/candidate" replace />;
   }
 
@@ -71,51 +105,53 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 function App() {
   return (
     <AppProvider>
-      <Router>
-        <AppLayout>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/auth" element={<Auth />} />
+      <ErrorBoundary>
+        <Router>
+          <AppLayout>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/auth" element={<Auth />} />
 
-            {/* Candidate Dashboard */}
-            <Route 
-              path="/candidate" 
-              element={
-                <ProtectedRoute allowedRoles={['Candidate']}>
-                  <CandidateDashboard />
-                </ProtectedRoute>
-              } 
-            />
+              {/* Candidate Dashboard */}
+              <Route 
+                path="/candidate" 
+                element={
+                  <ProtectedRoute allowedRoles={['Candidate']}>
+                    <CandidateDashboard />
+                  </ProtectedRoute>
+                } 
+              />
 
-            {/* HR Dashboard */}
-            <Route 
-              path="/hr" 
-              element={
-                <ProtectedRoute allowedRoles={['HR', 'HR Executive', 'HR Intern', 'Admin']}>
-                  <HRDashboard />
-                </ProtectedRoute>
-              } 
-            />
+              {/* HR Dashboard */}
+              <Route 
+                path="/hr" 
+                element={
+                  <ProtectedRoute allowedRoles={['HR', 'HR Executive', 'HR Intern', 'Admin']}>
+                    <HRDashboard />
+                  </ProtectedRoute>
+                } 
+              />
 
-            {/* Admin Dashboard */}
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute allowedRoles={['Admin']}>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } 
-            />
+              {/* Admin Dashboard */}
+              <Route 
+                path="/admin" 
+                element={
+                  <ProtectedRoute allowedRoles={['Admin']}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } 
+              />
 
-            {/* Catch-all Redirect */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </AppLayout>
-      </Router>
+              {/* Catch-all Redirect */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </AppLayout>
+        </Router>
+      </ErrorBoundary>
     </AppProvider>
   );
 }
