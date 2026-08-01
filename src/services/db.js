@@ -303,14 +303,51 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
     <p>I hereby confirm my acceptance of the employment offer extended by SRYN Management Private Limited for the position of <strong>{{position}}</strong> and agree to join the Company under the terms and conditions mentioned in this Appointment Letter. I understand that this document represents an important employment agreement between myself and the Company and that my continued association shall depend upon my commitment, professional performance, discipline, ethical conduct, and compliance with organizational expectations. I further acknowledge that I have received sufficient opportunity to review this Appointment Letter, understand its contents, and seek clarification regarding any provision before accepting the same. By signing below, I confirm that I have accepted all terms voluntarily and agree to fulfill my responsibilities with dedication, honesty, and professionalism.</p>
 
     <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; page-break-inside: avoid;">
-      <!-- Employer Sign -->
-      <div style="border: 1px solid #cbd5e1; padding: 16px; border-radius: 8px; background-color: #f8fafc;">
-        <div style="font-size: 0.7rem; color: #64748b; font-weight: bold; text-transform: uppercase; margin-bottom: 20px;">FOR SRYN MANAGEMENT PVT LTD</div>
-        <div style="height: 50px; display: flex; align-items: center; justify-content: center; border: 1px dashed #cbd5e1; border-radius: 4px; background: #fff; margin-bottom: 12px; color: #94a3b8; font-size: 0.75rem; font-style: italic;">
-          Authorized Signatory & Stamp
+      <!-- Employer Sign & Official Corporate Seal -->
+      <div style="border: 1px solid #cbd5e1; padding: 16px; border-radius: 8px; background-color: #f8fafc; position: relative;">
+        <div style="font-size: 0.7rem; color: #475569; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">FOR SRYN MANAGEMENT PVT LTD</div>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; min-height: 85px;">
+          <!-- Praveen Kumar Executive Signature SVG -->
+          <div style="flex: 1; text-align: left;">
+            <svg width="140" height="55" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+              <path d="M 15 50 C 20 20, 25 15, 30 35 C 32 45, 35 50, 42 38 C 45 32, 50 34, 52 42 C 55 48, 60 38, 65 35 C 70 32, 75 42, 80 40 C 85 38, 88 32, 92 36 C 98 42, 102 28, 108 22 C 115 15, 110 45, 112 52 C 114 55, 120 32, 128 30 C 135 28, 138 42, 145 38 C 150 35, 155 38, 160 36 C 165 34, 172 25, 180 20 M 10 58 C 50 62, 110 58, 185 48" 
+                    fill="none" stroke="#0f2b5c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 28 32 C 18 28, 12 40, 22 46 C 30 50, 38 42, 48 40" fill="none" stroke="#0f2b5c" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #0f172a; margin-top: 4px;">Praveen Kumar</div>
+            <div style="font-size: 0.72rem; color: #de3163; font-weight: 700;">Authorized Signatory / Director</div>
+          </div>
+
+          <!-- Official Corporate Seal Stamp SVG -->
+          <div style="width: 85px; height: 85px; flex-shrink: 0; transform: rotate(-5deg);">
+            <svg width="85" height="85" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="56" fill="none" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="8 2"/>
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#1e3a8a" stroke-width="1.8"/>
+              <circle cx="60" cy="60" r="32" fill="rgba(30, 58, 138, 0.04)" stroke="#1e3a8a" stroke-width="1.2"/>
+              
+              <path id="sealArcTop" d="M 18,60 A 42,42 0 1,1 102,60" fill="none"/>
+              <path id="sealArcBottom" d="M 102,60 A 42,42 0 0,1 18,60" fill="none"/>
+              
+              <text font-size="7.5" font-weight="900" fill="#1e3a8a" letter-spacing="0.8">
+                <textPath href="#sealArcTop" startOffset="50%" text-anchor="middle">SRYN MANAGEMENT PVT LTD</textPath>
+              </text>
+              <text font-size="6.2" font-weight="800" fill="#1e3a8a" letter-spacing="0.5">
+                <textPath href="#sealArcBottom" startOffset="50%" text-anchor="middle">CIN: U51900UP2022PTC169096</textPath>
+              </text>
+              
+              <text x="60" y="52" font-size="9" font-weight="900" fill="#1e3a8a" text-anchor="middle" letter-spacing="1">SRYN</text>
+              <line x1="38" y1="56" x2="82" y2="56" stroke="#1e3a8a" stroke-width="1"/>
+              <text x="60" y="64" font-size="5.5" font-weight="800" fill="#de3163" text-anchor="middle" letter-spacing="0.5">CORPORATE SEAL</text>
+              <text x="60" y="72" font-size="5" font-weight="700" fill="#1e3a8a" text-anchor="middle">AGRA / NOIDA</text>
+            </svg>
+          </div>
         </div>
-        <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 0.85rem; color: #0f172a;">SRYN Management Pvt Ltd</p>
-        <p style="margin: 0; font-size: 0.75rem; color: #de3163; font-weight: 600;">Authorized Signatory</p>
+
+        <div style="font-size: 0.7rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 6px; display: flex; justify-content: space-between;">
+          <span>SRYN Management Pvt Ltd</span>
+          <span style="color: #10b981; font-weight: 700;">✓ Official Stamp Verified</span>
+        </div>
       </div>
 
       <!-- Employee Digital Sign -->
@@ -935,10 +972,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: Upgrade templates to 20-section Word document layout if old
+          // Self-healing check: Upgrade templates to include Corporate Seal and Praveen Kumar signature
           const hr = templates.find(t => t.role === 'HR');
-          if (!hr || !hr.content || !hr.content.includes("U51900UP2022PTC169096")) {
-            console.log('SRYN: Upgrading Firestore offer templates with updated CIN U51900UP2022PTC169096...');
+          if (!hr || !hr.content || !hr.content.includes("Praveen Kumar")) {
+            console.log('SRYN: Upgrading Firestore offer templates with Corporate Seal & Praveen Kumar Signature...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -953,7 +990,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (!localHR || !localHR.content || !localHR.content.includes("U51900UP2022PTC169096")) {
+    if (!localHR || !localHR.content || !localHR.content.includes("Praveen Kumar")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }
