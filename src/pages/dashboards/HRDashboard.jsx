@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import Profile from '../Profile';
 import { 
-  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2, Menu
+  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2, Menu,
+  BookOpen, Copy, Check, Globe, Video, MessageSquare, Target, Award, ShieldCheck, Sparkles, ChevronRight, HelpCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,9 +13,21 @@ const HRDashboard = () => {
 
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [scriptRound, setScriptRound] = useState('round1'); // 'round1' | 'round2'
+  const [scriptLang, setScriptLang] = useState('hi'); // 'hi' | 'en'
+  const [copiedSnippet, setCopiedSnippet] = useState(null);
+  const [scriptCandidateName, setScriptCandidateName] = useState('');
+
   const [offerSigned, setOfferSigned] = useState(() => {
     return localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true';
   });
+
+  const copyToClipboard = (text, id) => {
+    navigator.clipboard.writeText(text);
+    setCopiedSnippet(id);
+    showToast("Script copied to clipboard!", "success");
+    setTimeout(() => setCopiedSnippet(null), 2500);
+  };
 
   const handleSignOffer = () => {
     localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
@@ -289,6 +302,12 @@ const HRDashboard = () => {
             style={{ ...sidebarLinkStyle, ...(activeTab === 'leads' ? activeLinkStyle : {}) }}
           >
             <Users size={18} /> Leads CRM
+          </button>
+          <button 
+            onClick={() => { setActiveTab('scripts'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'scripts' ? activeLinkStyle : {}) }}
+          >
+            <BookOpen size={18} /> Interview Scripts
           </button>
           <button 
             onClick={() => { setActiveTab('reports'); setSidebarOpen(false); }}
@@ -606,7 +625,425 @@ const HRDashboard = () => {
             </div>
           </div>
         )}
-        {/* --- COMPLETE PROFILE --- */}
+        {/* --- INTERVIEW SCRIPTS TAB --- */}
+        {activeTab === 'scripts' && (
+          <div style={tabContentStyle}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.8rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <BookOpen size={26} color="var(--primary-color)" /> HR Interview Calling & Pitch Scripts
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>
+                  Interactive multi-lingual pitch guide for SRYN Customer Relationship Executive hiring.
+                </p>
+              </div>
+
+              {/* Language & Candidate Name Toolbar */}
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', background: 'var(--surface-color)', padding: '4px 8px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.8rem', marginRight: '8px', color: 'var(--text-muted)' }}>Live Candidate Name:</span>
+                  <input
+                    type="text"
+                    placeholder="Candidate Name"
+                    value={scriptCandidateName}
+                    onChange={(e) => setScriptCandidateName(e.target.value)}
+                    style={{ background: 'none', border: 'none', color: 'var(--text-primary)', outline: 'none', fontSize: '0.85rem', width: '130px', fontWeight: 'bold' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', background: 'var(--surface-color)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <button
+                    onClick={() => setScriptLang('hi')}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      fontSize: '0.8rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      background: scriptLang === 'hi' ? 'var(--primary-color)' : 'transparent',
+                      color: scriptLang === 'hi' ? '#fff' : 'var(--text-secondary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    🇮🇳 Hindi / Hinglish
+                  </button>
+                  <button
+                    onClick={() => setScriptLang('en')}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      fontSize: '0.8rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      background: scriptLang === 'en' ? 'var(--primary-color)' : 'transparent',
+                      color: scriptLang === 'en' ? '#fff' : 'var(--text-secondary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    🌐 English
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Round Switcher Tabs */}
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+              <button
+                onClick={() => setScriptRound('round1')}
+                className={`btn ${scriptRound === 'round1' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}
+              >
+                <PhoneCall size={18} /> First Round: Telephonic Script
+              </button>
+              <button
+                onClick={() => setScriptRound('round2')}
+                className={`btn ${scriptRound === 'round2' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px' }}
+              >
+                <Video size={18} /> Second Round: Video Interview Script
+              </button>
+            </div>
+
+            {/* --- ROUND 1 TELEPHONIC SCRIPT --- */}
+            {scriptRound === 'round1' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {/* Script Header Card */}
+                <div className="card" style={{ background: 'linear-gradient(135deg, rgba(222,49,99,0.08), rgba(37,99,235,0.04))', border: '1px solid rgba(222,49,99,0.2)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div>
+                      <span className="badge badge-hired" style={{ marginBottom: '8px' }}>Round 1 Telephonic Calling</span>
+                      <h3 style={{ fontSize: '1.4rem' }}>Customer Relationship Executive Hiring Pitch</h3>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Company: SRYN Management Pvt. Ltd. | Position: CRE | Salary: ₹15,000 / month</span>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(
+                        scriptLang === 'hi' 
+                          ? `Hello, kya meri baat ${scriptCandidateName || '[Candidate Name]'} se ho rahi hai? SRYN Management Pvt. Ltd. se Customer Relationship Executive hiring ke liye baat kar raha/rahi hoon.` 
+                          : `Hello, may I speak with ${scriptCandidateName || '[Candidate Name]'}? Calling from SRYN Management Pvt. Ltd. for Customer Relationship Executive hiring.`,
+                        'r1-full'
+                      )}
+                      className="btn btn-outline"
+                      style={{ fontSize: '0.8rem', padding: '8px 14px' }}
+                    >
+                      {copiedSnippet === 'r1-full' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Quick Intro
+                    </button>
+                  </div>
+                </div>
+
+                {/* Step 1: Introduction */}
+                <div className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Step 1: Introduction & Courtesy Permission</span>
+                    <button onClick={() => copyToClipboard(scriptLang === 'hi' ? `Hello, kya meri baat ${scriptCandidateName || '[Candidate Name]'} se ho rahi hai? Hi ${scriptCandidateName || '[Candidate Name]'}, mera naam ${currentUser?.fullName || '[Your Name]'} hai aur main SRYN Management Pvt. Ltd. se baat kar raha/rahi hoon. Kya abhi 2-3 minute baat karne ke liye sahi time hai?` : `Hello, may I speak with ${scriptCandidateName || '[Candidate Name]'}? Hi ${scriptCandidateName || '[Candidate Name]'}, my name is ${currentUser?.fullName || '[Your Name]'}, and I'm calling from SRYN Management Pvt. Ltd. Is this a good time to talk? It will only take 2–3 minutes.`, 's1')} className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.75rem' }}>
+                      {copiedSnippet === 's1' ? <Check size={14} /> : <Copy size={14} />} Copy
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '0.95rem', lineHeight: '1.6', background: 'var(--surface-color)', padding: '12px 16px', borderRadius: '8px', borderLeft: '3px solid var(--primary-color)' }}>
+                    {scriptLang === 'hi' ? (
+                      <>
+                        "Hello, kya meri baat <strong>{scriptCandidateName || '[Candidate Name]'}</strong> se ho rahi hai?<br/>
+                        Hi <strong>{scriptCandidateName || '[Candidate Name]'}</strong>, mera naam <strong>{currentUser?.fullName || '[Your Name]'}</strong> hai, aur main <strong>SRYN Management Pvt. Ltd.</strong> se baat kar raha/rahi hoon.<br/>
+                        Kya abhi 2–3 minute baat karne ke liye sahi time hai?"
+                      </>
+                    ) : (
+                      <>
+                        "Hello, may I speak with <strong>{scriptCandidateName || '[Candidate Name]'}</strong>?<br/>
+                        Hi <strong>{scriptCandidateName || '[Candidate Name]'}</strong>, my name is <strong>{currentUser?.fullName || '[Your Name]'}</strong>, and I'm calling from <strong>SRYN Management Pvt. Ltd.</strong><br/>
+                        Is this a good time to talk? It will only take 2–3 minutes."
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                {/* Step 2: Role & Hometown Opportunity */}
+                <div className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Step 2: Opportunity & Hometown Work Pitch</span>
+                    <button onClick={() => copyToClipboard(scriptLang === 'hi' ? `Hum abhi Customer Relationship Executives hire kar rahe hain. Sabse achhi baat ye hai ki hum aapko aapke hometown mein work opportunity de rahe hain. Offered salary ₹15,000 per month hai.` : `We are currently hiring Customer Relationship Executives for our financial services division. The best part is that we provide work opportunities in your hometown with salary ₹15,000 per month.`, 's2')} className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.75rem' }}>
+                      {copiedSnippet === 's2' ? <Check size={14} /> : <Copy size={14} />} Copy
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '0.95rem', lineHeight: '1.6', background: 'var(--surface-color)', padding: '12px 16px', borderRadius: '8px', borderLeft: '3px solid var(--secondary-color)' }}>
+                    {scriptLang === 'hi' ? (
+                      <>
+                        "Bahut badiya!<br/>
+                        Hum abhi apni financial services division ke liye <strong>Customer Relationship Executives</strong> hire kar rahe hain. Aapki profile is opportunity ke liye suitable hai.<br/>
+                        Sabse achhi baat ye hai ki hum aapko aapke <strong>hometown mein work opportunity</strong> de rahe hain, toh aapko relocate hone ki zaroorat nahi hai.<br/>
+                        Offered salary <strong>₹15,000 per month</strong> hai, saath mein performance-based growth opportunities hain."
+                      </>
+                    ) : (
+                      <>
+                        "Great!<br/>
+                        We are currently hiring <strong>Customer Relationship Executives</strong> for our financial services division. I came across your profile and found it suitable for this opportunity.<br/>
+                        The best part is that we provide <strong>work opportunities in your hometown</strong>, so you don't need to relocate.<br/>
+                        The offered salary is <strong>₹15,000 per month</strong>, along with performance-based growth opportunities."
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                {/* Step 3: FD Card Benefits */}
+                <div className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--info-color)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Step 3: Role & FD Card Product Explanation</span>
+                    <button onClick={() => copyToClipboard(scriptLang === 'hi' ? `Aapki responsibility hamare FD Card ke baare mein customers ko guide karna hoga. FD ₹2,000 se ₹5,00,000 tak, 7% annual interest, aur CIBIL score builder.` : `Your responsibility will be to guide customers about our FD Card. FD from ₹2,000 to ₹5,00,000 with 7% annual interest and CIBIL building benefits.`, 's3')} className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '0.75rem' }}>
+                      {copiedSnippet === 's3' ? <Check size={14} /> : <Copy size={14} />} Copy
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '0.95rem', lineHeight: '1.6', background: 'var(--surface-color)', padding: '12px 16px', borderRadius: '8px', borderLeft: '3px solid var(--info-color)', marginBottom: '12px' }}>
+                    {scriptLang === 'hi' ? (
+                      "Aapki responsibility hamare FD Card ke baare mein customers ko guide karna aur application process mein help karna hoga. Hamara card un customers ke liye specially designed hai jo apna CIBIL score banana ya improve karna chahte hain."
+                    ) : (
+                      "Your responsibility will be to guide customers about our FD Card and help them complete the application process. Our company offers an FD-backed card specially designed for customers who want to improve or build their CIBIL score."
+                    )}
+                  </p>
+
+                  <div style={{ background: 'rgba(37,99,235,0.05)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(37,99,235,0.15)' }}>
+                    <strong style={{ fontSize: '0.85rem', color: 'var(--info-color)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Key FD Card Benefits to Explain:</strong>
+                    <ul style={{ paddingLeft: '20px', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                      <li>FD starting from <strong>₹2,000 up to ₹5,00,000</strong></li>
+                      <li>Fixed Deposit earns <strong>7% annual interest</strong></li>
+                      <li>FD remains in the customer's own name</li>
+                      <li>Instant credit to linked card account upon FD closure process</li>
+                      <li>Helps customers build a strong <strong>CIBIL score</strong> while their money earns interest</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Step 4: Simple Hiring Process & Payout */}
+                <div className="card">
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--warning-color)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '10px' }}>Step 4: Hiring Process & Salary Payout Schedule</span>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '0.9rem' }}>
+                    <div style={{ background: 'var(--surface-color)', padding: '14px', borderRadius: '8px' }}>
+                      <strong>2-Round Simple Hiring:</strong>
+                      <p style={{ marginTop: '6px', color: 'var(--text-secondary)' }}>
+                        1st Round: Telephonic Interview<br/>
+                        2nd Round: Video Interview<br/>
+                        Then: Official Offer Letter & Dashboard Activation.
+                      </p>
+                    </div>
+                    <div style={{ background: 'var(--surface-color)', padding: '14px', borderRadius: '8px' }}>
+                      <strong>Salary Cycle & Payout:</strong>
+                      <p style={{ marginTop: '6px', color: 'var(--text-secondary)' }}>
+                        Salary is processed after completing <strong>30 days of work</strong>.<br/>
+                        Payment credited within <strong>5–7 working days</strong> post cycle.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 5: Interview Invite Closing */}
+                <div className="card" style={{ border: '2px solid var(--primary-color)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase' }}>Step 5: Closing Line & Video Interview Invitation</span>
+                    <button onClick={() => copyToClipboard(scriptLang === 'hi' ? `Would you be interested in attending our second-round video interview to know more about the company, salary structure, training process, and growth opportunities?` : `Would you be interested in attending our second-round video interview to know more about the company, salary structure, training process, and growth opportunities?`, 's5')} className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
+                      {copiedSnippet === 's5' ? <Check size={16} /> : <Copy size={16} />} Copy Closing Pitch
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '1rem', fontWeight: '600', lineHeight: '1.6', color: 'var(--text-primary)' }}>
+                    {scriptLang === 'hi' ? (
+                      `"Aapki profile dekhte hue, I believe ye opportunity aapke liye bahut achhi fit ho sakti hai. Kya aap hamare second-round video interview ko attend karne mein interested hain jahan company, salary structure, training aur growth ke baare mein detail milegi?"`
+                    ) : (
+                      `"Based on your profile, I believe this opportunity can be a good fit for you. Would you be interested in attending our second-round video interview to know more about the company, salary structure, training process, and growth opportunities?"`
+                    )}
+                  </p>
+                </div>
+
+                {/* Interactive Objection Handling Cards */}
+                <h3 style={{ fontSize: '1.2rem', marginTop: '10px' }}>⚡ Interactive Candidate Objection Handlers</h3>
+                <div className="grid-2">
+                  {/* Objection 1 */}
+                  <div className="card" style={{ borderLeft: '4px solid var(--danger-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <strong style={{ color: 'var(--danger-color)', fontSize: '0.9rem' }}>If Candidate Says "I'm Not Interested"</strong>
+                      <button onClick={() => copyToClipboard(scriptLang === 'hi' ? `Main samajh sakta/samajhti hoon. Par ye ₹15,000 fixed salary wali hometown job hai, official offer letter aur training ke saath. Sirf 15-20 minute ka video interview hai, jiske baad aap decide kar sakte hain.` : `I completely understand. Before you decide, I'd just like to mention that this is a customer relationship role with a fixed salary of ₹15,000, work in your hometown, official offer letter, employee dashboard, and training support. It will only take around 15–20 minutes to attend the video interview.`, 'obj1')} className="btn btn-outline" style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                        {copiedSnippet === 'obj1' ? <Check size={12} /> : <Copy size={12} />} Copy
+                      </button>
+                    </div>
+                    <p style={{ fontSize: '0.88rem', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                      {scriptLang === 'hi' ? (
+                        `"Main samajh sakta/samajhti hoon. Par aapse kehna chahunga/chahungi ki ye Customer Relationship role hai jismein ₹15,000 fixed salary, hometown work opportunity, official offer letter, employee dashboard aur full training support milta hai. Sirf 15–20 minute ka video interview hai, jiske baad aap decide kar sakte hain. Kya aap ek baar interview attend karke final decision lena chahenge?"`
+                      ) : (
+                        `"I completely understand. Before you decide, I'd just like to mention that this is a customer relationship role with a fixed salary of ₹15,000, work opportunities in your hometown, official offer letter, employee dashboard, training support, and future career growth. It will only take around 15–20 minutes to attend the video interview, after which you can decide. Would you be willing to attend the interview once and then make your final decision?"`
+                      )}
+                    </p>
+                  </div>
+
+                  {/* Objection 2 */}
+                  <div className="card" style={{ borderLeft: '4px solid var(--warning-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <strong style={{ color: 'var(--warning-color)', fontSize: '0.9rem' }}>If Candidate Asks "Is There Any Target?"</strong>
+                      <button onClick={() => copyToClipboard(scriptLang === 'hi' ? `Ye Customer Relationship role hai jahan aap FD Card services mein help karenge. Video interview mein HR team aapko work process, targets, incentives aur growth ke baare mein detail mein batayegi.` : `This is a customer relationship role where you'll assist customers with our FD Card services. During the interview, our HR team will explain the complete work process, expectations, incentives, and career growth in detail.`, 'obj2')} className="btn btn-outline" style={{ padding: '4px 8px', fontSize: '0.75rem' }}>
+                        {copiedSnippet === 'obj2' ? <Check size={12} /> : <Copy size={12} />} Copy
+                      </button>
+                    </div>
+                    <p style={{ fontSize: '0.88rem', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                      {scriptLang === 'hi' ? (
+                        `"Ye Customer Relationship role hai jahan aap customers ko hamari FD Card services mein assist karenge. Video interview ke dauran hamari HR team aapko complete work process, expectations, incentives aur career growth detail mein batayegi."`
+                      ) : (
+                        `"This is a customer relationship role where you'll assist customers with our FD Card services. During the interview, our HR team will explain the complete work process, expectations, incentives, and career growth in detail."`
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* --- ROUND 2 VIDEO INTERVIEW SCRIPT --- */}
+            {scriptRound === 'round2' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div className="card" style={{ background: 'linear-gradient(135deg, rgba(37,99,235,0.08), rgba(222,49,99,0.04))', border: '1px solid rgba(37,99,235,0.2)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div>
+                      <span className="badge badge-calling" style={{ marginBottom: '8px' }}>Round 2 Video Interview & Selection</span>
+                      <h3 style={{ fontSize: '1.4rem' }}>Second Round Detailed Orientation & Evaluation Script</h3>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Position: Customer Relationship Executive | Target: ₹1 Lakh FD Value (60% Minimum for ₹15k Salary)</span>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(
+                        `Hello ${scriptCandidateName || '[Candidate Name]'}, welcome to the second round video interview with SRYN Management Pvt. Ltd.`,
+                        'r2-intro'
+                      )}
+                      className="btn btn-outline"
+                      style={{ fontSize: '0.8rem', padding: '8px 14px' }}
+                    >
+                      {copiedSnippet === 'r2-intro' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Welcome Intro
+                    </button>
+                  </div>
+                </div>
+
+                {/* Section 1: Welcome & Tone */}
+                <div className="card">
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>1. Welcome & Interview Purpose</span>
+                  <p style={{ fontSize: '0.95rem', lineHeight: '1.6', background: 'var(--surface-color)', padding: '12px 16px', borderRadius: '8px', borderLeft: '3px solid var(--primary-color)' }}>
+                    {scriptLang === 'hi' ? (
+                      `"Hello ${scriptCandidateName || '[Candidate Name]'}, SRYN Management Pvt. Ltd. ke second round video interview mein aapka swagat hai. Aaj ka interview sirf candidate select karne ke liye nahi hai, balki aapko job profile, responsibilities aur growth ke baare mein poori jankari dene ke liye hai taaki agar aap hamare saath judte hain toh aapko apna kaam clear rahe. Koi bhi sawaal ho toh zaroor poochiye."`
+                    ) : (
+                      `"Hello ${scriptCandidateName || '[Candidate Name]'}, welcome to the second round of your interview with SRYN Management Pvt. Ltd. First of all, thank you for joining us today. This interview is not just about selecting candidates—it is also about helping you understand the complete job profile so that, if you join us, you know exactly what your responsibilities, growth opportunities, and expectations will be. Please feel free to ask questions at any point."`
+                    )}
+                  </p>
+                </div>
+
+                {/* Section 2: About SRYN */}
+                <div className="card">
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--secondary-color)', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>2. About SRYN Management Pvt. Ltd.</span>
+                  <p style={{ fontSize: '0.92rem', lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                    {scriptLang === 'hi' ? (
+                      "SRYN Management Pvt. Ltd. financial services sector mein kaam karti hai. Hamara uddeshya customers ko sahi financial products dena hai jisse unka credit journey behtar bane aur unhe Fixed Deposits par 7% annual interest mil sake. Hum transparency, proper training, aur employees ki long-term career growth par focus karte hain."
+                    ) : (
+                      "SRYN Management Pvt. Ltd. works in the financial services sector. Our objective is to help customers access financial products that can support their credit journey while allowing them to earn returns on their Fixed Deposits. We believe in transparency, proper training, and long-term career growth for our employees."
+                    )}
+                  </p>
+                </div>
+
+                {/* Section 3: Job Role & No Field Collection */}
+                <div className="card" style={{ borderLeft: '4px solid var(--info-color)' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--info-color)', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>3. Job Role Clarity (Customer Relationship Executive)</span>
+                  <p style={{ fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '12px' }}>
+                    {scriptLang === 'hi' ? (
+                      `Aapki designation Customer Relationship Executive ki hogi. Ye Customer Relationship aur Acquisition role hai. Aapka kaam logon se milna, trust build karna, FD Card explain karna, aur application complete karvana hai. THIS IS NOT A FIELD COLLECTION JOB. Aapko kisi se cash collect nahi karna hai.`
+                    ) : (
+                      `The position you have applied for is Customer Relationship Executive. This is a customer relationship and customer acquisition role. Your responsibility is to meet people, build trust, explain our FD Card product, answer customer queries, and help interested customers complete their application. THIS IS NOT A FIELD COLLECTION JOB, and you will never collect cash from customers on behalf of the company.`
+                    )}
+                  </p>
+                  <div style={{ background: 'var(--surface-color)', padding: '12px 16px', borderRadius: '8px', fontSize: '0.85rem' }}>
+                    <strong>Network Building Points to Explain:</strong>
+                    <p style={{ marginTop: '4px', color: 'var(--text-secondary)' }}>
+                      Start with personal local network: Family, friends, relatives, neighbours, local shopkeepers, salaried employees, business owners.<br/>
+                      As company expands digital marketing campaigns, qualified customer inquiries are assigned based on performance.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Section 4: Target Breakdown & 60% Criteria */}
+                <div className="card" style={{ border: '2px solid var(--warning-color)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--warning-color)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Target size={18} /> 4. Target Structure & Salary Eligibility
+                    </span>
+                    <span className="badge badge-calling">Target: ₹1,00,000 FD Value</span>
+                  </div>
+
+                  <div className="grid-3" style={{ marginBottom: '16px' }}>
+                    <div style={{ background: 'var(--surface-color)', padding: '14px', borderRadius: '8px', textAnchor: 'middle' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Monthly Target</div>
+                      <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--text-primary)' }}>₹1,00,000</div>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Total FD Business</span>
+                    </div>
+                    <div style={{ background: 'rgba(16,185,129,0.08)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.2)' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--success-color)', fontWeight: 'bold' }}>Minimum Eligibility (60%)</div>
+                      <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--success-color)' }}>₹60,000</div>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>For Fixed Salary ₹15,000</span>
+                    </div>
+                    <div style={{ background: 'rgba(37,99,235,0.08)', padding: '14px', borderRadius: '8px', border: '1px solid rgba(37,99,235,0.2)' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--info-color)', fontWeight: 'bold' }}>Primary Focus FDs</div>
+                      <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--info-color)' }}>₹2,000 & ₹5,000</div>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Affordable for all</span>
+                    </div>
+                  </div>
+
+                  <p style={{ fontSize: '0.9rem', lineHeight: '1.6', background: 'var(--surface-color)', padding: '12px', borderRadius: '8px' }}>
+                    {scriptLang === 'hi' ? (
+                      `"Target sun kar ghabraney ki zaroorat nahi hai. Aapko ek customer se 1 Lakh nahi lana hai. Humara daily focus ₹2,000 aur ₹5,000 ki FDs par rehta hai. 12 se 15 choti FDs poore 30 din mein complete karne par aapka minimum 60% requirement aasaani se poora ho jata hai!"`
+                    ) : (
+                      `"You are not expected to find ₹1 lakh from one customer. Our day-to-day focus is on ₹2,000 and ₹5,000 FDs. Completing 12 to 15 small FDs across the month easily achieves your 60% salary requirement!"`
+                    )}
+                  </p>
+                </div>
+
+                {/* Section 5: Training & Company Support Suite */}
+                <div className="card">
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--success-color)', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>5. Complete Training & Support Package Provided</span>
+                  <div className="grid-2" style={{ fontSize: '0.88rem' }}>
+                    <ul style={{ paddingLeft: '20px', lineHeight: '1.7' }}>
+                      <li>Complete Product Training</li>
+                      <li>Customer Communication & Pitch Training</li>
+                      <li>Sales Conversation & Objection Handling</li>
+                      <li>Live Application Process Training</li>
+                      <li>Employee Dashboard Access</li>
+                    </ul>
+                    <ul style={{ paddingLeft: '20px', lineHeight: '1.7' }}>
+                      <li>Official Offer Letter & Employee ID Card</li>
+                      <li>Product Brochures & Digital Presentation</li>
+                      <li>WhatsApp Marketing Material</li>
+                      <li>Social Media Promotional Creatives</li>
+                      <li>Daily Manager Guidance & Support</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Section 6: Candidate Readiness Checklist */}
+                <div className="card" style={{ background: 'var(--surface-color)' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase', display: 'block', marginBottom: '10px' }}>6. Candidate Evaluation Questions (Ask Candidate)</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.9rem' }}>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      <CheckCircle2 size={16} color="var(--primary-color)" />
+                      <span>Are you comfortable speaking with new people every day?</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      <CheckCircle2 size={16} color="var(--primary-color)" />
+                      <span>Can you build relationships within your local area?</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      <CheckCircle2 size={16} color="var(--primary-color)" />
+                      <span>Are you willing to learn and follow the company's process?</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      <CheckCircle2 size={16} color="var(--primary-color)" />
+                      <span>Are you looking for a long-term opportunity where communication skills help you grow?</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         {activeTab === 'profile' && (
           <div style={tabContentStyle}>
             <Profile />
