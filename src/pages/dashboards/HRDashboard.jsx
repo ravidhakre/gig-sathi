@@ -229,15 +229,28 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
   };
 
   const handleSignOffer = () => {
-    localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
+    if (currentUser?.uid) {
+      localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
+    }
     setOfferSigned(true);
-    showToast("Offer letter accepted and signed successfully!", "success");
+    if (typeof showToast === 'function') {
+      showToast("Offer letter accepted and signed successfully!", "success");
+    }
   };
 
   const handleDownloadPDF = (person = null) => {
-    const target = person || currentUser;
-    const printWindow = window.open('', '_blank');
-    const content = renderOfferLetter(target);
+    try {
+      const target = person || currentUser || {};
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        if (typeof showToast === 'function') {
+          showToast("Pop-up blocked! Please allow pop-ups for this site to view/print your Offer Letter.", "warning");
+        } else {
+          alert("Pop-up blocked! Please allow pop-ups for this site to view/print your Offer Letter.");
+        }
+        return;
+      }
+      const content = renderOfferLetter(target);
     
     printWindow.document.write(`
       <html>
@@ -359,45 +372,58 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
       </html>
     `);
     printWindow.document.close();
+    } catch (err) {
+      console.error("Error opening print window:", err);
+      if (typeof showToast === 'function') {
+        showToast("Unable to open print preview. Please check browser pop-up settings.", "warning");
+      }
+    }
   };
 
   const renderOfferLetter = (targetPerson = null) => {
-    const person = targetPerson || currentUser;
-    const hrTemplate = templates.find(t => t.role === (person?.role || 'HR')) || templates.find(t => t.role === 'Candidate') || templates.find(t => t.role === 'HR') || {
-      content: `<h3>SRYN MANAGEMENT PVT LTD</h3><p>Dear {{name}}, offer letter loading...</p>`
-    };
-    
-    const todayStr = person?.date || new Date().toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    try {
+      const person = targetPerson || currentUser || {};
+      const safeTemplates = templates || [];
+      const hrTemplate = safeTemplates.find(t => t.role === (person?.role || 'HR')) 
+        || safeTemplates.find(t => t.role === 'Candidate') 
+        || safeTemplates.find(t => t.role === 'HR') 
+        || { content: `<h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Dear {{name}}, your official offer letter is loading...</p>` };
+      
+      const todayStr = person?.date || new Date().toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
 
-    const userAddress = [
-      person?.address,
-      person?.city,
-      person?.state,
-      person?.pincode
-    ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
+      const userAddress = [
+        person?.address,
+        person?.city,
+        person?.state,
+        person?.pincode
+      ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
 
-    const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Field Executive');
-    const userSalary = person?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
-    const userWorkingHours = person?.workingHours || '11:00 A.M. to 7:30 P.M.';
-    const userPerformanceTarget = person?.performanceTarget || 'Forty (40) candidates';
+      const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Field Executive');
+      const userSalary = person?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
+      const userWorkingHours = person?.workingHours || '11:00 A.M. to 7:30 P.M.';
+      const userPerformanceTarget = person?.performanceTarget || 'Forty (40) candidates';
 
-    let html = (hrTemplate.content || '')
-      .replace(/{{name}}/g, person?.fullName || 'Candidate')
-      .replace(/{{email}}/g, person?.email || 'N/A')
-      .replace(/{{mobile}}/g, person?.mobile || 'N/A')
-      .replace(/{{address}}/g, userAddress)
-      .replace(/{{date}}/g, todayStr)
-      .replace(/{{position}}/g, userRole)
-      .replace(/{{role}}/g, userRole)
-      .replace(/{{salary}}/g, userSalary)
-      .replace(/{{working_hours}}/g, userWorkingHours)
-      .replace(/{{performance_target}}/g, userPerformanceTarget);
+      let html = (hrTemplate?.content || '')
+        .replace(/{{name}}/g, person?.fullName || 'Candidate')
+        .replace(/{{email}}/g, person?.email || 'N/A')
+        .replace(/{{mobile}}/g, person?.mobile || 'N/A')
+        .replace(/{{address}}/g, userAddress)
+        .replace(/{{date}}/g, todayStr)
+        .replace(/{{position}}/g, userRole)
+        .replace(/{{role}}/g, userRole)
+        .replace(/{{salary}}/g, userSalary)
+        .replace(/{{working_hours}}/g, userWorkingHours)
+        .replace(/{{performance_target}}/g, userPerformanceTarget);
 
-    return html;
+      return html;
+    } catch (err) {
+      console.error("Error in renderOfferLetter:", err);
+      return `<div style="padding: 30px; text-align: center; color: #de3163;"><h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Loading Offer Letter details. Please wait...</p></div>`;
+    }
   };
   
   // CRM Filters
