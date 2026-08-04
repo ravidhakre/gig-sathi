@@ -63,7 +63,7 @@ class ErrorBoundary extends React.Component {
           <p style={{ color: '#475569', fontSize: '0.95rem', marginBottom: '24px', lineHeight: '1.5' }}>
             Portal session synced. Please reload your dashboard or reset session if required.
           </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '16px' }}>
             <button 
               onClick={() => { window.location.reload(); }} 
               className="btn btn-primary"
@@ -72,12 +72,22 @@ class ErrorBoundary extends React.Component {
               🔄 Reload SRYN Portal
             </button>
             <button 
-              onClick={() => { localStorage.removeItem('gs_user'); window.location.href = '/auth'; }} 
+              onClick={() => { localStorage.removeItem('gs_user'); localStorage.removeItem('gs_current_user'); window.location.href = '/auth'; }} 
               style={{ padding: '12px 20px', background: 'transparent', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.88rem' }}
             >
               Clear Session & Re-Login
             </button>
           </div>
+          {this.state.error && (
+            <div style={{ textAlign: 'left', background: '#f8fafc', padding: '12px', borderRadius: '6px', fontSize: '0.75rem', color: '#ef4444', border: '1px solid #fee2e2', maxHeight: '180px', overflowY: 'auto' }}>
+              <strong>Error Trace:</strong>
+              <pre style={{ margin: '4px 0 0 0', whiteSpace: 'pre-wrap', wordBreak: 'break-all', fontFamily: 'monospace' }}>
+                {this.state.error.toString()}
+                {'\n'}
+                {this.state.error.stack}
+              </pre>
+            </div>
+          )}
         </div>
       );
     }
