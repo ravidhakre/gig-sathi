@@ -30,6 +30,10 @@ const HRDashboard = () => {
   const [jdLocation, setJdLocation] = useState('');
   const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
 
+  const [offerSigned, setOfferSigned] = useState(() => {
+    return localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true';
+  });
+
   const effectiveRole = jdRole || activeProj?.title || 'Customer Relationship Executive';
   const effectiveSalary = jdSalary || activeProj?.salary || activeProj?.commission || '₹15,000 / month + Incentives';
   const effectiveLocation = jdLocation || activeProj?.location || 'Hometown / Local Area';
