@@ -82,40 +82,6 @@ const SEED_USERS = [
     aadharFront: '',
     aadharBack: '',
     resume: ''
-  },
-  {
-    uid: 'hr-1',
-    fullName: 'Anjali Sharma',
-    email: 'hr@srynmanagement.com',
-    mobile: '9876543211',
-    role: 'HR',
-    verified: true,
-    profileComplete: true,
-    aadharNumber: '4321-8765-2109',
-    address: 'DLF Phase 3, Gurugram, Haryana',
-    pincode: '122002',
-    city: 'Gurugram',
-    state: 'Haryana',
-    aadharFront: '',
-    aadharBack: '',
-    resume: ''
-  },
-  {
-    uid: 'candidate-1',
-    fullName: 'Amit Patel',
-    email: 'candidate@srynmanagement.com',
-    mobile: '9876543212',
-    role: 'Candidate',
-    verified: true,
-    profileComplete: false,
-    aadharNumber: '',
-    address: '',
-    pincode: '',
-    city: '',
-    state: '',
-    aadharFront: '',
-    aadharBack: '',
-    resume: ''
   }
 ];
 
@@ -709,6 +675,39 @@ const attachDefaultScriptFieldsIfNeeded = (rawProjects = []) => {
   });
 };
 
+const purgeDummyAndBlankUsers = async () => {
+  const dummyEmails = ['hr@srynmanagement.com', 'candidate@srynmanagement.com'];
+
+  // LocalStorage purge
+  try {
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const filtered = users.filter(u => {
+      if (!u) return false;
+      if (!u.fullName && !u.email && !u.mobile) return false;
+      if (dummyEmails.includes((u.email || '').toLowerCase().trim())) return false;
+      return true;
+    });
+    localStorage.setItem('gs_users', JSON.stringify(filtered));
+  } catch (e) {}
+
+  // Firestore purge
+  if (dbMode === 'FIREBASE') {
+    try {
+      const snapAll = await getDocs(collection(firebaseFirestore, 'users'));
+      snapAll.forEach(async (d) => {
+        const data = d.data();
+        if (!data || (!data.fullName && !data.email && !data.mobile) || dummyEmails.includes((data.email || '').toLowerCase().trim())) {
+          await deleteDoc(doc(firebaseFirestore, 'users', d.id));
+          console.log(`SRYN: Purged dummy/blank user doc ${d.id}`);
+        }
+      });
+    } catch (e) {
+      console.error("Purge dummy/blank users error:", e);
+    }
+  }
+};
+purgeDummyAndBlankUsers();
+
 // Helper to push mock data to Firestore on first connect (if empty)
 const syncFirestoreSeeds = async () => {
   if (dbMode !== 'FIREBASE') return;
@@ -1073,7 +1072,7 @@ export const dbService = {
         mergedMap.set(key, combined);
       }
     });
-    return Array.from(mergedMap.values());
+    return Array.from(mergedMap.values()).filter(u => u && (u.fullName || u.email || u.mobile));
   },
 
   updateUserRole: async (uid, role) => {
@@ -1168,14 +1167,44 @@ export const dbService = {
     return updatedUser || { uid: targetUid, email: targetEmail, profileApproved: isApproved };
   },
 
-  deleteUser: async (uid) => {
-    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
-    const filtered = users.filter(u => u.uid !== uid);
-    localStorage.setItem('gs_users', JSON.stringify(filtered));
+  deleteUser: async (userOrUid) => {
+    let targetUid = typeof userOrUid === 'object' ? userOrUid.uid : userOrUid;
+    let targetEmail = typeof userOrUid === 'object' ? userOrUid.email : (typeof userOrUid === 'string' && userOrUid.includes('@') ? userOrUid : null);
+    const targetLower = targetEmail ? targetEmail.toLowerCase().trim() : null;
 
+    // 1. Delete from LocalStorage gs_users
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const filtered = users.filter(u => {
+      if (!u) return false;
+      if (!u.fullName && !u.email && !u.mobile) return false; // purge blank rows
+      if (targetUid && u.uid === targetUid) return false;
+      if (targetLower && u.email && u.email.toLowerCase().trim() === targetLower) return false;
+      return true;
+    });
+    safeSetLocalStorage('gs_users', filtered);
+
+    // 2. Delete from Firestore
     if (dbMode === 'FIREBASE') {
       try {
-        await deleteDoc(doc(firebaseFirestore, 'users', uid));
+        if (targetUid) {
+          await deleteDoc(doc(firebaseFirestore, 'users', targetUid));
+        }
+        if (targetLower) {
+          await deleteDoc(doc(firebaseFirestore, 'users', targetLower));
+          const q = query(collection(firebaseFirestore, 'users'), where('email', '==', targetEmail));
+          const snap = await getDocs(q);
+          snap.forEach(async (d) => {
+            await deleteDoc(doc(firebaseFirestore, 'users', d.id));
+          });
+        }
+        // Also delete any corrupt/blank document in Firestore
+        const snapAll = await getDocs(collection(firebaseFirestore, 'users'));
+        snapAll.forEach(async (d) => {
+          const data = d.data();
+          if (!data || (!data.fullName && !data.email && !data.mobile)) {
+            await deleteDoc(doc(firebaseFirestore, 'users', d.id));
+          }
+        });
       } catch (e) {
         console.error("Firebase Firestore user document delete error:", e);
       }
@@ -1489,7 +1518,8 @@ export const dbService = {
               mergedMap.set(key, { ...existing, ...u });
             }
           });
-          callback(Array.from(mergedMap.values()));
+          const validUsers = Array.from(mergedMap.values()).filter(u => u && (u.fullName || u.email || u.mobile));
+          callback(validUsers);
         });
       } catch (e) {
         console.error("subscribeUsers error:", e);

@@ -236,9 +236,9 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDeleteCandidateClick = async (uid) => {
-    if (window.confirm("Are you sure you want to delete this candidate completely from the portal?")) {
-      await deleteUserAdmin(uid);
+  const handleDeleteCandidateClick = async (userObjOrUid) => {
+    if (window.confirm("Are you sure you want to delete this user completely from the portal?")) {
+      await deleteUserAdmin(userObjOrUid);
       await loadUsers();
     }
   };
@@ -663,7 +663,7 @@ const AdminDashboard = () => {
                               Reset Pass
                             </button>
                             <button 
-                              onClick={() => handleDeleteCandidateClick(u.uid)}
+                              onClick={() => handleDeleteCandidateClick(u)}
                               className="btn btn-outline" 
                               style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--danger-color)', color: 'var(--danger-color)' }}
                             >
@@ -760,7 +760,7 @@ const AdminDashboard = () => {
                               Reset Pass
                             </button>
                             <button 
-                              onClick={() => handleDeleteCandidateClick(u.uid)}
+                              onClick={() => handleDeleteCandidateClick(u)}
                               className="btn btn-outline" 
                               style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--danger-color)', color: 'var(--danger-color)' }}
                             >
