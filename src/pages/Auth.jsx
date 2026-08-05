@@ -347,44 +347,6 @@ const Auth = () => {
                   </>
                 )}
               </div>
-
-              {/* One-Tap Demo Accounts Selector */}
-              {!isSignup && (
-                <div style={credentialsBoxStyle}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: '800', color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Lock size={14} /> One-Tap Quick Demo Login:
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickDemoLogin('admin@srynmanagement.com', 'Admin')}
-                      className="btn btn-outline"
-                      style={{ padding: '8px 12px', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', textTransform: 'none' }}
-                    >
-                      <span>👑 <strong>Admin Portal</strong> (Full Control)</span>
-                      <ArrowRight size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickDemoLogin('hr@srynmanagement.com', 'HR')}
-                      className="btn btn-outline"
-                      style={{ padding: '8px 12px', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', textTransform: 'none' }}
-                    >
-                      <span>💼 <strong>HR Officer Portal</strong> (CRM & Scripts)</span>
-                      <ArrowRight size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickDemoLogin('candidate@srynmanagement.com', 'Candidate')}
-                      className="btn btn-outline"
-                      style={{ padding: '8px 12px', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', textTransform: 'none' }}
-                    >
-                      <span>👨‍💼 <strong>Candidate Portal</strong> (Offer & Tasks)</span>
-                      <ArrowRight size={14} />
-                    </button>
-                  </div>
-                </div>
-              )}
             </form>
           ) : (
             /* OTP VERIFICATION STEP */
