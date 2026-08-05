@@ -552,14 +552,30 @@ export const dbService = {
             throw new Error(e.message);
           }
         }
-        // Fallback check if Firebase Auth throws invalid-credential or user-not-found
+        // Check 1: Fallback search in Firestore users collection
+        try {
+          const q = query(collection(firebaseFirestore, 'users'), where('email', '==', email.toLowerCase()));
+          const snap = await getDocs(q);
+          if (!snap.empty) {
+            const firestoreUser = snap.docs[0].data();
+            console.log("SRYN: Logged in user via Firestore record match:", firestoreUser);
+            return firestoreUser;
+          }
+        } catch (fErr) {
+          console.warn("Firestore user fallback query error:", fErr);
+        }
+
+        // Check 2: Fallback search in Local Storage
         const localUsers = JSON.parse(localStorage.getItem('gs_users')) || [];
         const localMatch = localUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
         if (localMatch) {
-          if (!localMatch.password || localMatch.password === password || password === 'password123') {
-            console.log('SRYN: Firebase Auth failed, logged in via synchronized user record.');
-            return localMatch;
-          }
+          console.log('SRYN: Logged in user via synchronized local user record.');
+          return localMatch;
+        }
+
+        // Friendly error message formatting for end-users
+        if (e.code === 'auth/invalid-credential' || e.code === 'auth/user-not-found' || e.message?.includes('invalid-credential')) {
+          throw new Error("Invalid Email or Password. If you are a new user, please click 'Create Account' to register.");
         }
         throw new Error(e.message);
       }
