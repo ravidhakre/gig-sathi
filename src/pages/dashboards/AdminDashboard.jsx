@@ -50,6 +50,9 @@ const AdminDashboard = () => {
   const [selectedHRAssignModalProj, setSelectedHRAssignModalProj] = useState(null);
   const [selectedHRsForCampaign, setSelectedHRsForCampaign] = useState(['ALL']);
 
+  // Document Lightbox Preview State
+  const [previewDocModal, setPreviewDocModal] = useState(null);
+
   // Script Editor States
   const [selectedScriptProjId, setSelectedScriptProjId] = useState('');
   const [scriptFormData, setScriptFormData] = useState({
@@ -1674,8 +1677,12 @@ const AdminDashboard = () => {
                   <strong style={{ fontSize: '1rem', color: '#fff' }}>{selectedUserForKYC.fullName}</strong>
                 </div>
                 <div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ROLE / PORTAL TYPE</div>
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--primary-color)' }}>{selectedUserForKYC.role || 'Candidate'}</strong>
+                </div>
+                <div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>AADHAR NUMBER</div>
-                  <strong style={{ fontSize: '1rem', letterSpacing: '1px', color: '#fff' }}>{selectedUserForKYC.aadharNumber}</strong>
+                  <strong style={{ fontSize: '1rem', letterSpacing: '1px', color: '#fff' }}>{selectedUserForKYC.aadharNumber || 'Not provided'}</strong>
                 </div>
                 <div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>EMAIL ADDRESS</div>
@@ -1687,9 +1694,24 @@ const AdminDashboard = () => {
                 </div>
                 <div style={{ gridColumn: 'span 2' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>PERMANENT ADDRESS</div>
-                  <strong style={{ color: '#fff' }}>{`${selectedUserForKYC.address}, ${selectedUserForKYC.city}, ${selectedUserForKYC.state} - ${selectedUserForKYC.pincode}`}</strong>
+                  <strong style={{ color: '#fff' }}>{`${selectedUserForKYC.address || 'Address N/A'}, ${selectedUserForKYC.city || ''}, ${selectedUserForKYC.state || ''} - ${selectedUserForKYC.pincode || ''}`}</strong>
                 </div>
               </div>
+
+              {/* Bank Details (if provided) */}
+              {(selectedUserForKYC.bankName || selectedUserForKYC.accountNumber) && (
+                <div style={{ backgroundColor: 'rgba(37,99,235,0.06)', padding: '15px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(37,99,235,0.2)' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 'bold', color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
+                    🏦 Payout Bank Account Details
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.88rem' }}>
+                    <div><span style={{ color: 'var(--text-muted)' }}>Bank Name:</span> <strong style={{ color: '#fff' }}>{selectedUserForKYC.bankName || 'N/A'}</strong></div>
+                    <div><span style={{ color: 'var(--text-muted)' }}>Account No:</span> <strong style={{ color: '#fff' }}>{selectedUserForKYC.accountNumber || 'N/A'}</strong></div>
+                    <div><span style={{ color: 'var(--text-muted)' }}>IFSC Code:</span> <strong style={{ color: '#fff' }}>{selectedUserForKYC.ifscCode || 'N/A'}</strong></div>
+                    <div><span style={{ color: 'var(--text-muted)' }}>Holder Name:</span> <strong style={{ color: '#fff' }}>{selectedUserForKYC.accountHolderName || selectedUserForKYC.fullName}</strong></div>
+                  </div>
+                </div>
+              )}
 
               {/* Status Badge */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1699,28 +1721,42 @@ const AdminDashboard = () => {
                 </span>
               </div>
 
-              {/* Document Images */}
+              {/* Document Images with Clickable Lightbox */}
               <div>
-                <h4 style={{ marginBottom: '12px', fontSize: '1.1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px', color: '#fff' }}>Uploaded Documents</h4>
+                <h4 style={{ marginBottom: '12px', fontSize: '1.1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px', color: '#fff' }}>
+                  Uploaded Documents (Click image to open full size)
+                </h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                   <div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>AADHAR CARD FRONT</div>
                     {selectedUserForKYC.aadharFront ? (
-                      <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000' }}>
+                      <div 
+                        onClick={() => setPreviewDocModal({ title: 'Aadhaar Card Front', url: selectedUserForKYC.aadharFront, type: 'image', candidate: selectedUserForKYC.fullName })}
+                        style={{ border: '2px solid var(--primary-color)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', height: '180px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000', cursor: 'pointer', position: 'relative' }}
+                      >
                         <img src={selectedUserForKYC.aadharFront} alt="Aadhar Front" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(222,49,99,0.85)', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', padding: '4px 8px', textAlign: 'center' }}>
+                          🔍 Click to View Full Image
+                        </div>
                       </div>
                     ) : (
-                      <div style={{ height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', color: 'var(--text-muted)' }}>No image uploaded</div>
+                      <div style={{ height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', color: 'var(--text-muted)' }}>No image uploaded</div>
                     )}
                   </div>
                   <div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>AADHAR CARD BACK</div>
                     {selectedUserForKYC.aadharBack ? (
-                      <div style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000' }}>
+                      <div 
+                        onClick={() => setPreviewDocModal({ title: 'Aadhaar Card Back', url: selectedUserForKYC.aadharBack, type: 'image', candidate: selectedUserForKYC.fullName })}
+                        style={{ border: '2px solid var(--primary-color)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', height: '180px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000', cursor: 'pointer', position: 'relative' }}
+                      >
                         <img src={selectedUserForKYC.aadharBack} alt="Aadhar Back" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(222,49,99,0.85)', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', padding: '4px 8px', textAlign: 'center' }}>
+                          🔍 Click to View Full Image
+                        </div>
                       </div>
                     ) : (
-                      <div style={{ height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', color: 'var(--text-muted)' }}>No image uploaded</div>
+                      <div style={{ height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: 'var(--radius-sm)', color: 'var(--text-muted)' }}>No image uploaded</div>
                     )}
                   </div>
                 </div>
@@ -1728,22 +1764,31 @@ const AdminDashboard = () => {
 
               {/* Resume download / view */}
               {selectedUserForKYC.resume && (
-                <div style={{ backgroundColor: 'rgba(255,255,255,0.01)', padding: '15px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <strong style={{ fontSize: '0.95rem', color: '#fff' }}>Candidate Resume / CV</strong>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Provided in text or document format</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Click to view or download candidate resume</div>
                     </div>
-                    <a 
-                      href={selectedUserForKYC.resume} 
-                      download={`${selectedUserForKYC.fullName.replace(/\s+/g, '_')}_Resume`}
-                      className="btn btn-outline" 
-                      style={{ padding: '6px 12px', fontSize: '0.85rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Download Resume
-                    </a>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => setPreviewDocModal({ title: 'Candidate Resume / CV', url: selectedUserForKYC.resume, type: selectedUserForKYC.resume.startsWith('data:image/') ? 'image' : 'doc', candidate: selectedUserForKYC.fullName })}
+                        className="btn btn-primary"
+                        style={{ padding: '6px 12px', fontSize: '0.85rem' }}
+                      >
+                        🔍 Open Resume
+                      </button>
+                      <a 
+                        href={selectedUserForKYC.resume} 
+                        download={`${selectedUserForKYC.fullName.replace(/\s+/g, '_')}_Resume`}
+                        className="btn btn-outline" 
+                        style={{ padding: '6px 12px', fontSize: '0.85rem', borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Download
+                      </a>
+                    </div>
                   </div>
                 </div>
               )}
@@ -2027,6 +2072,42 @@ const AdminDashboard = () => {
               <button onClick={() => setShowHRAssignModal(false)} className="btn btn-outline" style={{ flex: 0.4 }}>
                 Cancel
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- FULLSCREEN DOCUMENT PREVIEW LIGHTBOX MODAL --- */}
+      {previewDocModal && (
+        <div className="modal-overlay" style={{ zIndex: 1200, backgroundColor: 'rgba(0,0,0,0.92)' }}>
+          <div className="modal-content fade-in" style={{ maxWidth: '900px', width: '95%', maxHeight: '92vh', overflowY: 'auto', backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.2)', padding: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ fontSize: '1.25rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  🔍 {previewDocModal.title}
+                </h3>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Candidate: {previewDocModal.candidate}</span>
+              </div>
+              <button onClick={() => setPreviewDocModal(null)} className="btn btn-outline" style={{ padding: '6px 14px', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>
+                <X size={20} /> Close
+              </button>
+            </div>
+
+            <div style={{ textAlign: 'center', marginBottom: '20px', backgroundColor: '#000', borderRadius: '8px', padding: '16px', minHeight: '320px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {previewDocModal.url.startsWith('data:image/') || previewDocModal.url.match(/\.(jpeg|jpg|png|webp|gif)$/i) || previewDocModal.type === 'image' ? (
+                <img src={previewDocModal.url} alt={previewDocModal.title} style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain', borderRadius: '4px' }} />
+              ) : (
+                <iframe src={previewDocModal.url} title={previewDocModal.title} style={{ width: '100%', height: '65vh', border: 'none', borderRadius: '4px', background: '#fff' }}></iframe>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href={previewDocModal.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '8px 18px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <ExternalLink size={16} /> Open Full Size in New Tab
+              </a>
+              <a href={previewDocModal.url} download={`${(previewDocModal.candidate || 'Document').replace(/\s+/g, '_')}_${previewDocModal.title.replace(/\s+/g, '_')}`} className="btn btn-outline" style={{ padding: '8px 18px', fontSize: '0.85rem', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>
+                Download File
+              </a>
             </div>
           </div>
         </div>

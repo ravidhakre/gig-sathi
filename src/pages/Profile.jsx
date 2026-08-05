@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { User, Phone, Mail, ShieldAlert, UploadCloud, FileText, CheckCircle2, Lock, Landmark } from 'lucide-react';
+import { compressImage } from '../utils/imageCompressor';
 
 const Profile = () => {
   const { currentUser, updateProfile, refreshCurrentUser, showToast } = useApp();
@@ -100,22 +101,20 @@ const Profile = () => {
     // Simulate progress bar loading animation
     setUploadProgress(prev => ({ ...prev, [fieldName]: 10 }));
     let progress = 10;
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       progress += 20;
       if (progress >= 100) {
         clearInterval(interval);
         setUploadProgress(prev => ({ ...prev, [fieldName]: 100 }));
 
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64Content = reader.result;
-          setFiles(prev => ({ ...prev, [fieldName]: base64Content }));
-          // Update profile with the uploaded file
-          try {
-            await updateProfile({ [fieldName]: base64Content });
-          } catch (err) {}
-        };
-        reader.readAsDataURL(file);
+        try {
+          const compressed = await compressImage(file);
+          setFiles(prev => ({ ...prev, [fieldName]: compressed }));
+          await updateProfile({ [fieldName]: compressed });
+          showToast(`Uploaded & compressed ${fieldName} document successfully!`, 'success');
+        } catch (err) {
+          showToast(`Upload failed: ${err.message}`, 'danger');
+        }
       } else {
         setUploadProgress(prev => ({ ...prev, [fieldName]: progress }));
       }
