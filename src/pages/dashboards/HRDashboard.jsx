@@ -5,7 +5,71 @@ import {
   LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2, Menu,
   BookOpen, Copy, Check, Globe, Video, MessageSquare, Target, Award, ShieldCheck, Sparkles, ChevronRight, HelpCircle, Send, Share2, ExternalLink, MessageCircle, Briefcase, MapPin, Building2, Clock
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+const FormattedScriptViewer = ({ text }) => {
+  if (!text) return null;
+  const lines = text.split('\n');
+
+  const isHeadingLine = (line) => {
+    const trimmed = line.trim();
+    if (!trimmed) return false;
+    if (/^(STEP\s*\d+:|SECTION\s*\d+:|\d+\.|\u26a1|Key FD Card|Salary Cycle|2-Round Simple|If Candidate Says|Role Benchmark|Target Requirement)/i.test(trimmed)) {
+      return true;
+    }
+    const letters = trimmed.replace(/[^A-Za-z]/g, '');
+    if (letters.length >= 4 && letters === letters.toUpperCase()) {
+      return true;
+    }
+    return false;
+  };
+
+  return (
+    <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={idx} style={{ height: '6px' }} />;
+        }
+
+        if (isHeadingLine(trimmed)) {
+          return (
+            <div 
+              key={idx} 
+              style={{ 
+                fontWeight: 800, 
+                color: 'var(--primary-color)', 
+                fontSize: '0.94rem', 
+                marginTop: idx === 0 ? '0' : '14px', 
+                marginBottom: '4px',
+                letterSpacing: '0.02em',
+                textTransform: 'uppercase'
+              }}
+            >
+              {trimmed}
+            </div>
+          );
+        }
+
+        const isBullet = /^[•\-\*]/.test(trimmed);
+
+        return (
+          <div 
+            key={idx} 
+            style={{ 
+              fontWeight: 400, 
+              fontStyle: 'italic', 
+              color: 'var(--text-primary)', 
+              fontSize: '0.94rem', 
+              lineHeight: '1.6',
+              paddingLeft: isBullet ? '14px' : '0'
+            }}
+          >
+            {trimmed}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 const HRDashboard = () => {
   const { currentUser, logout, leads, addNewLead, updateLeadStatus, projects, templates, showToast } = useApp();
@@ -1061,8 +1125,8 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                         {copiedSnippet === 'parsed-script' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Full Script
                       </button>
                     </div>
-                    <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.95rem', lineHeight: '1.7', color: 'var(--text-primary)' }}>
-                      {getParsedScript(activeProj, 'round1', scriptLang)}
+                    <div style={{ marginTop: '8px' }}>
+                      <FormattedScriptViewer text={getParsedScript(activeProj, 'round1', scriptLang)} />
                     </div>
                   </div>
                 )}
@@ -1263,8 +1327,8 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                         {copiedSnippet === 'parsed-r2' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Full Script
                       </button>
                     </div>
-                    <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.95rem', lineHeight: '1.7', color: 'var(--text-primary)' }}>
-                      {getParsedScript(activeProj, 'round2', scriptLang)}
+                    <div style={{ marginTop: '8px' }}>
+                      <FormattedScriptViewer text={getParsedScript(activeProj, 'round2', scriptLang)} />
                     </div>
                   </div>
                 )}
