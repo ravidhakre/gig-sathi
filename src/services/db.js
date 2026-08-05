@@ -119,6 +119,49 @@ const SEED_USERS = [
   }
 ];
 
+const DEFAULT_PITCH_HI_R1 = `Hello, kya meri baat {{name}} se ho rahi hai?
+Hi {{name}}, mera naam {{hrName}} hai, aur main SRYN Management Pvt. Ltd. se baat kar raha/rahi hoon.
+Kya abhi 2–3 minute baat karne ke liye sahi time hai?
+
+Bahut badiya! Hum abhi apni financial services division ke liye Customer Relationship Executives / {{role}} hire kar rahe hain. Aapki profile is opportunity ke liye suitable hai.
+Sabse achhi baat ye hai ki hum aapko aapke hometown mein work opportunity de rahe hain, toh aapko relocate hone ki zaroorat nahi hai.
+Offered salary {{salary}} hai, saath mein performance-based growth opportunities hain.
+
+Aapki responsibility hamare FD Card / Financial products ke baare mein customers ko guide karna aur application process mein help karna hoga. FD ₹2,000 se ₹5,00,000 tak, 7% annual interest, aur CIBIL score builder benefits hain.`;
+
+const DEFAULT_PITCH_EN_R1 = `Hello, may I speak with {{name}}?
+Hi {{name}}, my name is {{hrName}}, and I'm calling from SRYN Management Pvt. Ltd.
+Is this a good time to talk? It will only take 2–3 minutes.
+
+We are currently hiring Customer Relationship Executives / {{role}} for our team. I came across your profile and found it suitable for this opportunity.
+The best part is that we provide work opportunities in your hometown with offered salary {{salary}}.
+
+Your responsibility will be to guide customers about our products and help them complete the onboarding process.`;
+
+const DEFAULT_PITCH_HI_R2 = `Namaskar {{name}}! SRYN Management ke Round 2 Video Interview mein aapka swagat hai.
+Main aapko role, payout matrices, daily commission structure, aur official offer letter onboarding process explain karne wala/wali hoon.`;
+
+const DEFAULT_PITCH_EN_R2 = `Welcome {{name}} to Round 2 Video Interview with SRYN Management.
+Today we will cover your job responsibilities, payout structure, training modules, and official offer letter onboarding.`;
+
+const DEFAULT_PITCH_HI_JD = `🚨 *URGENT HIRING DRIVE: {{role}}* 🚨
+Company: SRYN Management Pvt. Ltd.
+Position: {{role}}
+Salary: {{salary}}
+Location: {{location}}
+
+Apply Link: {{workingLink}}
+Contact HR: {{hrName}}`;
+
+const DEFAULT_PITCH_EN_JD = `🚨 *OFFICIAL RECRUITMENT DRIVE: {{role}}* 🚨
+Company: SRYN Management Pvt. Ltd.
+Role: {{role}}
+Salary: {{salary}}
+Location: {{location}}
+
+Apply Online: {{workingLink}}
+HR Contact: {{hrName}}`;
+
 const SEED_PROJECTS = [
   {
     id: 'proj-1',
@@ -126,9 +169,37 @@ const SEED_PROJECTS = [
     category: 'Financial Products',
     description: 'Promote and acquire customers for HDFC Bank Lifetime Free credit cards. High commission rates and daily payouts.',
     commission: 'Rs. 2,500 per approved card',
+    salary: '₹15,000 / month + Incentives',
+    location: 'Hometown / Local Area',
     hiringCount: 150,
     status: 'Active',
-    workingLink: 'https://srynmanagement.com/fd-apply/hdfc-cc'
+    scriptActive: true,
+    workingLink: 'https://srynmanagement.com/fd-apply/hdfc-cc',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
+  },
+  {
+    id: 'proj-1785921272850',
+    title: 'Field Executive',
+    category: 'Field Executive',
+    description: 'Field executive sourcing for financial products, Merchant QR onboarding and lead generation.',
+    commission: 'Rs. 15,000 / month fixed + Incentives',
+    salary: '₹15,000 / month + Incentives',
+    location: 'Hometown / Local Area',
+    hiringCount: 100,
+    status: 'Active',
+    scriptActive: true,
+    workingLink: 'https://www.sryn.online/auth?signup=true',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
   },
   {
     id: 'proj-2',
@@ -136,9 +207,18 @@ const SEED_PROJECTS = [
     category: 'Delivery Boy Hiring',
     description: 'Onboard delivery partners for Zomato. flexible shifts, weekly payouts, and join-in bonuses across 50+ cities.',
     commission: 'Rs. 1,200 per active rider (onboarded)',
+    salary: '₹12,000 / month + Incentives',
+    location: 'Local District',
     hiringCount: 500,
     status: 'Active',
-    workingLink: 'https://srynmanagement.com/fd-apply/zomato-rider'
+    scriptActive: true,
+    workingLink: 'https://srynmanagement.com/fd-apply/zomato-rider',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
   },
   {
     id: 'proj-3',
@@ -146,9 +226,18 @@ const SEED_PROJECTS = [
     category: 'Delivery Boy Hiring',
     description: 'Onboard pickers and runners for Swiggy Instamart dark stores. Stable pay structure with performance incentives.',
     commission: 'Rs. 1,000 per onboarded partner',
+    salary: '₹14,000 / month',
+    location: 'Local District',
     hiringCount: 300,
     status: 'Active',
-    workingLink: 'https://srynmanagement.com/fd-apply/swiggy-insta'
+    scriptActive: true,
+    workingLink: 'https://srynmanagement.com/fd-apply/swiggy-insta',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
   },
   {
     id: 'proj-4',
@@ -156,9 +245,18 @@ const SEED_PROJECTS = [
     category: 'Third Party Hiring',
     description: 'Recruiting merchant onboarding field agents for Airtel Payments Bank. Requires strong communication skills.',
     commission: 'Rs. 150 per merchant KYC activation',
+    salary: '₹15,000 / month',
+    location: 'Hometown',
     hiringCount: 200,
     status: 'Active',
-    workingLink: 'https://srynmanagement.com/fd-apply/airtel-kyc'
+    scriptActive: true,
+    workingLink: 'https://srynmanagement.com/fd-apply/airtel-kyc',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
   }
 ];
 

@@ -238,6 +238,25 @@ For any questions, reply to this message:
 We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderful day!`;
   };
 
+  const getParsedScript = (proj, round, lang) => {
+    if (!proj) return '';
+    let raw = '';
+    if (round === 'round1') {
+      raw = lang === 'hi' ? (proj.scriptRound1Hindi || '') : (proj.scriptRound1English || '');
+    } else if (round === 'round2') {
+      raw = lang === 'hi' ? (proj.scriptRound2Hindi || '') : (proj.scriptRound2English || '');
+    }
+    if (!raw) return '';
+
+    return raw
+      .replace(/{{name}}/g, scriptCandidateName || '[Candidate Name]')
+      .replace(/{{role}}/g, proj.title || 'Executive')
+      .replace(/{{salary}}/g, proj.salary || '₹15,000 / month')
+      .replace(/{{location}}/g, proj.location || 'Hometown')
+      .replace(/{{hrName}}/g, currentUser?.fullName || '[Your Name]')
+      .replace(/{{workingLink}}/g, proj.workingLink || 'https://www.sryn.online');
+  };
+
   const handleSignOffer = async () => {
     if (currentUser?.uid) {
       localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
@@ -998,14 +1017,16 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
                     <div>
                       <span className="badge badge-hired" style={{ marginBottom: '8px' }}>Round 1 Telephonic Calling</span>
-                      <h3 style={{ fontSize: '1.4rem' }}>Customer Relationship Executive Hiring Pitch</h3>
-                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Company: SRYN Management Pvt. Ltd. | Position: CRE | Salary: ₹15,000 / month</span>
+                      <h3 style={{ fontSize: '1.4rem' }}>{activeProj?.title || 'Customer Relationship Executive'} Hiring Pitch</h3>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Company: SRYN Management Pvt. Ltd. | Campaign: {activeProj?.title || 'CRE'} | Salary: {activeProj?.salary || '₹15,000 / month'}</span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(
-                        scriptLang === 'hi' 
-                          ? `Hello, kya meri baat ${scriptCandidateName || '[Candidate Name]'} se ho rahi hai? SRYN Management Pvt. Ltd. se Customer Relationship Executive hiring ke liye baat kar raha/rahi hoon.` 
-                          : `Hello, may I speak with ${scriptCandidateName || '[Candidate Name]'}? Calling from SRYN Management Pvt. Ltd. for Customer Relationship Executive hiring.`,
+                        getParsedScript(activeProj, 'round1', scriptLang) || (
+                          scriptLang === 'hi' 
+                            ? `Hello, kya meri baat ${scriptCandidateName || '[Candidate Name]'} se ho rahi hai? SRYN Management Pvt. Ltd. se Customer Relationship Executive hiring ke liye baat kar raha/rahi hoon.` 
+                            : `Hello, may I speak with ${scriptCandidateName || '[Candidate Name]'}? Calling from SRYN Management Pvt. Ltd. for Customer Relationship Executive hiring.`
+                        ),
                         'r1-full'
                       )}
                       className="btn btn-outline"
@@ -1015,6 +1036,26 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                     </button>
                   </div>
                 </div>
+
+                {getParsedScript(activeProj, 'round1', scriptLang) && (
+                  <div className="card" style={{ textAlign: 'left', background: 'var(--surface-color)', borderLeft: '4px solid var(--primary-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                      <strong style={{ fontSize: '1rem', color: 'var(--primary-color)' }}>
+                        📞 Campaign Custom Pitch Script ({scriptLang === 'hi' ? 'Hindi / Hinglish' : 'English'})
+                      </strong>
+                      <button 
+                        onClick={() => copyToClipboard(getParsedScript(activeProj, 'round1', scriptLang), 'parsed-script')} 
+                        className="btn btn-outline" 
+                        style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+                      >
+                        {copiedSnippet === 'parsed-script' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Full Script
+                      </button>
+                    </div>
+                    <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.95rem', lineHeight: '1.7', color: 'var(--text-primary)' }}>
+                      {getParsedScript(activeProj, 'round1', scriptLang)}
+                    </div>
+                  </div>
+                )}
 
                 {/* Step 1: Introduction */}
                 <div className="card">
@@ -1197,6 +1238,26 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                     </button>
                   </div>
                 </div>
+
+                {getParsedScript(activeProj, 'round2', scriptLang) && (
+                  <div className="card" style={{ textAlign: 'left', background: 'var(--surface-color)', borderLeft: '4px solid var(--secondary-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                      <strong style={{ fontSize: '1rem', color: 'var(--secondary-color)' }}>
+                        🎥 Campaign Custom Video Interview Script ({scriptLang === 'hi' ? 'Hindi / Hinglish' : 'English'})
+                      </strong>
+                      <button 
+                        onClick={() => copyToClipboard(getParsedScript(activeProj, 'round2', scriptLang), 'parsed-r2')} 
+                        className="btn btn-outline" 
+                        style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+                      >
+                        {copiedSnippet === 'parsed-r2' ? <Check size={16} color="var(--success-color)" /> : <Copy size={16} />} Copy Full Script
+                      </button>
+                    </div>
+                    <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.95rem', lineHeight: '1.7', color: 'var(--text-primary)' }}>
+                      {getParsedScript(activeProj, 'round2', scriptLang)}
+                    </div>
+                  </div>
+                )}
 
                 {/* Section 1: Welcome & Tone */}
                 <div className="card">
