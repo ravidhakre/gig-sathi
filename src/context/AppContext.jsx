@@ -63,6 +63,52 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     loadData();
+
+    // Set up Real-time Firestore Subscribers for instant sync across all devices
+    const unsubUsers = dbService.subscribeUsers((updatedUsers) => {
+      if (currentUser) {
+        const latestSelf = updatedUsers.find(
+          (u) => u.uid === currentUser.uid || u.email?.toLowerCase() === currentUser.email?.toLowerCase()
+        );
+        if (latestSelf) {
+          localStorage.setItem('gs_current_user', JSON.stringify(latestSelf));
+          setCurrentUser(latestSelf);
+        }
+      }
+    });
+
+    const unsubProjects = dbService.subscribeProjects((projData) => {
+      if (projData && projData.length > 0) setProjects(projData);
+    });
+
+    const unsubLeads = dbService.subscribeLeads((leadData) => {
+      if (leadData && leadData.length > 0) setLeads(leadData);
+    });
+
+    const unsubCustomers = dbService.subscribeCustomers(
+      currentUser?.role === 'Candidate' ? currentUser.uid : null,
+      (custData) => {
+        if (custData && custData.length > 0) setCustomers(custData);
+      }
+    );
+
+    // Cross-tab storage listener for multi-tab sync
+    const handleStorageChange = (e) => {
+      if (e.key === 'gs_current_user' && e.newValue) {
+        try {
+          setCurrentUser(JSON.parse(e.newValue));
+        } catch (err) {}
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      unsubUsers();
+      unsubProjects();
+      unsubLeads();
+      unsubCustomers();
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, [currentUser?.uid]);
 
   // Toast Helper

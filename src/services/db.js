@@ -18,7 +18,8 @@ import {
   collection, 
   query, 
   where,
-  deleteDoc
+  deleteDoc,
+  onSnapshot
 } from 'firebase/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
@@ -1069,6 +1070,79 @@ export const dbService = {
     }
 
     return targetTemplate;
+  },
+
+  // --- Real-time Firestore Subscriptions ---
+  subscribeUsers: (callback) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        return onSnapshot(collection(firebaseFirestore, 'users'), (snap) => {
+          const firebaseUsers = [];
+          snap.forEach(d => firebaseUsers.push(d.data()));
+          const localUsers = JSON.parse(localStorage.getItem('gs_users')) || [];
+          const mergedMap = new Map();
+          [...SEED_USERS, ...localUsers, ...firebaseUsers].forEach(u => {
+            if (u && (u.uid || u.email)) {
+              const key = (u.uid || u.email).toLowerCase();
+              mergedMap.set(key, { ...mergedMap.get(key), ...u });
+            }
+          });
+          callback(Array.from(mergedMap.values()));
+        });
+      } catch (e) {
+        console.error("subscribeUsers error:", e);
+      }
+    }
+    return () => {};
+  },
+
+  subscribeProjects: (callback) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        return onSnapshot(collection(firebaseFirestore, 'projects'), (snap) => {
+          const projects = [];
+          snap.forEach(d => projects.push(d.data()));
+          callback(projects);
+        });
+      } catch (e) {
+        console.error("subscribeProjects error:", e);
+      }
+    }
+    return () => {};
+  },
+
+  subscribeLeads: (callback) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        return onSnapshot(collection(firebaseFirestore, 'leads'), (snap) => {
+          const leads = [];
+          snap.forEach(d => leads.push(d.data()));
+          callback(leads);
+        });
+      } catch (e) {
+        console.error("subscribeLeads error:", e);
+      }
+    }
+    return () => {};
+  },
+
+  subscribeCustomers: (executiveId, callback) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        let q = collection(firebaseFirestore, 'customers');
+        if (executiveId) {
+          q = query(q, where('addedBy', '==', executiveId));
+        }
+        return onSnapshot(q, (snap) => {
+          const customers = [];
+          snap.forEach(d => customers.push(d.data()));
+          callback(customers);
+        });
+      } catch (e) {
+        console.error("subscribeCustomers error:", e);
+      }
+    }
+    return () => {};
   }
 };
 export default dbService;
