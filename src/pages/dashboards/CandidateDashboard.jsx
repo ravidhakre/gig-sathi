@@ -539,7 +539,7 @@ const CandidateDashboard = () => {
               
               <hr style={{ margin: '30px 0', borderColor: '#e2e8f0' }} />
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-surface)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+              <div className="offer-actions-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-surface)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
                 <div style={{ textAlign: 'left' }}>
                   <div style={{ fontSize: '0.8rem', color: '#64748b' }}>CONTRACT DATE</div>
                   <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>{
@@ -548,11 +548,11 @@ const CandidateDashboard = () => {
                 </div>
 
                 {offerSigned ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#dcfce7', padding: '12px 20px', borderRadius: '8px', border: '1px solid #86efac' }}>
+                  <div className="offer-signed-box" style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#dcfce7', padding: '12px 20px', borderRadius: '8px', border: '1px solid #86efac' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#15803d', fontWeight: '800' }}>
                       <CheckCircle2 size={24} color="#15803d" /> Signed & Accepted
                     </div>
-                    <button onClick={handleDownloadPDF} className="btn" style={{ padding: '8px 18px', fontSize: '0.85rem', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold' }}>
+                    <button onClick={handleDownloadPDF} className="btn" style={{ padding: '8px 18px', fontSize: '0.85rem', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold', width: '100%' }}>
                       Download PDF
                     </button>
                   </div>

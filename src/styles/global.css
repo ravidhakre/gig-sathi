@@ -1083,6 +1083,80 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Mobile Responsive Offer Letter & Contract Sheet Styles */
+@media (max-width: 768px) {
+  .contract-page-sheet {
+    padding: 24px 16px !important;
+    margin: 0 auto 20px auto !important;
+    width: 100% !important;
+    min-height: auto !important;
+    border-radius: 8px !important;
+  }
+
+  .contract-page-sheet .watermark-text {
+    font-size: 1.1rem !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .contract-page-sheet .letterhead-logo {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .contract-page-sheet .letterhead-logo .logo-main {
+    font-size: 1.5rem !important;
+  }
+
+  .contract-page-sheet .letterhead-logo .company-cin {
+    text-align: left !important;
+    font-size: 0.65rem !important;
+  }
+
+  .contract-page-sheet .contract-body {
+    font-size: 0.88rem !important;
+    line-height: 1.55 !important;
+    text-align: left !important;
+  }
+
+  .contract-page-sheet .contract-body h3 {
+    font-size: 0.95rem !important;
+    margin-top: 16px !important;
+  }
+
+  .offer-actions-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+    text-align: center !important;
+    padding: 16px !important;
+  }
+
+  .offer-actions-bar > div {
+    text-align: center !important;
+  }
+
+  .offer-signed-box {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 12px !important;
+    text-align: center !important;
+    padding: 12px !important;
+  }
+
+  .offer-modal-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .offer-modal-header > div:last-child {
+    width: 100% !important;
+    justify-content: flex-end !important;
+  }
+}
+
 /* Premium Page Hero Banner (used across all inner pages) */
 .page-hero-banner {
   position: relative;

@@ -1805,12 +1805,12 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
       {selectedLeadOffer && (
         <div className="modal-overlay" style={{ zIndex: 1100 }}>
           <div className="modal-content fade-in" style={{ maxWidth: '850px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+            <div className="offer-modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
               <div>
                 <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Appointment Cum Offer Letter – {selectedLeadOffer.fullName}</h3>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Position: {selectedLeadOffer.roleApplied || selectedLeadOffer.project}</span>
               </div>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <button onClick={() => handleDownloadPDF(selectedLeadOffer)} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
                   <Printer size={16} /> Print / Save PDF
                 </button>
