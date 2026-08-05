@@ -34,6 +34,15 @@ export const AppProvider = ({ children }) => {
       setCms(cmsData || {});
 
       if (currentUser) {
+        const allUsers = await dbService.getUsers();
+        const latestSelf = allUsers.find(
+          (u) => u.uid === currentUser.uid || u.email?.toLowerCase() === currentUser.email?.toLowerCase()
+        );
+        if (latestSelf) {
+          localStorage.setItem('gs_current_user', JSON.stringify(latestSelf));
+          setCurrentUser(latestSelf);
+        }
+
         const custData = await dbService.getCustomers(
           currentUser.role === 'Candidate' ? currentUser.uid : null
         );
@@ -117,6 +126,23 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(null);
     setCustomers([]);
     showToast(`You have logged out successfully.`, 'info');
+  };
+
+  const refreshCurrentUser = async () => {
+    if (!currentUser) return;
+    try {
+      const allUsers = await dbService.getUsers();
+      const latestSelf = allUsers.find(
+        (u) => u.uid === currentUser.uid || u.email?.toLowerCase() === currentUser.email?.toLowerCase()
+      );
+      if (latestSelf) {
+        localStorage.setItem('gs_current_user', JSON.stringify(latestSelf));
+        setCurrentUser(latestSelf);
+        return latestSelf;
+      }
+    } catch (e) {
+      console.error("Error refreshing current user:", e);
+    }
   };
 
   const updateProfile = async (updatedFields) => {
@@ -318,6 +344,7 @@ export const AppProvider = ({ children }) => {
       verifyOTP,
       logout,
       updateProfile,
+      refreshCurrentUser,
       addCustomer,
       updateLeadStatus,
       addNewLead,

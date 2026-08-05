@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { User, Phone, Mail, ShieldAlert, UploadCloud, FileText, CheckCircle2, Lock, Landmark } from 'lucide-react';
 
 const Profile = () => {
-  const { currentUser, updateProfile, showToast } = useApp();
+  const { currentUser, updateProfile, refreshCurrentUser, showToast } = useApp();
+
+  useEffect(() => {
+    if (refreshCurrentUser) {
+      refreshCurrentUser();
+    }
+  }, []);
 
   const [personal, setPersonal] = useState({
     fullName: currentUser?.fullName || '',
