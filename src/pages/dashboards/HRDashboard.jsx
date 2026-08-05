@@ -5,6 +5,8 @@ import {
   LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Search, Plus, PhoneCall, Filter, Calendar, Save, X, PhoneIncoming, CheckCircle2, Menu,
   BookOpen, Copy, Check, Globe, Video, MessageSquare, Target, Award, ShieldCheck, Sparkles, ChevronRight, HelpCircle, Send, Share2, ExternalLink, MessageCircle, Briefcase, MapPin, Building2, Clock
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
 const FormattedScriptViewer = ({ text }) => {
   if (!text) return null;
   const lines = text.split('\n');
