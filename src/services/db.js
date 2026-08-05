@@ -521,6 +521,38 @@ const initMockStorage = () => {
 };
 initMockStorage();
 
+const mergeProjectsWithSeedDefaults = (rawProjects = []) => {
+  const seedMap = new Map(SEED_PROJECTS.map(sp => [sp.id, sp]));
+  const mergedMap = new Map();
+
+  SEED_PROJECTS.forEach(sp => {
+    mergedMap.set(sp.id, { ...sp });
+  });
+
+  rawProjects.forEach(p => {
+    if (p && p.id) {
+      const seed = seedMap.get(p.id);
+      if (seed) {
+        mergedMap.set(p.id, {
+          ...seed,
+          ...p,
+          scriptRound1Hindi: (p.scriptRound1Hindi !== undefined && p.scriptRound1Hindi !== null && p.scriptRound1Hindi !== '') ? p.scriptRound1Hindi : seed.scriptRound1Hindi,
+          scriptRound1English: (p.scriptRound1English !== undefined && p.scriptRound1English !== null && p.scriptRound1English !== '') ? p.scriptRound1English : seed.scriptRound1English,
+          scriptRound2Hindi: (p.scriptRound2Hindi !== undefined && p.scriptRound2Hindi !== null && p.scriptRound2Hindi !== '') ? p.scriptRound2Hindi : seed.scriptRound2Hindi,
+          scriptRound2English: (p.scriptRound2English !== undefined && p.scriptRound2English !== null && p.scriptRound2English !== '') ? p.scriptRound2English : seed.scriptRound2English,
+          jdHindi: (p.jdHindi !== undefined && p.jdHindi !== null && p.jdHindi !== '') ? p.jdHindi : seed.jdHindi,
+          jdEnglish: (p.jdEnglish !== undefined && p.jdEnglish !== null && p.jdEnglish !== '') ? p.jdEnglish : seed.jdEnglish,
+          scriptActive: p.scriptActive !== undefined ? p.scriptActive : (seed.scriptActive ?? true)
+        });
+      } else {
+        mergedMap.set(p.id, p);
+      }
+    }
+  });
+
+  return Array.from(mergedMap.values());
+};
+
 // Helper to push mock data to Firestore on first connect (if empty)
 const syncFirestoreSeeds = async () => {
   if (dbMode !== 'FIREBASE') return;
@@ -904,17 +936,20 @@ export const dbService = {
 
   // --- Projects Operations ---
   getProjects: async () => {
+    let raw = JSON.parse(localStorage.getItem('gs_projects')) || [];
     if (dbMode === 'FIREBASE') {
       try {
         const snap = await getDocs(collection(firebaseFirestore, 'projects'));
-        const projects = [];
-        snap.forEach(d => projects.push(d.data()));
-        if (projects.length > 0) return projects;
+        const fbProjects = [];
+        snap.forEach(d => fbProjects.push(d.data()));
+        if (fbProjects.length > 0) raw = fbProjects;
       } catch (e) {
         console.error(e);
       }
     }
-    return JSON.parse(localStorage.getItem('gs_projects')) || [];
+    const merged = mergeProjectsWithSeedDefaults(raw);
+    localStorage.setItem('gs_projects', JSON.stringify(merged));
+    return merged;
   },
 
   addProject: async (project) => {
@@ -1198,9 +1233,11 @@ export const dbService = {
     if (dbMode === 'FIREBASE') {
       try {
         return onSnapshot(collection(firebaseFirestore, 'projects'), (snap) => {
-          const projects = [];
-          snap.forEach(d => projects.push(d.data()));
-          callback(projects);
+          const fbProjects = [];
+          snap.forEach(d => fbProjects.push(d.data()));
+          const localProjects = JSON.parse(localStorage.getItem('gs_projects')) || [];
+          const merged = mergeProjectsWithSeedDefaults([...localProjects, ...fbProjects]);
+          callback(merged);
         });
       } catch (e) {
         console.error("subscribeProjects error:", e);
