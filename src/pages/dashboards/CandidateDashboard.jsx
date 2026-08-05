@@ -193,7 +193,7 @@ const CandidateDashboard = () => {
       ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
 
       const userRole = currentUser?.roleApplied || currentUser?.position || 'Field Executive';
-      const userSalary = currentUser?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
+      const userSalary = currentUser?.salary || '₹8,000/- (Rupees Eight Thousand Only)';
       const userWorkingHours = currentUser?.workingHours || '11:00 A.M. to 7:30 P.M.';
       const userPerformanceTarget = currentUser?.performanceTarget || 'Fifty (50) candidates';
 
