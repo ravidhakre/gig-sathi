@@ -380,21 +380,28 @@ const Profile = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* Aadhar Front */}
               <div>
-                <label style={uploadLabelStyle}>Aadhar Card Front Image</label>
+                <label style={uploadLabelStyle}>Aadhar Card Front Image / PDF</label>
                 <div style={uploaderBoxStyle}>
                   {files.aadharFront ? (
                     <div style={previewBoxStyle}>
-                      <img src={files.aadharFront} alt="Aadhar Front Preview" style={imagePreviewStyle} />
+                      {files.aadharFront.startsWith('data:application/pdf') || files.aadharFront.includes('pdf') ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', width: '100%' }}>
+                          <FileText size={28} color="var(--primary-color)" />
+                          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>📄 Aadhaar Front PDF Uploaded</span>
+                        </div>
+                      ) : (
+                        <img src={files.aadharFront} alt="Aadhar Front Preview" style={imagePreviewStyle} />
+                      )}
                       <label style={changeFileBtnStyle}>
                         Change File
-                        <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'aadharFront')} style={{ display: 'none' }} />
+                        <input type="file" accept="image/*,.pdf,application/pdf" onChange={(e) => handleFileChange(e, 'aadharFront')} style={{ display: 'none' }} />
                       </label>
                     </div>
                   ) : (
                     <label style={dropZoneStyle}>
                       <UploadCloud size={28} color="var(--text-muted)" />
-                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Click to upload Front photo</span>
-                      <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'aadharFront')} style={{ display: 'none' }} />
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Click to upload Front photo / PDF</span>
+                      <input type="file" accept="image/*,.pdf,application/pdf" onChange={(e) => handleFileChange(e, 'aadharFront')} style={{ display: 'none' }} />
                     </label>
                   )}
                   {uploadProgress.aadharFront > 0 && uploadProgress.aadharFront < 100 && (
@@ -407,21 +414,28 @@ const Profile = () => {
 
               {/* Aadhar Back */}
               <div>
-                <label style={uploadLabelStyle}>Aadhar Card Back Image</label>
+                <label style={uploadLabelStyle}>Aadhar Card Back Image / PDF</label>
                 <div style={uploaderBoxStyle}>
                   {files.aadharBack ? (
                     <div style={previewBoxStyle}>
-                      <img src={files.aadharBack} alt="Aadhar Back Preview" style={imagePreviewStyle} />
+                      {files.aadharBack.startsWith('data:application/pdf') || files.aadharBack.includes('pdf') ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', width: '100%' }}>
+                          <FileText size={28} color="var(--primary-color)" />
+                          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>📄 Aadhaar Back PDF Uploaded</span>
+                        </div>
+                      ) : (
+                        <img src={files.aadharBack} alt="Aadhar Back Preview" style={imagePreviewStyle} />
+                      )}
                       <label style={changeFileBtnStyle}>
                         Change File
-                        <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'aadharBack')} style={{ display: 'none' }} />
+                        <input type="file" accept="image/*,.pdf,application/pdf" onChange={(e) => handleFileChange(e, 'aadharBack')} style={{ display: 'none' }} />
                       </label>
                     </div>
                   ) : (
                     <label style={dropZoneStyle}>
                       <UploadCloud size={28} color="var(--text-muted)" />
-                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Click to upload Back photo</span>
-                      <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'aadharBack')} style={{ display: 'none' }} />
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Click to upload Back photo / PDF</span>
+                      <input type="file" accept="image/*,.pdf,application/pdf" onChange={(e) => handleFileChange(e, 'aadharBack')} style={{ display: 'none' }} />
                     </label>
                   )}
                   {uploadProgress.aadharBack > 0 && uploadProgress.aadharBack < 100 && (
@@ -434,24 +448,24 @@ const Profile = () => {
 
               {/* Resume File */}
               <div>
-                <label style={uploadLabelStyle}>Resume Document (PDF/DOC)</label>
+                <label style={uploadLabelStyle}>Resume Document (PDF/DOC/Image)</label>
                 <div style={uploaderBoxStyle}>
                   {files.resume ? (
                     <div style={docPreviewStyle}>
                       <FileText size={24} color="var(--secondary-color)" />
                       <span style={{ fontSize: '0.9rem', color: 'var(--text-primary)', flexGrow: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        resume_loaded.pdf
+                        Resume Uploaded & Saved
                       </span>
                       <label style={changeFileBtnStyle}>
                         Change
-                        <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileChange(e, 'resume')} style={{ display: 'none' }} />
+                        <input type="file" accept=".pdf,.doc,.docx,image/*" onChange={(e) => handleFileChange(e, 'resume')} style={{ display: 'none' }} />
                       </label>
                     </div>
                   ) : (
                     <label style={dropZoneStyle}>
                       <UploadCloud size={28} color="var(--text-muted)" />
-                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Upload PDF/Word resume</span>
-                      <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileChange(e, 'resume')} style={{ display: 'none' }} />
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Upload PDF / Photo resume</span>
+                      <input type="file" accept=".pdf,.doc,.docx,image/*" onChange={(e) => handleFileChange(e, 'resume')} style={{ display: 'none' }} />
                     </label>
                   )}
                   {uploadProgress.resume > 0 && uploadProgress.resume < 100 && (
