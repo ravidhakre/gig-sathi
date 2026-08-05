@@ -18,8 +18,14 @@ const CandidateDashboard = () => {
 
   // Offer letter sign state
   const [offerSigned, setOfferSigned] = useState(() => {
-    return localStorage.getItem(`gs_offer_signed_${currentUser?.uid}`) === 'true';
+    return currentUser?.offerSigned === true || (currentUser?.uid && localStorage.getItem(`gs_offer_signed_${currentUser?.uid}`) === 'true');
   });
+
+  useEffect(() => {
+    if (currentUser?.offerSigned === true || (currentUser?.uid && localStorage.getItem(`gs_offer_signed_${currentUser?.uid}`) === 'true')) {
+      setOfferSigned(true);
+    }
+  }, [currentUser?.offerSigned, currentUser?.uid]);
 
   const handleCustSubmit = async (e) => {
     e.preventDefault();
@@ -39,8 +45,13 @@ const CandidateDashboard = () => {
     } catch (err) {}
   };
 
-  const handleSignOffer = () => {
-    localStorage.setItem(`gs_offer_signed_${currentUser.uid}`, 'true');
+  const handleSignOffer = async () => {
+    if (currentUser?.uid) {
+      localStorage.setItem(`gs_offer_signed_${currentUser.uid}`, 'true');
+      try {
+        await updateProfile({ offerSigned: true });
+      } catch (err) {}
+    }
     setOfferSigned(true);
     showToast("Offer letter accepted and signed successfully!", "success");
   };
@@ -537,11 +548,11 @@ const CandidateDashboard = () => {
                 </div>
 
                 {offerSigned ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-color)', fontWeight: '700' }}>
-                      <CheckCircle2 size={24} /> Signed & Accepted
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#dcfce7', padding: '12px 20px', borderRadius: '8px', border: '1px solid #86efac' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#15803d', fontWeight: '800' }}>
+                      <CheckCircle2 size={24} color="#15803d" /> Signed & Accepted
                     </div>
-                    <button onClick={handleDownloadPDF} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
+                    <button onClick={handleDownloadPDF} className="btn" style={{ padding: '8px 18px', fontSize: '0.85rem', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold' }}>
                       Download PDF
                     </button>
                   </div>

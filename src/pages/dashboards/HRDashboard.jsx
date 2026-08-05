@@ -31,8 +31,14 @@ const HRDashboard = () => {
   const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
 
   const [offerSigned, setOfferSigned] = useState(() => {
-    return localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true';
+    return currentUser?.offerSigned === true || (currentUser?.uid && localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true');
   });
+
+  useEffect(() => {
+    if (currentUser?.offerSigned === true || (currentUser?.uid && localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true')) {
+      setOfferSigned(true);
+    }
+  }, [currentUser?.offerSigned, currentUser?.uid]);
 
   const effectiveRole = jdRole || activeProj?.title || 'Customer Relationship Executive';
   const effectiveSalary = jdSalary || activeProj?.salary || activeProj?.commission || '₹15,000 / month + Incentives';
@@ -232,9 +238,12 @@ For any questions, reply to this message:
 We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderful day!`;
   };
 
-  const handleSignOffer = () => {
+  const handleSignOffer = async () => {
     if (currentUser?.uid) {
       localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
+      try {
+        await updateProfile({ offerSigned: true });
+      } catch (err) {}
     }
     setOfferSigned(true);
     if (typeof showToast === 'function') {
@@ -839,7 +848,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
               <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
                 <div style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>OFFER_LETTER_HR.pdf</span>
-                  <span className={`badge ${offerSigned ? 'badge-hired' : 'badge-calling'}`}>
+                  <span className={`badge ${offerSigned ? 'badge-approved' : 'badge-pending'}`}>
                     {offerSigned ? 'SIGNED & ACTIVE' : 'AWAITING SIGNATURE'}
                   </span>
                 </div>
@@ -859,11 +868,11 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
                 </p>
 
                 {offerSigned ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--primary-light)', border: '1px solid rgba(222,49,99,0.2)', width: '100%' }}>
-                    <CheckCircle2 size={36} color="var(--primary-color)" />
-                    <strong style={{ color: 'var(--primary-color)' }}>Agreement Signed & Locked</strong>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>IP logged successfully. Copy sent to verified email.</span>
-                    <button onClick={handleDownloadPDF} className="btn btn-primary" style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: '#dcfce7', border: '1px solid #86efac', width: '100%' }}>
+                    <CheckCircle2 size={36} color="#15803d" />
+                    <strong style={{ color: '#15803d', fontSize: '1.05rem' }}>Agreement Signed & Locked</strong>
+                    <span style={{ fontSize: '0.8rem', color: '#166534', marginBottom: '4px' }}>IP logged successfully. Your signed agreement is active.</span>
+                    <button onClick={handleDownloadPDF} className="btn" style={{ width: '100%', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold', padding: '12px' }}>
                       Download Offer Letter (PDF)
                     </button>
                   </div>
