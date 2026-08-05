@@ -964,30 +964,57 @@ export const dbService = {
     }
   },
 
-  updateProfile: async (uid, updatedFields) => {
-    const users = JSON.parse(localStorage.getItem('gs_users'));
-    const index = users.findIndex(u => u.uid === uid);
+  updateProfile: async (uidOrEmail, updatedFields) => {
+    let users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const targetKey = String(uidOrEmail || '').toLowerCase().trim();
+
+    let index = users.findIndex(u => 
+      (u.uid && String(u.uid).toLowerCase().trim() === targetKey) || 
+      (u.email && String(u.email).toLowerCase().trim() === targetKey)
+    );
+
+    let u = null;
     if (index !== -1) {
-      const u = { ...users[index], ...updatedFields };
-      if (u.aadharNumber && u.pincode && u.city && u.state && u.aadharFront && u.aadharBack && u.resume) {
-        u.profileComplete = true;
-      }
-      users[index] = u;
-      localStorage.setItem('gs_users', JSON.stringify(users));
-
-      if (dbMode === 'FIREBASE') {
-        try {
-          // If profile files are uploaded in base64, you can store directly in Firestore,
-          // or in Storage if required. For standard API simplicity, we update Firestore doc.
-          await setDoc(doc(firebaseFirestore, 'users', uid), u);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      return u;
+      u = { ...users[index], ...updatedFields };
+    } else {
+      u = { uid: uidOrEmail, ...updatedFields };
+      users.push(u);
+      index = users.length - 1;
     }
-    throw new Error("User not found.");
+
+    if ((u.aadharFront || u.aadharBack || u.resume || u.aadharNumber) && (u.pincode || u.city || u.address || u.bankName)) {
+      u.profileComplete = true;
+    }
+    users[index] = u;
+    localStorage.setItem('gs_users', JSON.stringify(users));
+
+    // Update gs_current_user in localStorage if matching
+    try {
+      const curUser = JSON.parse(localStorage.getItem('gs_current_user'));
+      if (
+        curUser && (
+          (curUser.uid && String(curUser.uid).toLowerCase().trim() === targetKey) ||
+          (curUser.email && String(curUser.email).toLowerCase().trim() === targetKey)
+        )
+      ) {
+        localStorage.setItem('gs_current_user', JSON.stringify({ ...curUser, ...u }));
+      }
+    } catch (e) {}
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        if (u.uid) {
+          await setDoc(doc(firebaseFirestore, 'users', u.uid), u, { merge: true });
+        }
+        if (u.email) {
+          await setDoc(doc(firebaseFirestore, 'users', u.email.toLowerCase().trim()), u, { merge: true });
+        }
+      } catch (e) {
+        console.error("Firestore updateProfile error:", e);
+      }
+    }
+
+    return u;
   },
 
   getUsers: async () => {

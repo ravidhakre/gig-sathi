@@ -1,6 +1,6 @@
 /**
  * Utility to automatically compress image files client-side before saving/uploading.
- * Reduces file sizes from 5MB+ down to ~80KB - 150KB for fast site load speeds and minimal storage.
+ * Non-image files (e.g. PDF documents) are safely converted to Base64 data URLs without crashing.
  */
 export const compressImage = (fileOrBase64, maxWidth = 1200, maxHeight = 1200, quality = 0.75) => {
   return new Promise((resolve) => {
@@ -50,15 +50,21 @@ export const compressImage = (fileOrBase64, maxWidth = 1200, maxHeight = 1200, q
         resolve(fileOrBase64);
       }
     } else if (fileOrBase64 instanceof File || fileOrBase64 instanceof Blob) {
-      if (!fileOrBase64.type || !fileOrBase64.type.startsWith('image/')) {
-        // Non-image file (e.g. PDF document), read as raw base64 data URL
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(fileOrBase64);
-        return;
-      }
+      const mimeType = fileOrBase64.type || '';
+      const fileName = fileOrBase64.name || '';
+      const isImage = mimeType.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|bmp)$/i.test(fileName);
+
       const reader = new FileReader();
-      reader.onloadend = () => processDataUrl(reader.result);
+      reader.onloadend = () => {
+        const result = reader.result || '';
+        if (isImage) {
+          processDataUrl(result);
+        } else {
+          // PDF or document file: resolve raw data URL directly
+          resolve(result);
+        }
+      };
+      reader.onerror = () => resolve('');
       reader.readAsDataURL(fileOrBase64);
     } else {
       resolve('');

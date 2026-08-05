@@ -94,31 +94,29 @@ const Profile = () => {
   };
 
   // Handle files conversion to base64 for mock storage and visualization
-  const handleFileChange = (e, fieldName) => {
+  const handleFileChange = async (e, fieldName) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Simulate progress bar loading animation
-    setUploadProgress(prev => ({ ...prev, [fieldName]: 10 }));
-    let progress = 10;
-    const interval = setInterval(async () => {
-      progress += 20;
-      if (progress >= 100) {
-        clearInterval(interval);
-        setUploadProgress(prev => ({ ...prev, [fieldName]: 100 }));
+    setUploadProgress(prev => ({ ...prev, [fieldName]: 25 }));
 
-        try {
-          const compressed = await compressImage(file);
-          setFiles(prev => ({ ...prev, [fieldName]: compressed }));
-          await updateProfile({ [fieldName]: compressed });
-          showToast(`Uploaded & compressed ${fieldName} document successfully!`, 'success');
-        } catch (err) {
-          showToast(`Upload failed: ${err.message}`, 'danger');
-        }
-      } else {
-        setUploadProgress(prev => ({ ...prev, [fieldName]: progress }));
-      }
-    }, 150);
+    try {
+      setUploadProgress(prev => ({ ...prev, [fieldName]: 60 }));
+      const processedFile = await compressImage(file);
+      
+      setFiles(prev => ({ ...prev, [fieldName]: processedFile }));
+      setUploadProgress(prev => ({ ...prev, [fieldName]: 85 }));
+
+      await updateProfile({ [fieldName]: processedFile });
+      setUploadProgress(prev => ({ ...prev, [fieldName]: 100 }));
+
+      const docType = file.type === 'application/pdf' ? 'PDF Document' : 'Document';
+      showToast(`Uploaded ${docType} (${fieldName}) successfully!`, 'success');
+    } catch (err) {
+      console.error("Upload error:", err);
+      setUploadProgress(prev => ({ ...prev, [fieldName]: 0 }));
+      showToast(`Upload failed: ${err.message}`, 'danger');
+    }
   };
 
   return (
