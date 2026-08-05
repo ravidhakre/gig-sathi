@@ -119,30 +119,130 @@ const SEED_USERS = [
   }
 ];
 
-const DEFAULT_PITCH_HI_R1 = `Hello, kya meri baat {{name}} se ho rahi hai?
+const DEFAULT_PITCH_HI_R1 = `STEP 1: INTRODUCTION & COURTESY PERMISSION
+"Hello, kya meri baat {{name}} se ho rahi hai?
 Hi {{name}}, mera naam {{hrName}} hai, aur main SRYN Management Pvt. Ltd. se baat kar raha/rahi hoon.
-Kya abhi 2–3 minute baat karne ke liye sahi time hai?
+Kya abhi 2–3 minute baat karne ke liye sahi time hai?"
 
-Bahut badiya! Hum abhi apni financial services division ke liye Customer Relationship Executives / {{role}} hire kar rahe hain. Aapki profile is opportunity ke liye suitable hai.
+STEP 2: OPPORTUNITY & HOMETOWN WORK PITCH
+"Bahut badiya!
+Hum abhi apni financial services division ke liye Customer Relationship Executives hire kar rahe hain. Aapki profile is opportunity ke liye suitable hai.
 Sabse achhi baat ye hai ki hum aapko aapke hometown mein work opportunity de rahe hain, toh aapko relocate hone ki zaroorat nahi hai.
-Offered salary {{salary}} hai, saath mein performance-based growth opportunities hain.
+Offered salary ₹15,000 per month hai, saath mein performance-based growth opportunities hain."
 
-Aapki responsibility hamare FD Card / Financial products ke baare mein customers ko guide karna aur application process mein help karna hoga. FD ₹2,000 se ₹5,00,000 tak, 7% annual interest, aur CIBIL score builder benefits hain.`;
+STEP 3: ROLE & FD CARD PRODUCT EXPLANATION
+"Aapki responsibility hamare FD Card ke baare mein customers ko guide karna aur application process mein help karna hoga. Hamara card un customers ke liye specially designed hai jo apna CIBIL score banana ya improve karna chahte hain.
 
-const DEFAULT_PITCH_EN_R1 = `Hello, may I speak with {{name}}?
+Key FD Card Benefits to Explain:
+• FD starting from ₹2,000 up to ₹5,00,000
+• Fixed Deposit earns 7% annual interest
+• FD remains in the customer's own name
+• Instant credit to linked card account upon FD closure process
+• Helps customers build a strong CIBIL score while their money earns interest"
+
+STEP 4: HIRING PROCESS & SALARY PAYOUT SCHEDULE
+2-Round Simple Hiring:
+1st Round: Telephonic Interview
+2nd Round: Video Interview
+Then: Official Offer Letter & Dashboard Activation.
+
+Salary Cycle & Payout:
+Salary is processed after completing 30 days of work. Payment credited within 5–7 working days post cycle.
+
+STEP 5: CLOSING LINE & VIDEO INTERVIEW INVITATION
+"Aapki profile dekhte hue, I believe ye opportunity aapke liye bahut achhi fit ho sakti hai. Kya aap hamare second-round video interview ko attend karne mein interested hain jahan company, salary structure, training aur growth ke baare mein detail milegi?"
+
+⚡ INTERACTIVE CANDIDATE OBJECTION HANDLERS
+If Candidate Says "I'm Not Interested":
+"Main samajh sakta/samajhti hoon. Par aapse kehna chahunga/chahungi ki ye Customer Relationship role hai jismein ₹15,000 fixed salary, hometown work opportunity, official offer letter, employee dashboard aur full training support milta hai. Sirf 15–20 minute ka video interview hai, jiske baad aap decide kar sakte hain. Kya aap ek baar interview attend karke final decision lena chahenge?"`;
+
+const DEFAULT_PITCH_EN_R1 = `STEP 1: INTRODUCTION & COURTESY PERMISSION
+"Hello, may I speak with {{name}}?
 Hi {{name}}, my name is {{hrName}}, and I'm calling from SRYN Management Pvt. Ltd.
-Is this a good time to talk? It will only take 2–3 minutes.
+Is this a good time to talk? It will only take 2–3 minutes."
 
-We are currently hiring Customer Relationship Executives / {{role}} for our team. I came across your profile and found it suitable for this opportunity.
-The best part is that we provide work opportunities in your hometown with offered salary {{salary}}.
+STEP 2: OPPORTUNITY & HOMETOWN WORK PITCH
+"Great!
+We are currently hiring Customer Relationship Executives for our financial services division. I came across your profile and found it suitable for this opportunity.
+The best part is that we provide work opportunities in your hometown, so you don't need to relocate.
+The offered salary is ₹15,000 per month, along with performance-based growth opportunities."
 
-Your responsibility will be to guide customers about our products and help them complete the onboarding process.`;
+STEP 3: ROLE & FD CARD PRODUCT EXPLANATION
+"Your responsibility will be to guide customers about our FD Card and help them complete the application process. Our company offers an FD-backed card specially designed for customers who want to improve or build their CIBIL score.
 
-const DEFAULT_PITCH_HI_R2 = `Namaskar {{name}}! SRYN Management ke Round 2 Video Interview mein aapka swagat hai.
-Main aapko role, payout matrices, daily commission structure, aur official offer letter onboarding process explain karne wala/wali hoon.`;
+Key FD Card Benefits to Explain:
+• FD starting from ₹2,000 up to ₹5,00,000
+• Fixed Deposit earns 7% annual interest
+• FD remains in the customer's own name
+• Instant credit to linked card account upon FD closure process
+• Helps customers build a strong CIBIL score while their money earns interest"
 
-const DEFAULT_PITCH_EN_R2 = `Welcome {{name}} to Round 2 Video Interview with SRYN Management.
-Today we will cover your job responsibilities, payout structure, training modules, and official offer letter onboarding.`;
+STEP 4: HIRING PROCESS & SALARY PAYOUT SCHEDULE
+2-Round Simple Hiring:
+1st Round: Telephonic Interview
+2nd Round: Video Interview
+Then: Official Offer Letter & Dashboard Activation.
+
+Salary Cycle & Payout:
+Salary is processed after completing 30 days of work. Payment credited within 5–7 working days post cycle.
+
+STEP 5: CLOSING LINE & VIDEO INTERVIEW INVITATION
+"Based on your profile, I believe this opportunity can be a good fit for you. Would you be interested in attending our second-round video interview to know more about the company, salary structure, training process, and growth opportunities?"
+
+⚡ INTERACTIVE CANDIDATE OBJECTION HANDLERS
+If Candidate Says "I'm Not Interested":
+"I completely understand. Before you decide, I'd just like to mention that this is a customer relationship role with a fixed salary of ₹15,000, work opportunities in your hometown, official offer letter, employee dashboard, training support, and future career growth. It will only take around 15–20 minutes to attend the video interview, after which you can decide. Would you be willing to attend the interview once and then make your final decision?"`;
+
+const DEFAULT_PITCH_HI_R2 = `1. WELCOME & INTERVIEW PURPOSE
+"Hello {{name}}, SRYN Management Pvt. Ltd. ke second round video interview mein aapka swagat hai. Aaj ka interview sirf candidate select karne ke liye nahi hai, balki aapko job profile, responsibilities aur growth ke baare mein poori jankari dene ke liye hai taaki agar aap hamare saath judte hain toh aapko apna kaam clear rahe. Koi bhi sawaal ho toh zaroor poochiye."
+
+2. ABOUT SRYN MANAGEMENT PVT. LTD.
+"SRYN Management Pvt. Ltd. financial services sector mein kaam karti hai. Hamara uddeshya customers ko sahi financial products dena hai jisse unka credit journey behtar bane aur unhe Fixed Deposits par 7% annual interest mil sake. Hum transparency, proper training, aur employees ki long-term career growth par focus karte hain."
+
+3. JOB ROLE & RESPONSIBILITIES
+Job Role: Customer Relationship Executive (CRE)
+Core Duty: Customers ko hamare FD Card ke features, 7% annual interest rate, aur CIBIL building benefits explain karna.
+Support: Customers ko application form fill karne mein online assist karna.
+No Cash Field Handling: Koi cash collection ya field runs nahi hain. Pure relationship & guidance role.
+
+4. TARGET & SALARY EVALUATION CRITERIA
+Role Benchmark Target: ₹1,00,000 FD Volume per month.
+Sixty Percent Rule for Full Salary Eligibility: Full ₹15,000 salary ke liye minimum 60% of target (yani ₹60,000 FD volume) achieve karna zaroori hai.
+Performance Calculation Examples:
+• 100% Target Achieved (₹1 Lakh FD): Full Salary ₹15,000 + Performance Incentive
+• 60% Target Achieved (₹60,000 FD): Full Salary ₹15,000
+• Below 60% (e.g., ₹50,000 FD): Salary calculated proportionately (₹50k/₹100k = 50% of ₹15k = ₹7,500)
+
+5. OFFICIAL OFFER LETTER & DASHBOARD ACTIVATION
+Aapko SRYN Management Pvt. Ltd. se official Appointment Cum Offer Letter milega, jise aap apne personal Employee Dashboard se read, digitally sign, aur PDF download kar sakte hain.
+
+6. ORIENTATION CLOSING PITCH
+"Kya aap SRYN Management Pvt. Ltd. ke saath Customer Relationship Executive role mein join karne ke liye tayyar hain?"`;
+
+const DEFAULT_PITCH_EN_R2 = `1. WELCOME & INTERVIEW PURPOSE
+"Hello {{name}}, welcome to the second round of your interview with SRYN Management Pvt. Ltd. First of all, thank you for joining us today. This interview is not just about selecting candidates—it is also about helping you understand the complete job profile so that, if you join us, you know exactly what your responsibilities, growth opportunities, and expectations will be. Please feel free to ask questions at any point."
+
+2. ABOUT SRYN MANAGEMENT PVT. LTD.
+"SRYN Management Pvt. Ltd. operates in the financial services sector. Our mission is to provide customers with genuine financial products that strengthen their credit journey while offering 7% annual interest on Fixed Deposits. We focus on transparency, structured training, and long-term career growth for our team."
+
+3. JOB ROLE & CORE RESPONSIBILITIES
+Job Role: Customer Relationship Executive (CRE)
+Core Duty: Guide customers regarding FD Card features, 7% annual interest, and CIBIL score enhancement benefits.
+Process: Assist customers digitally in completing their online application forms. No cash field handling.
+
+4. TARGET & SALARY EVALUATION MATRIX
+Target Requirement: ₹1,00,000 FD Volume per monthly cycle.
+Minimum Eligibility Benchmark: To receive full ₹15,000 monthly salary, candidate must achieve at least 60% of the target (₹60,000 FD volume).
+Payout Scenarios:
+• 100% Target (₹1 Lakh FD): Full Salary ₹15,000 + Incentives
+• 60% Target (₹60k FD): Full Salary ₹15,000
+• Below 60% (e.g. ₹50k FD): Proportionate Salary payout (50% = ₹7,500)
+
+5. OFFICIAL APPOINTMENT OFFER & DASHBOARD ACCESS
+You will receive an official Appointment Cum Offer Letter from SRYN Management Pvt. Ltd. You can read, digitally sign, and download your PDF offer letter directly from your employee dashboard.
+
+6. ORIENTATION CLOSING PITCH
+"Are you ready to commence your onboarding process as Customer Relationship Executive with SRYN Management Pvt. Ltd.?"`;
 
 const DEFAULT_PITCH_HI_JD = `🚨 *URGENT HIRING DRIVE: {{role}}* 🚨
 Company: SRYN Management Pvt. Ltd.
@@ -527,13 +627,21 @@ const initMockStorage = () => {
   if (!localStorage.getItem('gs_projects')) {
     localStorage.setItem('gs_projects', JSON.stringify(SEED_PROJECTS));
   } else {
-    // Ensure CRE project is present
-    const existing = JSON.parse(localStorage.getItem('gs_projects')) || [];
-    const hasCRE = existing.some(p => p.id === 'proj-cre-1' || p.title === 'Customer Relationship Executive');
-    if (!hasCRE) {
+    // Ensure CRE project is present and updated with full original scripts
+    let existing = JSON.parse(localStorage.getItem('gs_projects')) || [];
+    const creIndex = existing.findIndex(p => p.id === 'proj-cre-1' || p.title === 'Customer Relationship Executive');
+    if (creIndex !== -1) {
+      existing[creIndex] = {
+        ...existing[creIndex],
+        scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+        scriptRound1English: DEFAULT_PITCH_EN_R1,
+        scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+        scriptRound2English: DEFAULT_PITCH_EN_R2
+      };
+    } else {
       existing.unshift(SEED_PROJECTS[0]);
-      localStorage.setItem('gs_projects', JSON.stringify(existing));
     }
+    localStorage.setItem('gs_projects', JSON.stringify(existing));
   }
   if (!localStorage.getItem('gs_leads')) {
     localStorage.setItem('gs_leads', JSON.stringify(SEED_LEADS));
