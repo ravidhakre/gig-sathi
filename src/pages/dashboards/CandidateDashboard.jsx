@@ -171,14 +171,17 @@ const CandidateDashboard = () => {
     printWindow.document.close();
   };
 
-  const renderOfferLetter = () => {
+  const renderOfferLetter = (targetPerson = null) => {
     try {
+      const target = (targetPerson && typeof targetPerson === 'object' && (targetPerson.email || targetPerson.fullName)) 
+        ? targetPerson 
+        : (currentUser || {});
       const safeTemplates = templates || [];
       const candidateTemplate = safeTemplates.find(t => t.role === 'Candidate') || safeTemplates.find(t => t.role === 'HR') || {
         content: `<h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Dear {{name}}, offer letter loading...</p>`
       };
       
-      const issueDateObj = new Date();
+      const issueDateObj = target?.date ? new Date(target.date) : new Date();
       const joiningDateObj = new Date(issueDateObj);
       joiningDateObj.setDate(joiningDateObj.getDate() + 1);
 
@@ -188,28 +191,28 @@ const CandidateDashboard = () => {
         year: 'numeric'
       });
 
-      const joiningDateStr = currentUser?.joiningDate || joiningDateObj.toLocaleDateString('en-IN', {
+      const joiningDateStr = target?.joiningDate || joiningDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
       });
 
       const userAddress = [
-        currentUser?.address,
-        currentUser?.city,
-        currentUser?.state,
-        currentUser?.pincode
-      ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
+        target?.address,
+        target?.city,
+        target?.state,
+        target?.pincode
+      ].filter(Boolean).join(', ') || (currentUser?.address ? [currentUser.address, currentUser.city, currentUser.state, currentUser.pincode].filter(Boolean).join(', ') : 'Not Provided (Complete Candidate Profile)');
 
-      const userRole = currentUser?.roleApplied || currentUser?.position || 'Field Executive';
-      const userSalary = currentUser?.salary || '₹8,000/- (Rupees Eight Thousand Only)';
-      const userWorkingHours = currentUser?.workingHours || '11:00 A.M. to 7:30 P.M.';
-      const userPerformanceTarget = currentUser?.performanceTarget || 'Fifty (50) candidates';
+      const userRole = target?.roleApplied || target?.position || 'Field Executive';
+      const userSalary = target?.salary || '₹8,000/- (Rupees Eight Thousand Only)';
+      const userWorkingHours = target?.workingHours || '11:00 A.M. to 7:30 P.M.';
+      const userPerformanceTarget = target?.performanceTarget || 'Fifty (50) candidates';
 
       let html = (candidateTemplate?.content || '')
-        .replace(/{{name}}/g, currentUser?.fullName || 'Candidate')
-        .replace(/{{email}}/g, currentUser?.email || 'N/A')
-        .replace(/{{mobile}}/g, currentUser?.mobile || 'N/A')
+        .replace(/{{name}}/g, target?.fullName || target?.name || currentUser?.fullName || 'Candidate')
+        .replace(/{{email}}/g, target?.email || currentUser?.email || 'N/A')
+        .replace(/{{mobile}}/g, target?.mobile || currentUser?.mobile || 'N/A')
         .replace(/{{address}}/g, userAddress)
         .replace(/{{date}}/g, todayStr)
         .replace(/{{joining_date}}/g, joiningDateStr)

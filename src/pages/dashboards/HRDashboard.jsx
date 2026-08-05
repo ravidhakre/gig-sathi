@@ -242,9 +242,11 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
     }
   };
 
-  const handleDownloadPDF = (person = null) => {
+  const handleDownloadPDF = (personParam = null) => {
     try {
-      const target = person || currentUser || {};
+      const target = (personParam && typeof personParam === 'object' && (personParam.email || personParam.fullName)) 
+        ? personParam 
+        : (currentUser || {});
       const printWindow = window.open('', '_blank');
       if (!printWindow) {
         if (typeof showToast === 'function') {
@@ -386,7 +388,9 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
 
   const renderOfferLetter = (targetPerson = null) => {
     try {
-      const person = targetPerson || currentUser || {};
+      const person = (targetPerson && typeof targetPerson === 'object' && (targetPerson.email || targetPerson.fullName)) 
+        ? targetPerson 
+        : (currentUser || {});
       const safeTemplates = templates || [];
       const hrTemplate = safeTemplates.find(t => t.role === (person?.role || 'HR')) 
         || safeTemplates.find(t => t.role === 'Candidate') 
@@ -414,7 +418,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
         person?.city,
         person?.state,
         person?.pincode
-      ].filter(Boolean).join(', ') || 'Not Provided (Complete Candidate Profile)';
+      ].filter(Boolean).join(', ') || (currentUser?.address ? [currentUser.address, currentUser.city, currentUser.state, currentUser.pincode].filter(Boolean).join(', ') : 'Not Provided (Complete Candidate Profile)');
 
       const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Field Executive');
       const userSalary = person?.salary || '₹8,000/- (Rupees Eight Thousand Only)';
@@ -422,9 +426,9 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
       const userPerformanceTarget = person?.performanceTarget || 'Fifty (50) candidates';
 
       let html = (hrTemplate?.content || '')
-        .replace(/{{name}}/g, person?.fullName || 'Candidate')
-        .replace(/{{email}}/g, person?.email || 'N/A')
-        .replace(/{{mobile}}/g, person?.mobile || 'N/A')
+        .replace(/{{name}}/g, person?.fullName || person?.name || currentUser?.fullName || 'Candidate')
+        .replace(/{{email}}/g, person?.email || currentUser?.email || 'N/A')
+        .replace(/{{mobile}}/g, person?.mobile || currentUser?.mobile || 'N/A')
         .replace(/{{address}}/g, userAddress)
         .replace(/{{date}}/g, todayStr)
         .replace(/{{joining_date}}/g, joiningDateStr)
