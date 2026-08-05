@@ -190,10 +190,11 @@ export const AppProvider = ({ children }) => {
     try {
       const allUsers = await dbService.getUsers();
       const latestSelf = allUsers.find(
-        (u) => u.uid === currentUser.uid || u.email?.toLowerCase() === currentUser.email?.toLowerCase()
+        (u) => (u.uid && currentUser.uid && u.uid === currentUser.uid) || 
+               (u.email && currentUser.email && u.email.toLowerCase().trim() === currentUser.email.toLowerCase().trim())
       );
       if (latestSelf) {
-        localStorage.setItem('gs_current_user', JSON.stringify(latestSelf));
+        dbService.safeSetLocalStorage('gs_current_user', latestSelf);
         setCurrentUser(latestSelf);
         return latestSelf;
       }
@@ -205,14 +206,14 @@ export const AppProvider = ({ children }) => {
   const updateProfile = async (updatedFields) => {
     if (!currentUser) return;
     try {
-      const updatedUser = await dbService.updateProfile(currentUser.uid, updatedFields);
-      localStorage.setItem('gs_current_user', JSON.stringify(updatedUser));
+      const targetId = currentUser.uid || currentUser.email;
+      const updatedUser = await dbService.updateProfile(targetId, updatedFields);
+      dbService.safeSetLocalStorage('gs_current_user', updatedUser);
       setCurrentUser(updatedUser);
-      // Sync the user list in localStorage
-      const allUsers = await dbService.getUsers();
       showToast("Profile details updated successfully!", "success");
       return updatedUser;
     } catch (error) {
+      console.error("updateProfile error:", error);
       showToast(error.message, "danger");
       throw error;
     }

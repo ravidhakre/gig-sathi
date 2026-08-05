@@ -236,6 +236,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleReviewKYCClick = async (u) => {
+    setSelectedUserForKYC(u);
+    if (dbMode === 'FIREBASE' && (u.uid || u.email)) {
+      try {
+        let fullDoc = null;
+        if (u.uid) {
+          const docSnap = await getDoc(doc(firebaseFirestore, 'users', u.uid));
+          if (docSnap.exists()) fullDoc = docSnap.data();
+        }
+        if (!fullDoc && u.email) {
+          const docSnap = await getDoc(doc(firebaseFirestore, 'users', u.email.toLowerCase().trim()));
+          if (docSnap.exists()) fullDoc = docSnap.data();
+        }
+        if (fullDoc) {
+          setSelectedUserForKYC(prev => ({ ...prev, ...fullDoc }));
+        }
+      } catch (err) {
+        console.error("Error fetching full KYC doc from Firestore:", err);
+      }
+    }
+  };
+
   const handleDeleteCandidateClick = async (userObjOrUid) => {
     if (window.confirm("Are you sure you want to delete this user completely from the portal?")) {
       await deleteUserAdmin(userObjOrUid);
@@ -642,7 +664,7 @@ const AdminDashboard = () => {
                         <td>
                           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                             <button 
-                              onClick={() => setSelectedUserForKYC(u)}
+                              onClick={() => handleReviewKYCClick(u)}
                               className="btn btn-outline" 
                               style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
                             >
@@ -739,7 +761,7 @@ const AdminDashboard = () => {
                         <td>
                           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                             <button 
-                              onClick={() => setSelectedUserForKYC(u)}
+                              onClick={() => handleReviewKYCClick(u)}
                               className="btn btn-outline" 
                               style={{ padding: '6px 12px', fontSize: '0.8rem', borderColor: 'var(--primary-color)', color: 'var(--primary-color)' }}
                             >

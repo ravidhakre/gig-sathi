@@ -778,6 +778,7 @@ const safeSetLocalStorage = (key, value) => {
 
 export const dbService = {
   getMode: () => dbMode,
+  safeSetLocalStorage,
 
   // --- CMS Operations ---
   getCMS: async () => {
