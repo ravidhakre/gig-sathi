@@ -154,13 +154,26 @@ const AdminDashboard = () => {
     });
   };
 
+  const [projFormErrors, setProjFormErrors] = useState({});
+
   // Project save updates
   const handleProjSubmit = async (e) => {
     if (e) e.preventDefault();
-    if (!projForm.title || !projForm.description || !projForm.commission) {
-      showToast("Please fill all required project parameters.", "warning");
+    const errors = {};
+    if (!projForm.title?.trim()) errors.title = "Campaign Title is required";
+    if (!projForm.salary?.trim()) errors.salary = "Offered Salary is required";
+    if (!projForm.location?.trim()) errors.location = "Work Location is required";
+    if (!projForm.commission?.trim()) errors.commission = "Commission Structure is required";
+    if (!projForm.workingLink?.trim()) errors.workingLink = "Onboarding Link is required";
+    if (!projForm.description?.trim()) errors.description = "Overview & Description is required";
+
+    if (Object.keys(errors).length > 0) {
+      setProjFormErrors(errors);
+      showToast("Please fill all required campaign fields highlighted in red.", "danger");
       return;
     }
+    setProjFormErrors({});
+
     try {
       if (editingProj) {
         await updateProjectDetails(editingProj.id, projForm);
@@ -965,18 +978,32 @@ const AdminDashboard = () => {
               <h3>{editingProj ? 'Modify Campaign Details & Scripts' : 'Create New Hiring Campaign'}</h3>
               <button onClick={() => { setShowProjModal(false); setEditingProj(null); }}><X size={20} /></button>
             </div>
-            <form onSubmit={projForm.title ? handleProjSubmit : (e) => e.preventDefault()} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <form onSubmit={handleProjSubmit} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
               <div className="grid-2" style={{ gap: '15px' }}>
                 <div className="form-group">
-                  <label>Campaign Title / Hiring Role</label>
+                  <label style={{ color: projFormErrors.title ? 'var(--danger-color)' : 'inherit', fontWeight: 'bold' }}>
+                    Campaign Title / Hiring Role <span style={{ color: 'var(--danger-color)' }}>*</span>
+                  </label>
                   <input
                     type="text"
                     className="form-control"
+                    style={{
+                      borderColor: projFormErrors.title ? 'var(--danger-color)' : '',
+                      boxShadow: projFormErrors.title ? '0 0 0 3px rgba(239, 68, 68, 0.25)' : '',
+                      backgroundColor: projFormErrors.title ? '#fff5f5' : ''
+                    }}
                     value={projForm.title}
-                    onChange={(e) => setProjForm({ ...projForm, title: e.target.value })}
+                    onChange={(e) => {
+                      setProjForm({ ...projForm, title: e.target.value });
+                      if (projFormErrors.title) setProjFormErrors({ ...projFormErrors, title: null });
+                    }}
                     placeholder="E.g., SRYN FD Card Customer Relationship Executive"
-                    required
                   />
+                  {projFormErrors.title && (
+                    <div style={{ color: 'var(--danger-color)', fontSize: '0.78rem', marginTop: '4px', fontWeight: 'bold' }}>
+                      ⚠️ {projFormErrors.title}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Campaign Category</label>
@@ -995,24 +1022,54 @@ const AdminDashboard = () => {
 
               <div className="grid-3" style={{ gap: '15px' }}>
                 <div className="form-group">
-                  <label>Offered Fixed Salary</label>
+                  <label style={{ color: projFormErrors.salary ? 'var(--danger-color)' : 'inherit', fontWeight: 'bold' }}>
+                    Offered Fixed Salary <span style={{ color: 'var(--danger-color)' }}>*</span>
+                  </label>
                   <input
                     type="text"
                     className="form-control"
+                    style={{
+                      borderColor: projFormErrors.salary ? 'var(--danger-color)' : '',
+                      boxShadow: projFormErrors.salary ? '0 0 0 3px rgba(239, 68, 68, 0.25)' : '',
+                      backgroundColor: projFormErrors.salary ? '#fff5f5' : ''
+                    }}
                     value={projForm.salary}
-                    onChange={(e) => setProjForm({ ...projForm, salary: e.target.value })}
+                    onChange={(e) => {
+                      setProjForm({ ...projForm, salary: e.target.value });
+                      if (projFormErrors.salary) setProjFormErrors({ ...projFormErrors, salary: null });
+                    }}
                     placeholder="E.g., ₹15,000 / month + Incentives"
                   />
+                  {projFormErrors.salary && (
+                    <div style={{ color: 'var(--danger-color)', fontSize: '0.78rem', marginTop: '4px', fontWeight: 'bold' }}>
+                      ⚠️ {projFormErrors.salary}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
-                  <label>Work Location</label>
+                  <label style={{ color: projFormErrors.location ? 'var(--danger-color)' : 'inherit', fontWeight: 'bold' }}>
+                    Work Location <span style={{ color: 'var(--danger-color)' }}>*</span>
+                  </label>
                   <input
                     type="text"
                     className="form-control"
+                    style={{
+                      borderColor: projFormErrors.location ? 'var(--danger-color)' : '',
+                      boxShadow: projFormErrors.location ? '0 0 0 3px rgba(239, 68, 68, 0.25)' : '',
+                      backgroundColor: projFormErrors.location ? '#fff5f5' : ''
+                    }}
                     value={projForm.location}
-                    onChange={(e) => setProjForm({ ...projForm, location: e.target.value })}
+                    onChange={(e) => {
+                      setProjForm({ ...projForm, location: e.target.value });
+                      if (projFormErrors.location) setProjFormErrors({ ...projFormErrors, location: null });
+                    }}
                     placeholder="E.g., Hometown / Local District"
                   />
+                  {projFormErrors.location && (
+                    <div style={{ color: 'var(--danger-color)', fontSize: '0.78rem', marginTop: '4px', fontWeight: 'bold' }}>
+                      ⚠️ {projFormErrors.location}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Assign to HR Manager</label>
@@ -1031,38 +1088,81 @@ const AdminDashboard = () => {
 
               <div className="grid-2" style={{ gap: '15px' }}>
                 <div className="form-group">
-                  <label>Commission / Remuneration Structure</label>
+                  <label style={{ color: projFormErrors.commission ? 'var(--danger-color)' : 'inherit', fontWeight: 'bold' }}>
+                    Commission / Remuneration Structure <span style={{ color: 'var(--danger-color)' }}>*</span>
+                  </label>
                   <input
                     type="text"
                     className="form-control"
+                    style={{
+                      borderColor: projFormErrors.commission ? 'var(--danger-color)' : '',
+                      boxShadow: projFormErrors.commission ? '0 0 0 3px rgba(239, 68, 68, 0.25)' : '',
+                      backgroundColor: projFormErrors.commission ? '#fff5f5' : ''
+                    }}
                     value={projForm.commission}
-                    onChange={(e) => setProjForm({ ...projForm, commission: e.target.value })}
+                    onChange={(e) => {
+                      setProjForm({ ...projForm, commission: e.target.value });
+                      if (projFormErrors.commission) setProjFormErrors({ ...projFormErrors, commission: null });
+                    }}
                     placeholder="E.g., Rs. 2,500 per approved card / ₹15,000 fixed"
-                    required
                   />
+                  {projFormErrors.commission && (
+                    <div style={{ color: 'var(--danger-color)', fontSize: '0.78rem', marginTop: '4px', fontWeight: 'bold' }}>
+                      ⚠️ {projFormErrors.commission}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
-                  <label>Working Signup / Onboarding Link</label>
+                  <label style={{ color: projFormErrors.workingLink ? 'var(--danger-color)' : 'inherit', fontWeight: 'bold' }}>
+                    Working Signup / Onboarding Link <span style={{ color: 'var(--danger-color)' }}>*</span>
+                  </label>
                   <input
                     type="url"
                     className="form-control"
+                    style={{
+                      borderColor: projFormErrors.workingLink ? 'var(--danger-color)' : '',
+                      boxShadow: projFormErrors.workingLink ? '0 0 0 3px rgba(239, 68, 68, 0.25)' : '',
+                      backgroundColor: projFormErrors.workingLink ? '#fff5f5' : ''
+                    }}
                     value={projForm.workingLink}
-                    onChange={(e) => setProjForm({ ...projForm, workingLink: e.target.value })}
+                    onChange={(e) => {
+                      setProjForm({ ...projForm, workingLink: e.target.value });
+                      if (projFormErrors.workingLink) setProjFormErrors({ ...projFormErrors, workingLink: null });
+                    }}
                     placeholder="https://sryn.online/apply-link"
                   />
+                  {projFormErrors.workingLink && (
+                    <div style={{ color: 'var(--danger-color)', fontSize: '0.78rem', marginTop: '4px', fontWeight: 'bold' }}>
+                      ⚠️ {projFormErrors.workingLink}
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="form-group">
-                <label>Brief Campaign Overview & Description</label>
+                <label style={{ color: projFormErrors.description ? 'var(--danger-color)' : 'inherit', fontWeight: 'bold' }}>
+                  Brief Campaign Overview & Description <span style={{ color: 'var(--danger-color)' }}>*</span>
+                </label>
                 <textarea
                   rows="2"
                   className="form-control"
+                  style={{
+                    borderColor: projFormErrors.description ? 'var(--danger-color)' : '',
+                    boxShadow: projFormErrors.description ? '0 0 0 3px rgba(239, 68, 68, 0.25)' : '',
+                    backgroundColor: projFormErrors.description ? '#fff5f5' : ''
+                  }}
                   value={projForm.description}
-                  onChange={(e) => setProjForm({ ...projForm, description: e.target.value })}
+                  onChange={(e) => {
+                    setProjForm({ ...projForm, description: e.target.value });
+                    if (projFormErrors.description) setProjFormErrors({ ...projFormErrors, description: null });
+                  }}
                   placeholder="Overview of this hiring drive..."
-                  required
                 ></textarea>
+                {projFormErrors.description && (
+                  <div style={{ color: 'var(--danger-color)', fontSize: '0.78rem', marginTop: '4px', fontWeight: 'bold' }}>
+                    ⚠️ {projFormErrors.description}
+                  </div>
+                )}
               </div>
 
               <hr style={{ borderColor: 'var(--border-color)', margin: '5px 0' }} />
@@ -1107,7 +1207,7 @@ const AdminDashboard = () => {
                 </button>
                 <button 
                   type="button"
-                  onClick={() => { setShowProjModal(false); setEditingProj(null); }}
+                  onClick={() => { setShowProjModal(false); setEditingProj(null); setProjFormErrors({}); }}
                   className="btn btn-outline"
                   style={{ flex: 0.4 }}
                 >
