@@ -409,7 +409,7 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
       const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Field Executive');
       const userSalary = person?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
       const userWorkingHours = person?.workingHours || '11:00 A.M. to 7:30 P.M.';
-      const userPerformanceTarget = person?.performanceTarget || 'Forty (40) candidates';
+      const userPerformanceTarget = person?.performanceTarget || 'Fifty (50) candidates';
 
       let html = (hrTemplate?.content || '')
         .replace(/{{name}}/g, person?.fullName || 'Candidate')

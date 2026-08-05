@@ -195,7 +195,7 @@ const CandidateDashboard = () => {
       const userRole = currentUser?.roleApplied || currentUser?.position || 'Field Executive';
       const userSalary = currentUser?.salary || '₹9,000/- (Rupees Nine Thousand Only)';
       const userWorkingHours = currentUser?.workingHours || '11:00 A.M. to 7:30 P.M.';
-      const userPerformanceTarget = currentUser?.performanceTarget || 'Forty (40) candidates';
+      const userPerformanceTarget = currentUser?.performanceTarget || 'Fifty (50) candidates';
 
       let html = (candidateTemplate?.content || '')
         .replace(/{{name}}/g, currentUser?.fullName || 'Candidate')
