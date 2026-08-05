@@ -720,43 +720,53 @@ export const dbService = {
   },
 
   updateUserRole: async (uid, role) => {
-    const users = JSON.parse(localStorage.getItem('gs_users'));
-    const index = users.findIndex(u => u.uid === uid);
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const index = users.findIndex(u => u.uid === uid || u.email === uid);
+    let updatedUser = null;
+
     if (index !== -1) {
       users[index].role = role;
-      localStorage.setItem('gs_users', JSON.stringify(users));
-
-      if (dbMode === 'FIREBASE') {
-        try {
-          await updateDoc(doc(firebaseFirestore, 'users', uid), { role });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      return users[index];
+      updatedUser = users[index];
+    } else {
+      updatedUser = { uid, role };
+      users.push(updatedUser);
     }
-    throw new Error("User not found.");
+    localStorage.setItem('gs_users', JSON.stringify(users));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'users', uid), { role }, { merge: true });
+      } catch (e) {
+        console.error("Firestore updateUserRole error:", e);
+      }
+    }
+
+    return updatedUser;
   },
 
   approveUserKYC: async (uid, isApproved) => {
-    const users = JSON.parse(localStorage.getItem('gs_users'));
-    const index = users.findIndex(u => u.uid === uid);
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const index = users.findIndex(u => u.uid === uid || u.email === uid);
+    let updatedUser = null;
+
     if (index !== -1) {
       users[index].profileApproved = isApproved;
-      localStorage.setItem('gs_users', JSON.stringify(users));
-
-      if (dbMode === 'FIREBASE') {
-        try {
-          await updateDoc(doc(firebaseFirestore, 'users', uid), { profileApproved: isApproved });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      return users[index];
+      updatedUser = users[index];
+    } else {
+      updatedUser = { uid, profileApproved: isApproved };
+      users.push(updatedUser);
     }
-    throw new Error("User not found.");
+    localStorage.setItem('gs_users', JSON.stringify(users));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'users', uid), { profileApproved: isApproved }, { merge: true });
+      } catch (e) {
+        console.error("Firestore approveUserKYC error:", e);
+      }
+    }
+
+    return updatedUser;
   },
 
   deleteUser: async (uid) => {
