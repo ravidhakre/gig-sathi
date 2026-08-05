@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X,
-  BookOpen, Video, PhoneCall, Share2
+  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import dbService from '../../services/db';
@@ -83,11 +83,70 @@ const AdminDashboard = () => {
       return;
     }
     try {
-      await updateProjectDetails(selectedScriptProjId, scriptFormData);
+      await updateProjectDetails(selectedScriptProjId, {
+        ...scriptFormData,
+        scriptActive: true
+      });
       showToast("Calling & Pitch Scripts saved and published to HR Officers successfully!", "success");
     } catch (err) {
       showToast("Failed to save scripts: " + err.message, "danger");
     }
+  };
+
+  const handleToggleScriptActive = async (proj) => {
+    try {
+      const newStatus = proj.scriptActive !== false ? false : true;
+      await updateProjectDetails(proj.id, { scriptActive: newStatus });
+      showToast(`Script status for "${proj.title}" set to ${newStatus ? 'ACTIVE (ON)' : 'DISABLED (OFF)'}`, "info");
+    } catch (err) {
+      showToast("Failed to toggle script status: " + err.message, "danger");
+    }
+  };
+
+  const handleDeleteScript = async (proj) => {
+    if (window.confirm(`Are you sure you want to delete/reset calling scripts for "${proj.title}"?`)) {
+      try {
+        await updateProjectDetails(proj.id, {
+          scriptRound1Hindi: '',
+          scriptRound1English: '',
+          scriptRound2Hindi: '',
+          scriptRound2English: '',
+          jdHindi: '',
+          jdEnglish: '',
+          scriptActive: false
+        });
+        if (selectedScriptProjId === proj.id) {
+          setScriptFormData({
+            scriptRound1Hindi: '',
+            scriptRound1English: '',
+            scriptRound2Hindi: '',
+            scriptRound2English: '',
+            jdHindi: '',
+            jdEnglish: ''
+          });
+        }
+        showToast(`Calling scripts deleted for "${proj.title}".`, "success");
+      } catch (err) {
+        showToast("Failed to delete scripts: " + err.message, "danger");
+      }
+    }
+  };
+
+  const handleEditScript = (proj) => {
+    setSelectedScriptProjId(proj.id);
+    setScriptFormData({
+      scriptRound1Hindi: proj.scriptRound1Hindi || '',
+      scriptRound1English: proj.scriptRound1English || '',
+      scriptRound2Hindi: proj.scriptRound2Hindi || '',
+      scriptRound2English: proj.scriptRound2English || '',
+      jdHindi: proj.jdHindi || '',
+      jdEnglish: proj.jdEnglish || ''
+    });
+    const editorElem = document.getElementById('script-editor-form');
+    if (editorElem) {
+      editorElem.scrollIntoView({ behavior: 'smooth' });
+    }
+    showToast(`Loaded scripts for "${proj.title}" into Editor below.`, "info");
   };
 
   // Leads Assignment States
@@ -936,30 +995,143 @@ const AdminDashboard = () => {
                   <BookOpen size={26} color="var(--primary-color)" /> Calling & Pitch Scripts Manager
                 </h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>
-                  Upload, edit, and publish campaign-wise multi-lingual calling scripts for HR calling officers.
+                  Upload, edit, enable/disable, and publish campaign-wise calling scripts for HR officers.
                 </p>
               </div>
 
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <button onClick={handleSaveScripts} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Save size={18} /> Save & Publish Scripts
-                </button>
+                <a href="#script-editor-form" className="btn btn-outline" style={{ padding: '10px 18px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Plus size={18} /> Add / Upload New Script
+                </a>
               </div>
             </div>
 
-            <div className="card" style={{ marginBottom: '24px', textAlign: 'left' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)', marginBottom: '20px' }}>
-                <label style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Select Hiring Campaign:</label>
-                <select
-                  className="form-control"
-                  value={selectedScriptProjId}
-                  onChange={(e) => setSelectedScriptProjId(e.target.value)}
-                  style={{ maxWidth: '380px', fontSize: '0.95rem', fontWeight: 'bold', color: 'var(--primary-color)' }}
-                >
-                  {projects.map(p => (
-                    <option key={p.id} value={p.id}>📢 {p.title} ({p.category})</option>
-                  ))}
-                </select>
+            {/* --- SECTION 1: ALL CAMPAIGN PITCH SCRIPTS LIST TABLE --- */}
+            <div className="card" style={{ marginBottom: '30px', padding: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  📋 All Campaign Pitch Scripts List
+                </h3>
+                <span className="badge badge-approved" style={{ fontSize: '0.8rem', padding: '6px 12px' }}>
+                  {projects.filter(p => p.scriptActive !== false && (p.scriptRound1Hindi || p.scriptRound1English)).length} / {projects.length} Active Scripts
+                </span>
+              </div>
+
+              <div className="table-responsive">
+                <table className="data-table" style={{ width: '100%', textAlign: 'left' }}>
+                  <thead>
+                    <tr>
+                      <th>Hiring Campaign Role</th>
+                      <th>Category</th>
+                      <th>Script Status (ON / OFF)</th>
+                      <th>Round 1 (Telephonic)</th>
+                      <th>Round 2 (Video)</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects.map((proj) => {
+                      const isActive = proj.scriptActive !== false;
+                      const hasR1 = Boolean(proj.scriptRound1Hindi || proj.scriptRound1English);
+                      const hasR2 = Boolean(proj.scriptRound2Hindi || proj.scriptRound2English);
+
+                      return (
+                        <tr key={proj.id} style={{ backgroundColor: selectedScriptProjId === proj.id ? 'rgba(222, 49, 99, 0.04)' : 'transparent' }}>
+                          <td>
+                            <strong style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>{proj.title}</strong>
+                            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>ID: {proj.id}</div>
+                          </td>
+                          <td>
+                            <span className="badge" style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                              {proj.category || 'Financial Products'}
+                            </span>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => handleToggleScriptActive(proj)}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '6px 14px',
+                                borderRadius: '20px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                fontSize: '0.8rem',
+                                backgroundColor: isActive ? '#dcfce7' : '#fee2e2',
+                                color: isActive ? '#15803d' : '#b91c1c',
+                                transition: 'all 0.2s ease'
+                              }}
+                              title="Click to toggle script ON or OFF for HR Officers"
+                            >
+                              {isActive ? <ToggleRight size={20} color="#15803d" /> : <ToggleLeft size={20} color="#b91c1c" />}
+                              {isActive ? '🟢 SCRIPT ON' : '🔴 SCRIPT OFF'}
+                            </button>
+                          </td>
+                          <td>
+                            <span className={`badge ${hasR1 ? 'badge-approved' : 'badge-pending'}`}>
+                              {hasR1 ? '✓ Configured' : '⚠️ Empty'}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`badge ${hasR2 ? 'badge-approved' : 'badge-pending'}`}>
+                              {hasR2 ? '✓ Configured' : '⚠️ Empty'}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <button
+                                onClick={() => handleEditScript(proj)}
+                                className="btn btn-outline"
+                                style={{ padding: '6px 12px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                              >
+                                <Edit3 size={14} /> Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteScript(proj)}
+                                style={{
+                                  padding: '6px 12px',
+                                  fontSize: '0.8rem',
+                                  backgroundColor: '#fee2e2',
+                                  color: '#b91c1c',
+                                  border: '1px solid #fca5a5',
+                                  borderRadius: 'var(--radius-sm)',
+                                  cursor: 'pointer',
+                                  fontWeight: 'bold',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                              >
+                                <Trash2 size={14} /> Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* --- SECTION 2: SCRIPT EDITOR FORM --- */}
+            <div id="script-editor-form" className="card" style={{ marginBottom: '24px', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  <label style={{ fontWeight: 'bold', fontSize: '1rem' }}>✍️ Edit Pitch Script for:</label>
+                  <select
+                    className="form-control"
+                    value={selectedScriptProjId}
+                    onChange={(e) => setSelectedScriptProjId(e.target.value)}
+                    style={{ maxWidth: '380px', fontSize: '0.95rem', fontWeight: 'bold', color: 'var(--primary-color)' }}
+                  >
+                    {projects.map(p => (
+                      <option key={p.id} value={p.id}>📢 {p.title} ({p.category})</option>
+                    ))}
+                  </select>
+                </div>
 
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--surface-color)', padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
                   Tokens: <code>{"{{name}}"}</code>, <code>{"{{role}}"}</code>, <code>{"{{salary}}"}</code>, <code>{"{{location}}"}</code>, <code>{"{{hrName}}"}</code>

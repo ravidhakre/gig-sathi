@@ -983,6 +983,13 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
               </button>
             </div>
 
+            {activeProj && activeProj.scriptActive === false && (
+              <div style={{ padding: '16px 20px', borderRadius: '10px', backgroundColor: '#fef2f2', border: '1px solid #fca5a5', color: '#991b1b', textAlign: 'left', marginBottom: '20px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '1.2rem' }}>🔴</span>
+                <span>Calling Script for "{activeProj.title}" is currently set to OFF / Disabled by Admin. Please contact Admin if you need pitch access.</span>
+              </div>
+            )}
+
             {/* --- ROUND 1 TELEPHONIC SCRIPT --- */}
             {scriptRound === 'round1' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
