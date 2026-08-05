@@ -658,6 +658,39 @@ const initMockStorage = () => {
 };
 initMockStorage();
 
+const purgeSpecifiedUser = async (targetEmail) => {
+  if (!targetEmail) return;
+  const targetLower = targetEmail.toLowerCase().trim();
+
+  try {
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    const filtered = users.filter(u => (u.email || '').toLowerCase().trim() !== targetLower);
+    if (users.length !== filtered.length) {
+      localStorage.setItem('gs_users', JSON.stringify(filtered));
+    }
+    const curUser = JSON.parse(localStorage.getItem('gs_current_user'));
+    if (curUser && (curUser.email || '').toLowerCase().trim() === targetLower) {
+      localStorage.removeItem('gs_current_user');
+    }
+  } catch (e) {}
+
+  if (dbMode === 'FIREBASE') {
+    try {
+      const snapAll = await getDocs(collection(firebaseFirestore, 'users'));
+      snapAll.forEach(async (docSnap) => {
+        const data = docSnap.data();
+        if (data.email && data.email.toLowerCase().trim() === targetLower) {
+          await deleteDoc(doc(firebaseFirestore, 'users', docSnap.id));
+          console.log(`SRYN: Purged Firestore user doc ${docSnap.id} for ${targetEmail}`);
+        }
+      });
+    } catch (e) {
+      console.error("Purge user error:", e);
+    }
+  }
+};
+purgeSpecifiedUser('sneharoy8017@gmail.com');
+
 const attachDefaultScriptFieldsIfNeeded = (rawProjects = []) => {
   return (rawProjects || []).map(p => {
     if (!p) return p;
