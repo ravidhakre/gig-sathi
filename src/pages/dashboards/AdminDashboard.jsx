@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X,
-  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff
+  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff, ExternalLink
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import dbService from '../../services/db';
