@@ -521,36 +521,22 @@ const initMockStorage = () => {
 };
 initMockStorage();
 
-const mergeProjectsWithSeedDefaults = (rawProjects = []) => {
-  const seedMap = new Map(SEED_PROJECTS.map(sp => [sp.id, sp]));
-  const mergedMap = new Map();
-
-  SEED_PROJECTS.forEach(sp => {
-    mergedMap.set(sp.id, { ...sp });
+const attachDefaultScriptFieldsIfNeeded = (rawProjects = []) => {
+  return (rawProjects || []).map(p => {
+    if (!p) return p;
+    return {
+      ...p,
+      scriptRound1Hindi: (p.scriptRound1Hindi !== undefined && p.scriptRound1Hindi !== null && p.scriptRound1Hindi !== '') ? p.scriptRound1Hindi : DEFAULT_PITCH_HI_R1,
+      scriptRound1English: (p.scriptRound1English !== undefined && p.scriptRound1English !== null && p.scriptRound1English !== '') ? p.scriptRound1English : DEFAULT_PITCH_EN_R1,
+      scriptRound2Hindi: (p.scriptRound2Hindi !== undefined && p.scriptRound2Hindi !== null && p.scriptRound2Hindi !== '') ? p.scriptRound2Hindi : DEFAULT_PITCH_HI_R2,
+      scriptRound2English: (p.scriptRound2English !== undefined && p.scriptRound2English !== null && p.scriptRound2English !== '') ? p.scriptRound2English : DEFAULT_PITCH_EN_R2,
+      jdHindi: (p.jdHindi !== undefined && p.jdHindi !== null && p.jdHindi !== '') ? p.jdHindi : DEFAULT_PITCH_HI_JD,
+      jdEnglish: (p.jdEnglish !== undefined && p.jdEnglish !== null && p.jdEnglish !== '') ? p.jdEnglish : DEFAULT_PITCH_EN_JD,
+      scriptActive: p.scriptActive !== undefined ? p.scriptActive : true,
+      assignedHR: p.assignedHR || 'ALL',
+      assignedHRs: p.assignedHRs || (p.assignedHR ? (Array.isArray(p.assignedHR) ? p.assignedHR : [p.assignedHR]) : ['ALL'])
+    };
   });
-
-  rawProjects.forEach(p => {
-    if (p && p.id) {
-      const seed = seedMap.get(p.id);
-      if (seed) {
-        mergedMap.set(p.id, {
-          ...seed,
-          ...p,
-          scriptRound1Hindi: (p.scriptRound1Hindi !== undefined && p.scriptRound1Hindi !== null && p.scriptRound1Hindi !== '') ? p.scriptRound1Hindi : seed.scriptRound1Hindi,
-          scriptRound1English: (p.scriptRound1English !== undefined && p.scriptRound1English !== null && p.scriptRound1English !== '') ? p.scriptRound1English : seed.scriptRound1English,
-          scriptRound2Hindi: (p.scriptRound2Hindi !== undefined && p.scriptRound2Hindi !== null && p.scriptRound2Hindi !== '') ? p.scriptRound2Hindi : seed.scriptRound2Hindi,
-          scriptRound2English: (p.scriptRound2English !== undefined && p.scriptRound2English !== null && p.scriptRound2English !== '') ? p.scriptRound2English : seed.scriptRound2English,
-          jdHindi: (p.jdHindi !== undefined && p.jdHindi !== null && p.jdHindi !== '') ? p.jdHindi : seed.jdHindi,
-          jdEnglish: (p.jdEnglish !== undefined && p.jdEnglish !== null && p.jdEnglish !== '') ? p.jdEnglish : seed.jdEnglish,
-          scriptActive: p.scriptActive !== undefined ? p.scriptActive : (seed.scriptActive ?? true)
-        });
-      } else {
-        mergedMap.set(p.id, p);
-      }
-    }
-  });
-
-  return Array.from(mergedMap.values());
 };
 
 // Helper to push mock data to Firestore on first connect (if empty)
@@ -947,9 +933,9 @@ export const dbService = {
         console.error(e);
       }
     }
-    const merged = mergeProjectsWithSeedDefaults(raw);
-    localStorage.setItem('gs_projects', JSON.stringify(merged));
-    return merged;
+    const withDefaults = attachDefaultScriptFieldsIfNeeded(raw);
+    localStorage.setItem('gs_projects', JSON.stringify(withDefaults));
+    return withDefaults;
   },
 
   addProject: async (project) => {
@@ -1235,9 +1221,8 @@ export const dbService = {
         return onSnapshot(collection(firebaseFirestore, 'projects'), (snap) => {
           const fbProjects = [];
           snap.forEach(d => fbProjects.push(d.data()));
-          const localProjects = JSON.parse(localStorage.getItem('gs_projects')) || [];
-          const merged = mergeProjectsWithSeedDefaults([...localProjects, ...fbProjects]);
-          callback(merged);
+          const withDefaults = attachDefaultScriptFieldsIfNeeded(fbProjects);
+          callback(withDefaults);
         });
       } catch (e) {
         console.error("subscribeProjects error:", e);
