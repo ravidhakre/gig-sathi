@@ -164,6 +164,27 @@ HR Contact: {{hrName}}`;
 
 const SEED_PROJECTS = [
   {
+    id: 'proj-cre-1',
+    title: 'Customer Relationship Executive',
+    category: 'Financial Products',
+    description: 'Work in your hometown as Customer Relationship Executive (CRE). Guide customers regarding FD Cards, CIBIL score building, and financial product applications.',
+    commission: 'Rs. 15,000 / month fixed + Incentives',
+    salary: '₹15,000 / month + Incentives',
+    location: 'Hometown / Local District',
+    hiringCount: 250,
+    status: 'Active',
+    scriptActive: true,
+    assignedHR: 'ALL',
+    assignedHRs: ['ALL'],
+    workingLink: 'https://www.sryn.online/auth?signup=true',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
+  },
+  {
     id: 'proj-1',
     title: 'HDFC Credit Card Sales',
     category: 'Financial Products',
@@ -505,6 +526,14 @@ const initMockStorage = () => {
   }
   if (!localStorage.getItem('gs_projects')) {
     localStorage.setItem('gs_projects', JSON.stringify(SEED_PROJECTS));
+  } else {
+    // Ensure CRE project is present
+    const existing = JSON.parse(localStorage.getItem('gs_projects')) || [];
+    const hasCRE = existing.some(p => p.id === 'proj-cre-1' || p.title === 'Customer Relationship Executive');
+    if (!hasCRE) {
+      existing.unshift(SEED_PROJECTS[0]);
+      localStorage.setItem('gs_projects', JSON.stringify(existing));
+    }
   }
   if (!localStorage.getItem('gs_leads')) {
     localStorage.setItem('gs_leads', JSON.stringify(SEED_LEADS));
@@ -558,6 +587,13 @@ const syncFirestoreSeeds = async () => {
       }
       await setDoc(doc(firebaseFirestore, 'settings', 'cms'), SEED_CMS);
       console.log('SRYN: Firestore seeded successfully.');
+    } else {
+      // Ensure CRE project is in Firestore
+      const creDocRef = doc(firebaseFirestore, 'projects', 'proj-cre-1');
+      const creSnap = await getDoc(creDocRef);
+      if (!creSnap.exists()) {
+        await setDoc(creDocRef, SEED_PROJECTS[0]);
+      }
     }
   } catch (e) {
     console.error('SRYN: Failed to seed Firestore', e);
