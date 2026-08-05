@@ -232,7 +232,8 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
     <h2 style="text-align: center; color: #de3163; margin-top: 10px; margin-bottom: 24px; font-size: 1.5rem; font-weight: 800; border-bottom: 2px solid #de3163; padding-bottom: 8px; letter-spacing: 0.03em;">APPOINTMENT CUM OFFER LETTER</h2>
     
     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; font-size: 0.9rem; line-height: 1.7;">
-      <p style="margin: 0 0 6px 0;"><strong>Date:</strong> {{date}}</p>
+      <p style="margin: 0 0 6px 0;"><strong>Date of Issue:</strong> {{date}}</p>
+      <p style="margin: 0 0 6px 0;"><strong>Date of Joining:</strong> {{joining_date}}</p>
       <p style="margin: 0 0 6px 0;"><strong>Employee Name:</strong> {{name}}</p>
       <p style="margin: 0 0 6px 0;"><strong>Address:</strong> {{address}}</p>
       <p style="margin: 0 0 6px 0;"><strong>Email:</strong> {{email}} &nbsp;|&nbsp; <strong>Mobile:</strong> {{mobile}}</p>
@@ -243,7 +244,7 @@ const OFFER_LETTER_WORD_TEMPLATE = `<div class="contract-page-sheet">
     <p>It is with great pleasure that SRYN Management Private Limited extends this formal Offer of Employment for the position of <strong>{{position}}</strong>. Your educational qualifications, communication abilities, professional aptitude, and overall suitability have been carefully evaluated during the selection process, and the Management is pleased to offer you this opportunity to become a valuable member of our organization. We believe that every employee contributes significantly to the growth and reputation of the Company, and therefore your appointment carries substantial professional responsibilities together with an expectation of integrity, dedication, discipline, and excellence. This Appointment Letter outlines the principal terms and conditions governing your employment and shall be read together with the Company's internal policies, operational guidelines, code of conduct, and other employment regulations issued from time to time. By accepting this offer and commencing employment, you acknowledge that you have carefully read, understood, and voluntarily accepted all provisions contained herein and agree to comply with them throughout your association with the Company.</p>
 
     <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">1. APPOINTMENT AND COMMENCEMENT OF EMPLOYMENT</h3>
-    <p>You are hereby appointed as an <strong>{{position}}</strong> with SRYN Management Private Limited effective from your date of joining as communicated by the Management. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
+    <p>You are hereby appointed as an <strong>{{position}}</strong> with SRYN Management Private Limited effective from your official Date of Joining, which is <strong>{{joining_date}}</strong>. Your employment shall be governed by the terms and conditions mentioned in this Appointment Letter together with all Company policies, operational procedures, administrative circulars, and statutory requirements applicable from time to time. During your employment, you shall faithfully perform all duties entrusted to you and shall devote your complete professional attention, skills, and efforts exclusively towards the business interests of the Company. The Management reserves the right to assign, modify, or expand your responsibilities depending upon operational requirements, organizational growth, or business priorities. Your appointment is based upon the information and documents submitted by you during the recruitment process, and any false declaration, concealment of facts, forged documentation, or material misrepresentation discovered at any stage shall render this appointment liable to immediate cancellation without any prior notice. This employment shall not create any automatic right to permanent service, and continuation of employment shall remain subject to satisfactory performance, business requirements, and compliance with all Company rules.</p>
 
     <h3 style="color: #de3163; font-size: 1rem; margin-top: 24px; margin-bottom: 8px; border-left: 4px solid #de3163; padding-left: 10px; font-weight: 700;">2. NATURE OF EMPLOYMENT</h3>
     <p>Your appointment is on a full-time basis, and you shall be expected to devote your entire professional time, attention, knowledge, and abilities exclusively to the affairs of SRYN Management Private Limited during working hours. You shall not engage, directly or indirectly, in any other employment, consultancy, freelancing assignment, business activity, partnership, commission-based work, or any occupation that may create a conflict of interest with the Company's business unless prior written approval has been obtained from the Management. The Company reserves the right to assign you to different recruitment campaigns, departments, projects, locations, or operational responsibilities depending upon business requirements without affecting the continuity of your employment. You acknowledge that flexibility, adaptability, and cooperation form an essential part of your employment and agree to perform every lawful assignment with sincerity and professionalism. Your designation represents your present role within the organization and may be revised, upgraded, or modified by the Company depending upon organizational restructuring, business expansion, operational requirements, or demonstrated professional capability.</p>
@@ -972,10 +973,10 @@ export const dbService = {
         const templates = [];
         snap.forEach(d => templates.push(d.data()));
         if (templates.length > 0) {
-          // Self-healing check: Upgrade templates to include mandatory training & FD account activation clause
+          // Self-healing check: Upgrade templates to include joining_date field & FD account clause
           const hr = templates.find(t => t.role === 'HR');
-          if (!hr || !hr.content || !hr.content.includes("Fixed Deposit (FD)")) {
-            console.log('SRYN: Upgrading Firestore offer templates with training & FD account activation clause...');
+          if (!hr || !hr.content || !hr.content.includes("joining_date")) {
+            console.log('SRYN: Upgrading Firestore offer templates with Date of Joining field...');
             for (const temp of SEED_TEMPLATES) {
               await setDoc(doc(firebaseFirestore, 'templates', temp.id), temp);
             }
@@ -990,7 +991,7 @@ export const dbService = {
     // Fallback logic for Local Storage: Upgrade if old template
     const local = JSON.parse(localStorage.getItem('gs_templates'));
     const localHR = local ? local.find(t => t.role === 'HR') : null;
-    if (!localHR || !localHR.content || !localHR.content.includes("Fixed Deposit (FD)")) {
+    if (!localHR || !localHR.content || !localHR.content.includes("joining_date")) {
       localStorage.setItem('gs_templates', JSON.stringify(SEED_TEMPLATES));
       return SEED_TEMPLATES;
     }

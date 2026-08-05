@@ -393,7 +393,17 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
         || safeTemplates.find(t => t.role === 'HR') 
         || { content: `<h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Dear {{name}}, your official offer letter is loading...</p>` };
       
-      const todayStr = person?.date || new Date().toLocaleDateString('en-IN', {
+      const issueDateObj = person?.date ? new Date(person.date) : new Date();
+      const joiningDateObj = new Date(issueDateObj);
+      joiningDateObj.setDate(joiningDateObj.getDate() + 1);
+
+      const todayStr = issueDateObj.toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      const joiningDateStr = person?.joiningDate || joiningDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
@@ -417,6 +427,8 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
         .replace(/{{mobile}}/g, person?.mobile || 'N/A')
         .replace(/{{address}}/g, userAddress)
         .replace(/{{date}}/g, todayStr)
+        .replace(/{{joining_date}}/g, joiningDateStr)
+        .replace(/{{date_of_joining}}/g, joiningDateStr)
         .replace(/{{position}}/g, userRole)
         .replace(/{{role}}/g, userRole)
         .replace(/{{salary}}/g, userSalary)

@@ -178,8 +178,17 @@ const CandidateDashboard = () => {
         content: `<h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Dear {{name}}, offer letter loading...</p>`
       };
       
-      // Replace placeholders with candidate details dynamically
-      const todayStr = new Date().toLocaleDateString('en-IN', {
+      const issueDateObj = new Date();
+      const joiningDateObj = new Date(issueDateObj);
+      joiningDateObj.setDate(joiningDateObj.getDate() + 1);
+
+      const todayStr = issueDateObj.toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      const joiningDateStr = currentUser?.joiningDate || joiningDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
@@ -203,6 +212,8 @@ const CandidateDashboard = () => {
         .replace(/{{mobile}}/g, currentUser?.mobile || 'N/A')
         .replace(/{{address}}/g, userAddress)
         .replace(/{{date}}/g, todayStr)
+        .replace(/{{joining_date}}/g, joiningDateStr)
+        .replace(/{{date_of_joining}}/g, joiningDateStr)
         .replace(/{{position}}/g, userRole)
         .replace(/{{role}}/g, userRole)
         .replace(/{{salary}}/g, userSalary)
