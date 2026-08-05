@@ -20,8 +20,18 @@ const HRDashboard = () => {
 
   // Share JD & Dynamic Campaign State
   const [selectedProjId, setSelectedProjId] = useState('');
-  const assignedProjects = (projects || []).filter(p => !p.assignedHR || p.assignedHR === 'ALL' || p.assignedHR === currentUser?.uid);
-  const activeProj = (assignedProjects || []).find(p => p.id === selectedProjId) || assignedProjects[0] || (projects && projects[0]) || {};
+  
+  const isAssignedToMe = (proj) => {
+    if (!proj) return false;
+    const hrs = proj.assignedHRs || (proj.assignedHR ? (Array.isArray(proj.assignedHR) ? proj.assignedHR : [proj.assignedHR]) : ['ALL']);
+    if (hrs.includes('ALL')) return true;
+    if (currentUser?.uid && hrs.includes(currentUser.uid)) return true;
+    if (currentUser?.email && hrs.some(h => typeof h === 'string' && h.toLowerCase() === currentUser.email.toLowerCase())) return true;
+    return false;
+  };
+
+  const assignedProjects = (projects || []).filter(isAssignedToMe);
+  const activeProj = (assignedProjects || []).find(p => p.id === selectedProjId) || assignedProjects[0] || {};
 
   const [jdCandidateName, setJdCandidateName] = useState('');
   const [jdCandidateMobile, setJdCandidateMobile] = useState('');

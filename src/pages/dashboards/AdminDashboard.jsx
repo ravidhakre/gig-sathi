@@ -45,6 +45,11 @@ const AdminDashboard = () => {
   const [editingProj, setEditingProj] = useState(null);
   const [projForm, setProjForm] = useState({ title: '', category: 'Financial Products', description: '', commission: '', workingLink: '' });
 
+  // Campaign HR Assignment Modal States
+  const [showHRAssignModal, setShowHRAssignModal] = useState(false);
+  const [selectedHRAssignModalProj, setSelectedHRAssignModalProj] = useState(null);
+  const [selectedHRsForCampaign, setSelectedHRsForCampaign] = useState(['ALL']);
+
   // Script Editor States
   const [selectedScriptProjId, setSelectedScriptProjId] = useState('');
   const [scriptFormData, setScriptFormData] = useState({
@@ -317,6 +322,48 @@ const AdminDashboard = () => {
   const handleDeleteProjClick = async (id) => {
     if (window.confirm("Are you sure you want to delete this campaign?")) {
       await deleteProjectDetails(id);
+    }
+  };
+
+  // Campaign HR Assignment Handlers
+  const handleOpenAssignHRModal = (proj) => {
+    setSelectedHRAssignModalProj(proj);
+    const existingHRs = proj.assignedHRs || (proj.assignedHR ? (Array.isArray(proj.assignedHR) ? proj.assignedHR : [proj.assignedHR]) : ['ALL']);
+    setSelectedHRsForCampaign(existingHRs.length > 0 ? existingHRs : ['ALL']);
+    setShowHRAssignModal(true);
+  };
+
+  const handleToggleHRSelection = (hrUid) => {
+    if (hrUid === 'ALL') {
+      setSelectedHRsForCampaign(['ALL']);
+      return;
+    }
+
+    let updated = selectedHRsForCampaign.filter(id => id !== 'ALL');
+    if (updated.includes(hrUid)) {
+      updated = updated.filter(id => id !== hrUid);
+    } else {
+      updated.push(hrUid);
+    }
+
+    if (updated.length === 0) {
+      updated = ['ALL'];
+    }
+    setSelectedHRsForCampaign(updated);
+  };
+
+  const handleSaveHRAssignments = async () => {
+    if (!selectedHRAssignModalProj) return;
+    try {
+      await updateProjectDetails(selectedHRAssignModalProj.id, {
+        assignedHRs: selectedHRsForCampaign,
+        assignedHR: selectedHRsForCampaign.includes('ALL') ? 'ALL' : (selectedHRsForCampaign[0] || 'ALL')
+      });
+      showToast(`HR Assignments updated for "${selectedHRAssignModalProj.title}"!`, "success");
+      setShowHRAssignModal(false);
+      setSelectedHRAssignModalProj(null);
+    } catch (err) {
+      showToast("Failed to update HR assignments: " + err.message, "danger");
     }
   };
 
@@ -865,18 +912,42 @@ const AdminDashboard = () => {
                     <code style={{ fontSize: '0.85rem', color: 'var(--primary-color)', wordBreak: 'break-all' }}>{p.workingLink}</code>
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>PAYOUT COMMISSION</div>
                       <strong style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>{p.commission}</strong>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
-                    <button onClick={() => handleEditProjClick(p)} className="btn btn-outline" style={{ flex: 1, padding: '8px' }}>
+                  {/* Assigned HR Officers Box */}
+                  <div style={{ marginBottom: '16px', padding: '10px 12px', borderRadius: '8px', background: 'var(--surface-color)', border: '1px solid var(--border-color)' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <UserCheck size={14} color="var(--primary-color)" /> Assigned HR Officers:
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {(p.assignedHRs || (p.assignedHR ? (Array.isArray(p.assignedHR) ? p.assignedHR : [p.assignedHR]) : ['ALL'])).includes('ALL') ? (
+                        <span className="badge badge-approved" style={{ fontSize: '0.75rem' }}>🌐 All HR Officers (Global Access)</span>
+                      ) : (
+                        (p.assignedHRs || [p.assignedHR]).map(hrId => {
+                          const hrObj = hrOfficers.find(h => h.uid === hrId || h.email?.toLowerCase() === hrId?.toLowerCase());
+                          return (
+                            <span key={hrId} className="badge" style={{ backgroundColor: 'rgba(222,49,99,0.1)', color: 'var(--primary-color)', border: '1px solid rgba(222,49,99,0.2)', fontSize: '0.75rem' }}>
+                              👤 {hrObj ? hrObj.fullName : hrId}
+                            </span>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+                    <button onClick={() => handleOpenAssignHRModal(p)} className="btn btn-primary" style={{ flex: 1.2, padding: '8px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                      <UserCheck size={14} /> Assign HRs
+                    </button>
+                    <button onClick={() => handleEditProjClick(p)} className="btn btn-outline" style={{ flex: 1, padding: '8px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
                       <Edit3 size={14} /> Modify
                     </button>
-                    <button onClick={() => handleDeleteProjClick(p.id)} className="btn btn-outline" style={{ borderColor: 'var(--danger-color)', color: 'var(--danger-color)', padding: '8px' }}>
+                    <button onClick={() => handleDeleteProjClick(p.id)} className="btn btn-outline" style={{ borderColor: 'var(--danger-color)', color: 'var(--danger-color)', padding: '8px 12px' }}>
                       <Trash2 size={14} />
                     </button>
                   </div>
@@ -1860,6 +1931,103 @@ const AdminDashboard = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- ASSIGN HR OFFICERS MODAL --- */}
+      {showHRAssignModal && selectedHRAssignModalProj && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in" style={{ maxWidth: '580px', width: '90%', padding: '24px' }}>
+            <div style={modalHeaderStyle}>
+              <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <UserCheck size={20} color="var(--primary-color)" /> Assign Campaign to HR Officers
+              </h3>
+              <button onClick={() => setShowHRAssignModal(false)}><X size={20} /></button>
+            </div>
+
+            <div style={{ textAlign: 'left', marginBottom: '20px', background: 'var(--surface-color)', padding: '14px', borderRadius: '8px', borderLeft: '4px solid var(--primary-color)' }}>
+              <strong style={{ fontSize: '1.1rem', color: 'var(--primary-color)', display: 'block', marginBottom: '4px' }}>
+                {selectedHRAssignModalProj.title}
+              </strong>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                Select which HR Officers can view this campaign, use its calling pitch scripts, and receive candidate applications.
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px', maxHeight: '320px', overflowY: 'auto' }}>
+              {/* Global Option */}
+              <div 
+                onClick={() => handleToggleHRSelection('ALL')}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '12px', 
+                  padding: '12px 16px', 
+                  borderRadius: '8px', 
+                  border: '1px solid',
+                  borderColor: selectedHRsForCampaign.includes('ALL') ? 'var(--primary-color)' : 'var(--border-color)',
+                  backgroundColor: selectedHRsForCampaign.includes('ALL') ? 'rgba(222,49,99,0.06)' : 'var(--surface-color)',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  textAlign: 'left'
+                }}
+              >
+                <input 
+                  type="checkbox" 
+                  checked={selectedHRsForCampaign.includes('ALL')} 
+                  onChange={() => {}} 
+                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                />
+                <div>
+                  <div style={{ fontSize: '0.98rem' }}>🌐 All HR Officers (Global Access)</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>Visible to every current and future HR Officer</div>
+                </div>
+              </div>
+
+              {/* Individual HR Officers */}
+              {hrOfficers.map(hr => {
+                const isChecked = !selectedHRsForCampaign.includes('ALL') && selectedHRsForCampaign.includes(hr.uid);
+                return (
+                  <div 
+                    key={hr.uid}
+                    onClick={() => handleToggleHRSelection(hr.uid)}
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '12px', 
+                      padding: '12px 16px', 
+                      borderRadius: '8px', 
+                      border: '1px solid',
+                      borderColor: isChecked ? 'var(--primary-color)' : 'var(--border-color)',
+                      backgroundColor: isChecked ? 'rgba(222,49,99,0.06)' : 'var(--surface-color)',
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <input 
+                      type="checkbox" 
+                      checked={isChecked} 
+                      onChange={() => {}} 
+                      style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    />
+                    <div>
+                      <strong style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>👤 {hr.fullName}</strong>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Email: {hr.email} | Role: {hr.role}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button onClick={handleSaveHRAssignments} className="btn btn-primary" style={{ flex: 1, padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                <Save size={18} /> Save HR Assignments
+              </button>
+              <button onClick={() => setShowHRAssignModal(false)} className="btn btn-outline" style={{ flex: 0.4 }}>
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
