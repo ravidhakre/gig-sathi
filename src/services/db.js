@@ -745,6 +745,38 @@ syncFirestoreSeeds();
 // -------------------------------------------------------------
 // Database Operations API
 // -------------------------------------------------------------
+const safeSetLocalStorage = (key, value) => {
+  try {
+    const stringified = typeof value === 'string' ? value : JSON.stringify(value);
+    localStorage.setItem(key, stringified);
+  } catch (e) {
+    console.warn(`LocalStorage quota exceeded for key "${key}". Stripping heavy media base64 strings...`, e);
+    try {
+      if (typeof value === 'object' && value !== null) {
+        if (Array.isArray(value)) {
+          const stripped = value.map(u => {
+            if (!u) return u;
+            const clone = { ...u };
+            if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = clone.aadharFront.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
+            if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = clone.aadharBack.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
+            if (clone.resume && clone.resume.length > 500) clone.resume = clone.resume.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
+            return clone;
+          });
+          localStorage.setItem(key, JSON.stringify(stripped));
+        } else {
+          const clone = { ...value };
+          if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = clone.aadharFront.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
+          if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = clone.aadharBack.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
+          if (clone.resume && clone.resume.length > 500) clone.resume = clone.resume.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
+          localStorage.setItem(key, JSON.stringify(clone));
+        }
+      }
+    } catch (err2) {
+      console.error("Critical LocalStorage failure:", err2);
+    }
+  }
+};
+
 export const dbService = {
   getMode: () => dbMode,
 
@@ -963,7 +995,6 @@ export const dbService = {
       throw new Error("Invalid OTP code. Please check and try again.");
     }
   },
-
   updateProfile: async (uidOrEmail, updatedFields) => {
     let users = JSON.parse(localStorage.getItem('gs_users')) || [];
     const targetKey = String(uidOrEmail || '').toLowerCase().trim();
@@ -986,7 +1017,7 @@ export const dbService = {
       u.profileComplete = true;
     }
     users[index] = u;
-    localStorage.setItem('gs_users', JSON.stringify(users));
+    safeSetLocalStorage('gs_users', users);
 
     // Update gs_current_user in localStorage if matching
     try {
@@ -997,7 +1028,7 @@ export const dbService = {
           (curUser.email && String(curUser.email).toLowerCase().trim() === targetKey)
         )
       ) {
-        localStorage.setItem('gs_current_user', JSON.stringify({ ...curUser, ...u }));
+        safeSetLocalStorage('gs_current_user', { ...curUser, ...u });
       }
     } catch (e) {}
 
@@ -1035,7 +1066,11 @@ export const dbService = {
       if (u && (u.email || u.uid)) {
         const key = (u.email || u.uid).toLowerCase().trim();
         const existing = mergedMap.get(key) || {};
-        mergedMap.set(key, { ...existing, ...u });
+        const combined = { ...existing, ...u };
+        if ((combined.aadharFront || combined.aadharBack || combined.resume || combined.aadharNumber) && (combined.pincode || combined.city || combined.address || combined.bankName)) {
+          combined.profileComplete = true;
+        }
+        mergedMap.set(key, combined);
       }
     });
     return Array.from(mergedMap.values());
@@ -1094,7 +1129,7 @@ export const dbService = {
         updatedUser = users[i];
       }
     });
-    localStorage.setItem('gs_users', JSON.stringify(users));
+    safeSetLocalStorage('gs_users', users);
 
     // 2. Update gs_current_user if it matches target user
     try {
@@ -1106,7 +1141,7 @@ export const dbService = {
         )
       ) {
         curUser.profileApproved = isApproved;
-        localStorage.setItem('gs_current_user', JSON.stringify(curUser));
+        safeSetLocalStorage('gs_current_user', curUser);
       }
     } catch (e) {}
 

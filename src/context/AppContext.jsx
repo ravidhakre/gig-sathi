@@ -74,7 +74,15 @@ export const AppProvider = ({ children }) => {
         );
         if (latestSelf) {
           const mergedSelf = { ...activeUser, ...latestSelf };
-          localStorage.setItem('gs_current_user', JSON.stringify(mergedSelf));
+          try {
+            localStorage.setItem('gs_current_user', JSON.stringify(mergedSelf));
+          } catch (e) {
+            const clone = { ...mergedSelf };
+            if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = clone.aadharFront.substring(0, 200) + '...[FIRESTORE]';
+            if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = clone.aadharBack.substring(0, 200) + '...[FIRESTORE]';
+            if (clone.resume && clone.resume.length > 500) clone.resume = clone.resume.substring(0, 200) + '...[FIRESTORE]';
+            try { localStorage.setItem('gs_current_user', JSON.stringify(clone)); } catch (e2) {}
+          }
           setCurrentUser(mergedSelf);
         }
       }
