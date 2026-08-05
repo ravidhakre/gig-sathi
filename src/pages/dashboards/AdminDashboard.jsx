@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
-  Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X
+  Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X,
+  BookOpen, Video, PhoneCall, Share2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import dbService from '../../services/db';
@@ -43,6 +44,51 @@ const AdminDashboard = () => {
   const [showProjModal, setShowProjModal] = useState(false);
   const [editingProj, setEditingProj] = useState(null);
   const [projForm, setProjForm] = useState({ title: '', category: 'Financial Products', description: '', commission: '', workingLink: '' });
+
+  // Script Editor States
+  const [selectedScriptProjId, setSelectedScriptProjId] = useState('');
+  const [scriptFormData, setScriptFormData] = useState({
+    scriptRound1Hindi: '',
+    scriptRound1English: '',
+    scriptRound2Hindi: '',
+    scriptRound2English: '',
+    jdHindi: '',
+    jdEnglish: ''
+  });
+
+  useEffect(() => {
+    if (projects && projects.length > 0) {
+      const activeId = selectedScriptProjId || projects[0]?.id;
+      if (!selectedScriptProjId && activeId) {
+        setSelectedScriptProjId(activeId);
+      }
+      const found = projects.find(p => p.id === activeId);
+      if (found) {
+        setScriptFormData({
+          scriptRound1Hindi: found.scriptRound1Hindi || '',
+          scriptRound1English: found.scriptRound1English || '',
+          scriptRound2Hindi: found.scriptRound2Hindi || '',
+          scriptRound2English: found.scriptRound2English || '',
+          jdHindi: found.jdHindi || '',
+          jdEnglish: found.jdEnglish || ''
+        });
+      }
+    }
+  }, [selectedScriptProjId, projects]);
+
+  const handleSaveScripts = async (e) => {
+    if (e) e.preventDefault();
+    if (!selectedScriptProjId) {
+      showToast("Please select a Campaign Project first.", "warning");
+      return;
+    }
+    try {
+      await updateProjectDetails(selectedScriptProjId, scriptFormData);
+      showToast("Calling & Pitch Scripts saved and published to HR Officers successfully!", "success");
+    } catch (err) {
+      showToast("Failed to save scripts: " + err.message, "danger");
+    }
+  };
 
   // Leads Assignment States
   const [bulkLeadsText, setBulkLeadsText] = useState('');
@@ -327,6 +373,12 @@ const AdminDashboard = () => {
             style={{ ...sidebarLinkStyle, ...(activeTab === 'offer' ? activeLinkStyle : {}) }}
           >
             <FileText size={18} /> Offer Templates
+          </button>
+          <button 
+            onClick={() => { setActiveTab('scripts'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'scripts' ? activeLinkStyle : {}) }}
+          >
+            <BookOpen size={18} /> Calling Pitch Scripts
           </button>
           <button 
             onClick={() => { setActiveTab('cms'); setSidebarOpen(false); }}
@@ -871,6 +923,149 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* --- CALLING PITCH SCRIPTS EDITOR TAB --- */}
+        {activeTab === 'scripts' && (
+          <div style={tabContentStyle}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.8rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <BookOpen size={26} color="var(--primary-color)" /> Calling & Pitch Scripts Manager
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>
+                  Upload, edit, and publish campaign-wise multi-lingual calling scripts for HR calling officers.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <button onClick={handleSaveScripts} className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Save size={18} /> Save & Publish Scripts
+                </button>
+              </div>
+            </div>
+
+            <div className="card" style={{ marginBottom: '24px', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)', marginBottom: '20px' }}>
+                <label style={{ fontWeight: 'bold', fontSize: '0.95rem' }}>Select Hiring Campaign:</label>
+                <select
+                  className="form-control"
+                  value={selectedScriptProjId}
+                  onChange={(e) => setSelectedScriptProjId(e.target.value)}
+                  style={{ maxWidth: '380px', fontSize: '0.95rem', fontWeight: 'bold', color: 'var(--primary-color)' }}
+                >
+                  {projects.map(p => (
+                    <option key={p.id} value={p.id}>📢 {p.title} ({p.category})</option>
+                  ))}
+                </select>
+
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--surface-color)', padding: '6px 12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                  Tokens: <code>{"{{name}}"}</code>, <code>{"{{role}}"}</code>, <code>{"{{salary}}"}</code>, <code>{"{{location}}"}</code>, <code>{"{{hrName}}"}</code>
+                </div>
+              </div>
+
+              <form onSubmit={handleSaveScripts} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {/* Round 1 Telephonic Calling */}
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', color: 'var(--primary-color)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <PhoneCall size={20} /> Round 1: Telephonic Calling Pitch Script
+                  </h3>
+                  <div className="grid-2" style={{ gap: '20px' }}>
+                    <div className="form-group">
+                      <label style={{ fontWeight: 'bold' }}>Hindi / Hinglish Telephonic Pitch</label>
+                      <textarea
+                        rows="6"
+                        className="form-control"
+                        value={scriptFormData.scriptRound1Hindi}
+                        onChange={(e) => setScriptFormData({ ...scriptFormData, scriptRound1Hindi: e.target.value })}
+                        placeholder="Enter Round 1 Telephonic calling script in Hindi/Hinglish..."
+                        style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', lineHeight: '1.6' }}
+                      ></textarea>
+                    </div>
+                    <div className="form-group">
+                      <label style={{ fontWeight: 'bold' }}>English Telephonic Pitch</label>
+                      <textarea
+                        rows="6"
+                        className="form-control"
+                        value={scriptFormData.scriptRound1English}
+                        onChange={(e) => setScriptFormData({ ...scriptFormData, scriptRound1English: e.target.value })}
+                        placeholder="Enter Round 1 Telephonic calling script in English..."
+                        style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', lineHeight: '1.6' }}
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Round 2 Video Interview */}
+                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
+                  <h3 style={{ fontSize: '1.15rem', color: 'var(--secondary-color)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Video size={20} /> Round 2: Video Interview Pitch Script
+                  </h3>
+                  <div className="grid-2" style={{ gap: '20px' }}>
+                    <div className="form-group">
+                      <label style={{ fontWeight: 'bold' }}>Hindi / Hinglish Video Interview Pitch</label>
+                      <textarea
+                        rows="6"
+                        className="form-control"
+                        value={scriptFormData.scriptRound2Hindi}
+                        onChange={(e) => setScriptFormData({ ...scriptFormData, scriptRound2Hindi: e.target.value })}
+                        placeholder="Enter Round 2 Video Interview script in Hindi/Hinglish..."
+                        style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', lineHeight: '1.6' }}
+                      ></textarea>
+                    </div>
+                    <div className="form-group">
+                      <label style={{ fontWeight: 'bold' }}>English Video Interview Pitch</label>
+                      <textarea
+                        rows="6"
+                        className="form-control"
+                        value={scriptFormData.scriptRound2English}
+                        onChange={(e) => setScriptFormData({ ...scriptFormData, scriptRound2English: e.target.value })}
+                        placeholder="Enter Round 2 Video Interview script in English..."
+                        style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', lineHeight: '1.6' }}
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                {/* WhatsApp Job Description Pitch */}
+                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
+                  <h3 style={{ fontSize: '1.15rem', color: '#16a34a', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Share2 size={20} /> WhatsApp Job Description (JD) Share Pitch
+                  </h3>
+                  <div className="grid-2" style={{ gap: '20px' }}>
+                    <div className="form-group">
+                      <label style={{ fontWeight: 'bold' }}>WhatsApp JD Text (Hindi / Hinglish)</label>
+                      <textarea
+                        rows="5"
+                        className="form-control"
+                        value={scriptFormData.jdHindi}
+                        onChange={(e) => setScriptFormData({ ...scriptFormData, jdHindi: e.target.value })}
+                        placeholder="Enter WhatsApp JD share message in Hindi..."
+                        style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', lineHeight: '1.6' }}
+                      ></textarea>
+                    </div>
+                    <div className="form-group">
+                      <label style={{ fontWeight: 'bold' }}>WhatsApp JD Text (English)</label>
+                      <textarea
+                        rows="5"
+                        className="form-control"
+                        value={scriptFormData.jdEnglish}
+                        onChange={(e) => setScriptFormData({ ...scriptFormData, jdEnglish: e.target.value })}
+                        placeholder="Enter WhatsApp JD share message in English..."
+                        style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', lineHeight: '1.6' }}
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                  <button type="submit" className="btn btn-primary" style={{ padding: '12px 30px', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Save size={18} /> Save & Publish Calling Scripts
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
