@@ -378,7 +378,9 @@ h1, h2, h3, h4, h5, h6 {
 .badge-calling { background-color: var(--accent-light); color: var(--accent-color); }
 .badge-interested { background-color: rgba(37, 99, 235, 0.1); color: var(--info-color); }
 .badge-hired { background-color: var(--primary-light); color: var(--primary-color); }
-.badge-rejected { background-color: var(--danger-light); color: var(--danger-color); }
+.badge-approved { background-color: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac; font-weight: 800; }
+.badge-rejected { background-color: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fca5a5; font-weight: 800; }
+.badge-pending { background-color: #dbeafe !important; color: #1d4ed8 !important; border: 1px solid #93c5fd; font-weight: 800; }
 
 /* Animation Utility classes */
 .fade-in {

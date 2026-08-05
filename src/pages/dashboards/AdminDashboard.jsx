@@ -384,7 +384,7 @@ const AdminDashboard = () => {
                           </span>
                           {(u.role === 'Candidate' || u.role === 'HR' || u.role === 'HR Executive' || u.role === 'HR Intern') && (
                             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
-                              <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`} style={{ fontSize: '0.75rem' }}>
+                              <span className={`badge ${u.profileApproved === true ? 'badge-approved' : u.profileApproved === false ? 'badge-rejected' : 'badge-pending'}`} style={{ fontSize: '0.75rem' }}>
                                 {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
                               </span>
                               <button 
@@ -461,7 +461,7 @@ const AdminDashboard = () => {
                           </span>
                         </td>
                         <td>
-                          <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`}>
+                          <span className={`badge ${u.profileApproved === true ? 'badge-approved' : u.profileApproved === false ? 'badge-rejected' : 'badge-pending'}`}>
                             {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
                           </span>
                         </td>
@@ -558,7 +558,7 @@ const AdminDashboard = () => {
                           </span>
                         </td>
                         <td>
-                          <span className={`badge ${u.profileApproved === true ? 'badge-hired' : u.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`}>
+                          <span className={`badge ${u.profileApproved === true ? 'badge-approved' : u.profileApproved === false ? 'badge-rejected' : 'badge-pending'}`}>
                             {u.profileApproved === true ? 'Approved' : u.profileApproved === false ? 'Rejected' : 'Pending Review'}
                           </span>
                         </td>
@@ -1156,7 +1156,7 @@ const AdminDashboard = () => {
               {/* Status Badge */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontWeight: '600', color: '#fff' }}>Current Status:</span>
-                <span className={`badge ${selectedUserForKYC.profileApproved === true ? 'badge-hired' : selectedUserForKYC.profileApproved === false ? 'badge-rejected' : 'badge-calling'}`} style={{ fontSize: '0.9rem', padding: '6px 12px' }}>
+                <span className={`badge ${selectedUserForKYC.profileApproved === true ? 'badge-approved' : selectedUserForKYC.profileApproved === false ? 'badge-rejected' : 'badge-pending'}`} style={{ fontSize: '0.9rem', padding: '6px 12px' }}>
                   {selectedUserForKYC.profileApproved === true ? 'Approved & Verified' : selectedUserForKYC.profileApproved === false ? 'Rejected' : 'Pending Review'}
                 </span>
               </div>
