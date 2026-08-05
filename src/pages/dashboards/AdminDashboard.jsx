@@ -1797,7 +1797,7 @@ const AdminDashboard = () => {
               <div style={{ display: 'flex', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px', marginTop: '10px' }}>
                 <button 
                   onClick={async () => {
-                    await approveUserKYCAdmin(selectedUserForKYC.uid, true);
+                    await approveUserKYCAdmin(selectedUserForKYC, true);
                     setSelectedUserForKYC(null);
                     await loadUsers();
                   }}
@@ -1808,7 +1808,7 @@ const AdminDashboard = () => {
                 </button>
                 <button 
                   onClick={async () => {
-                    await approveUserKYCAdmin(selectedUserForKYC.uid, false);
+                    await approveUserKYCAdmin(selectedUserForKYC, false);
                     setSelectedUserForKYC(null);
                     await loadUsers();
                   }}

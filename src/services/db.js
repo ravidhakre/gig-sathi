@@ -1005,9 +1005,10 @@ export const dbService = {
     // Merge all user sources: SEED_USERS, localUsers, and firebaseUsers
     const mergedMap = new Map();
     [...SEED_USERS, ...localUsers, ...firebaseUsers].forEach(u => {
-      if (u && (u.uid || u.email)) {
-        const key = (u.uid || u.email).toLowerCase();
-        mergedMap.set(key, { ...mergedMap.get(key), ...u });
+      if (u && (u.email || u.uid)) {
+        const key = (u.email || u.uid).toLowerCase().trim();
+        const existing = mergedMap.get(key) || {};
+        mergedMap.set(key, { ...existing, ...u });
       }
     });
     return Array.from(mergedMap.values());
@@ -1038,29 +1039,71 @@ export const dbService = {
     return updatedUser;
   },
 
-  approveUserKYC: async (uid, isApproved) => {
-    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
-    const index = users.findIndex(u => u.uid === uid || u.email === uid);
-    let updatedUser = null;
+  approveUserKYC: async (userOrUid, isApproved) => {
+    let targetUid = null;
+    let targetEmail = null;
 
-    if (index !== -1) {
-      users[index].profileApproved = isApproved;
-      updatedUser = users[index];
-    } else {
-      updatedUser = { uid, profileApproved: isApproved };
-      users.push(updatedUser);
+    if (typeof userOrUid === 'object' && userOrUid !== null) {
+      targetUid = userOrUid.uid;
+      targetEmail = userOrUid.email;
+    } else if (typeof userOrUid === 'string') {
+      targetUid = userOrUid;
+      if (userOrUid.includes('@')) {
+        targetEmail = userOrUid;
+      }
     }
+
+    const targetLowerEmail = targetEmail ? targetEmail.toLowerCase().trim() : null;
+
+    // 1. Update in LocalStorage gs_users
+    const users = JSON.parse(localStorage.getItem('gs_users')) || [];
+    let updatedUser = null;
+    users.forEach((u, i) => {
+      if (
+        (targetUid && u.uid === targetUid) ||
+        (targetLowerEmail && u.email && u.email.toLowerCase().trim() === targetLowerEmail)
+      ) {
+        users[i].profileApproved = isApproved;
+        updatedUser = users[i];
+      }
+    });
     localStorage.setItem('gs_users', JSON.stringify(users));
 
+    // 2. Update gs_current_user if it matches target user
+    try {
+      const curUser = JSON.parse(localStorage.getItem('gs_current_user'));
+      if (
+        curUser && (
+          (targetUid && curUser.uid === targetUid) ||
+          (targetLowerEmail && curUser.email && curUser.email.toLowerCase().trim() === targetLowerEmail)
+        )
+      ) {
+        curUser.profileApproved = isApproved;
+        localStorage.setItem('gs_current_user', JSON.stringify(curUser));
+      }
+    } catch (e) {}
+
+    // 3. Update Firestore docs in BOTH email & uid matches
     if (dbMode === 'FIREBASE') {
       try {
-        await setDoc(doc(firebaseFirestore, 'users', uid), { profileApproved: isApproved }, { merge: true });
+        if (targetUid) {
+          await setDoc(doc(firebaseFirestore, 'users', targetUid), { profileApproved: isApproved }, { merge: true });
+        }
+        if (targetLowerEmail) {
+          await setDoc(doc(firebaseFirestore, 'users', targetLowerEmail), { profileApproved: isApproved }, { merge: true });
+
+          const q = query(collection(firebaseFirestore, 'users'), where('email', '==', targetEmail));
+          const snap = await getDocs(q);
+          snap.forEach(async (docSnap) => {
+            await setDoc(doc(firebaseFirestore, 'users', docSnap.id), { profileApproved: isApproved }, { merge: true });
+          });
+        }
       } catch (e) {
         console.error("Firestore approveUserKYC error:", e);
       }
     }
 
-    return updatedUser;
+    return updatedUser || { uid: targetUid, email: targetEmail, profileApproved: isApproved };
   },
 
   deleteUser: async (uid) => {
@@ -1378,9 +1421,10 @@ export const dbService = {
           const localUsers = JSON.parse(localStorage.getItem('gs_users')) || [];
           const mergedMap = new Map();
           [...SEED_USERS, ...localUsers, ...firebaseUsers].forEach(u => {
-            if (u && (u.uid || u.email)) {
-              const key = (u.uid || u.email).toLowerCase();
-              mergedMap.set(key, { ...mergedMap.get(key), ...u });
+            if (u && (u.email || u.uid)) {
+              const key = (u.email || u.uid).toLowerCase().trim();
+              const existing = mergedMap.get(key) || {};
+              mergedMap.set(key, { ...existing, ...u });
             }
           });
           callback(Array.from(mergedMap.values()));

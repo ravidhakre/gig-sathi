@@ -66,13 +66,16 @@ export const AppProvider = ({ children }) => {
 
     // Set up Real-time Firestore Subscribers for instant sync across all devices
     const unsubUsers = dbService.subscribeUsers((updatedUsers) => {
-      if (currentUser) {
+      const activeUser = JSON.parse(localStorage.getItem('gs_current_user')) || currentUser;
+      if (activeUser) {
         const latestSelf = updatedUsers.find(
-          (u) => u.uid === currentUser.uid || u.email?.toLowerCase() === currentUser.email?.toLowerCase()
+          (u) => (u.uid && activeUser.uid && u.uid === activeUser.uid) || 
+                 (u.email && activeUser.email && u.email.toLowerCase().trim() === activeUser.email.toLowerCase().trim())
         );
         if (latestSelf) {
-          localStorage.setItem('gs_current_user', JSON.stringify(latestSelf));
-          setCurrentUser(latestSelf);
+          const mergedSelf = { ...activeUser, ...latestSelf };
+          localStorage.setItem('gs_current_user', JSON.stringify(mergedSelf));
+          setCurrentUser(mergedSelf);
         }
       }
     });
