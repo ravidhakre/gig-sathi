@@ -373,9 +373,6 @@ const Auth = () => {
               <div style={otpHelpPanelStyle}>
                 <span>📬 Verification OTP Code:</span>
                 <strong style={{ fontSize: '1.4rem', color: 'var(--primary-color)', letterSpacing: '2px' }}>{receivedOtp || '123456'}</strong>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                  (Enter code above or bypass with master code: <strong>123456</strong>)
-                </div>
               </div>
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '20px', padding: '14px', fontSize: '1rem', fontWeight: 'bold' }}>
