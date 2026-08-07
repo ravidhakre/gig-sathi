@@ -106,6 +106,8 @@ const HRDashboard = () => {
   const [jdLocation, setJdLocation] = useState('');
   const [jdFormat, setJdFormat] = useState('whatsapp_hi'); // 'whatsapp_hi' | 'whatsapp_en' | 'email'
 
+  const isApproved = currentUser?.profileApproved === true;
+
   const [offerSigned, setOfferSigned] = useState(() => {
     return currentUser?.offerSigned === true || (currentUser?.uid && localStorage.getItem(`gs_hr_offer_signed_${currentUser?.uid}`) === 'true');
   });
@@ -700,10 +702,26 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
             <BarChart3 size={18} /> Reports
           </button>
           <button 
-            onClick={() => { setActiveTab('offer'); setSidebarOpen(false); }}
-            style={{ ...sidebarLinkStyle, ...(activeTab === 'offer' ? activeLinkStyle : {}) }}
+            disabled={!isApproved}
+            onClick={() => { 
+              if (!isApproved) {
+                if (typeof showToast === 'function') {
+                  showToast("Offer Letter menu is disabled until your profile is approved by Admin.", "warning");
+                }
+                return;
+              }
+              setActiveTab('offer'); 
+              setSidebarOpen(false); 
+            }}
+            title={!isApproved ? "Offer Letter is disabled until Admin approves your profile" : "View Offer Letter"}
+            style={{ 
+              ...sidebarLinkStyle, 
+              ...(activeTab === 'offer' ? activeLinkStyle : {}),
+              ...(!isApproved ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: 'transparent' } : {}) 
+            }}
           >
-            <FileText size={18} /> View Offer Letter
+            <FileText size={18} color={!isApproved ? "#94a3b8" : undefined} /> View Offer Letter
+            {!isApproved && <span style={{ marginLeft: 'auto', fontSize: '0.65rem', backgroundColor: '#fef08a', color: '#854d0e', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>🔒 Locked</span>}
           </button>
           <button 
             onClick={() => { setActiveTab('profile'); setSidebarOpen(false); }}
@@ -965,48 +983,65 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
         {/* --- OFFER LETTER TAB --- */}
         {activeTab === 'offer' && (
           <div style={tabContentStyle}>
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Employment Offer Agreement</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Please review the terms of your engagement as HR Officer / Recruitment Coordinator with SRYN.</p>
-
-            <div className="grid-2" style={{ gap: '30px', alignItems: 'start' }}>
-              <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-                <div style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>OFFER_LETTER_HR.pdf</span>
-                  <span className={`badge ${offerSigned ? 'badge-approved' : 'badge-pending'}`}>
-                    {offerSigned ? 'SIGNED & ACTIVE' : 'AWAITING SIGNATURE'}
-                  </span>
+            {!isApproved ? (
+              <div style={{ textAlign: 'center', padding: '60px 24px', backgroundColor: 'var(--surface-color)', borderRadius: '12px', border: '1px solid var(--border-color)', maxWidth: '650px', margin: '40px auto', boxShadow: 'var(--shadow-md)' }}>
+                <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: 'rgba(234, 179, 8, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                  <ShieldCheck size={36} color="#eab308" />
                 </div>
-                
-                <div className="contract-document-wrapper">
-                  <div 
-                    dangerouslySetInnerHTML={{ __html: renderOfferLetter() }} 
-                    style={{ textAlign: 'left' }}
-                  />
-                </div>
-              </div>
-
-              <div className="card">
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Sign & Accept Offer</h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
-                  By clicking accept, you acknowledge and agree to the roles, payout matrices, and code of conduct policies of SRYN Recruiting Solutions.
+                <h2 style={{ fontSize: '1.6rem', marginBottom: '12px', color: 'var(--text-primary)', fontWeight: '800' }}>Offer Letter Currently Locked</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
+                  Your HR profile is currently pending Admin verification. Once Admin approves your profile, your official Offer Letter will automatically be unlocked for viewing & signing.
                 </p>
-
-                {offerSigned ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: '#dcfce7', border: '1px solid #86efac', width: '100%' }}>
-                    <CheckCircle2 size={36} color="#15803d" />
-                    <strong style={{ color: '#15803d', fontSize: '1.05rem' }}>Agreement Signed & Locked</strong>
-                    <span style={{ fontSize: '0.8rem', color: '#166534', marginBottom: '4px' }}>IP logged successfully. Your signed agreement is active.</span>
-                    <button onClick={handleDownloadPDF} className="btn" style={{ width: '100%', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold', padding: '12px' }}>
-                      Download Offer Letter (PDF)
-                    </button>
-                  </div>
-                ) : (
-                  <button onClick={handleSignOffer} className="btn btn-primary" style={{ width: '100%' }}>
-                    Accept & Sign Agreement
-                  </button>
-                )}
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#fef9c3', border: '1px solid #fef08a', color: '#854d0e', padding: '10px 20px', borderRadius: '30px', fontWeight: 'bold', fontSize: '0.88rem' }}>
+                  ⏳ Status: Pending Admin Profile Approval
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Employment Offer Agreement</h2>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Please review the terms of your engagement as HR Officer / Recruitment Coordinator with SRYN.</p>
+
+                <div className="grid-2" style={{ gap: '30px', alignItems: 'start' }}>
+                  <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                    <div style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '16px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: '700', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>OFFER_LETTER_HR.pdf</span>
+                      <span className={`badge ${offerSigned ? 'badge-approved' : 'badge-pending'}`}>
+                        {offerSigned ? 'SIGNED & ACTIVE' : 'AWAITING SIGNATURE'}
+                      </span>
+                    </div>
+                    
+                    <div className="contract-document-wrapper">
+                      <div 
+                        dangerouslySetInnerHTML={{ __html: renderOfferLetter() }} 
+                        style={{ textAlign: 'left' }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="card">
+                    <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Sign & Accept Offer</h3>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
+                      By clicking accept, you acknowledge and agree to the roles, payout matrices, and code of conduct policies of SRYN Recruiting Solutions.
+                    </p>
+
+                    {offerSigned ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', padding: '20px', borderRadius: 'var(--radius-md)', backgroundColor: '#dcfce7', border: '1px solid #86efac', width: '100%' }}>
+                        <CheckCircle2 size={36} color="#15803d" />
+                        <strong style={{ color: '#15803d', fontSize: '1.05rem' }}>Agreement Signed & Locked</strong>
+                        <span style={{ fontSize: '0.8rem', color: '#166534', marginBottom: '4px' }}>IP logged successfully. Your signed agreement is active.</span>
+                        <button onClick={handleDownloadPDF} className="btn" style={{ width: '100%', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold', padding: '12px' }}>
+                          Download Offer Letter (PDF)
+                        </button>
+                      </div>
+                    ) : (
+                      <button onClick={handleSignOffer} className="btn btn-primary" style={{ width: '100%' }}>
+                        Accept & Sign Agreement
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
         {/* --- INTERVIEW SCRIPTS TAB --- */}

@@ -10,6 +10,8 @@ const CandidateDashboard = () => {
   const { currentUser, logout, projects, customers, addCustomer, templates, showToast } = useApp();
   const navigate = useNavigate();
   
+  const isApproved = currentUser?.profileApproved === true;
+
   const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, customer, report, offer, profile
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -316,10 +318,24 @@ const CandidateDashboard = () => {
             <BarChart3 size={18} /> Earnings Reports
           </button>
           <button 
-            onClick={() => { setActiveTab('offer'); setSidebarOpen(false); }}
-            style={{ ...sidebarLinkStyle, ...(activeTab === 'offer' ? activeLinkStyle : {}) }}
+            disabled={!isApproved}
+            onClick={() => { 
+              if (!isApproved) {
+                showToast("Offer Letter menu is disabled until your profile is approved by Admin.", "warning");
+                return;
+              }
+              setActiveTab('offer'); 
+              setSidebarOpen(false); 
+            }}
+            title={!isApproved ? "Offer Letter is disabled until Admin approves your profile" : "View Offer Letter"}
+            style={{ 
+              ...sidebarLinkStyle, 
+              ...(activeTab === 'offer' ? activeLinkStyle : {}),
+              ...(!isApproved ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: 'transparent' } : {}) 
+            }}
           >
-            <FileText size={18} /> View Offer Letter
+            <FileText size={18} color={!isApproved ? "#94a3b8" : undefined} /> View Offer Letter
+            {!isApproved && <span style={{ marginLeft: 'auto', fontSize: '0.65rem', backgroundColor: '#fef08a', color: '#854d0e', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>🔒 Locked</span>}
           </button>
           <button 
             onClick={() => { setActiveTab('profile'); setSidebarOpen(false); }}
@@ -368,11 +384,23 @@ const CandidateDashboard = () => {
                   <div style={metricValueStyle}>₹{activeEarnings.toLocaleString('en-IN')}</div>
                 </div>
               </div>
-              <div className="premium-metric-card metric-blue">
-                <FileText size={28} color={offerSigned ? "var(--primary-color)" : "var(--danger-color)"} />
+              <div 
+                onClick={() => {
+                  if (!isApproved) {
+                    showToast("Offer Letter menu is disabled until your profile is approved by Admin.", "warning");
+                    return;
+                  }
+                  setActiveTab('offer');
+                }}
+                className="premium-metric-card metric-blue"
+                style={{ cursor: isApproved ? 'pointer' : 'not-allowed', opacity: isApproved ? 1 : 0.8 }}
+              >
+                <FileText size={28} color={offerSigned ? "var(--primary-color)" : isApproved ? "var(--danger-color)" : "#94a3b8"} />
                 <div>
                   <div style={metricLabelStyle}>Offer Letter</div>
-                  <div style={metricValueStyle}>{offerSigned ? 'Signed' : 'Pending Sign'}</div>
+                  <div style={metricValueStyle}>
+                    {offerSigned ? 'Signed' : isApproved ? 'Pending Sign' : '🔒 Approval Pending'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -555,43 +583,60 @@ const CandidateDashboard = () => {
         {/* --- OFFER LETTER TAB --- */}
         {activeTab === 'offer' && (
           <div style={tabContentStyle}>
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Your Employment Offer Letter</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Review and sign your active project contract.</p>
-
-            <div style={{ maxWidth: '850px', margin: '0 auto' }}>
-              <div className="contract-document-wrapper">
-                <div 
-                  dangerouslySetInnerHTML={{ __html: renderOfferLetter() }} 
-                  style={{ textAlign: 'left' }}
-                />
-              </div>
-              
-              <hr style={{ margin: '30px 0', borderColor: '#e2e8f0' }} />
-
-              <div className="offer-actions-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-surface)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <div style={{ textAlign: 'left' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#64748b' }}>CONTRACT DATE</div>
-                  <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>{
-                    new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
-                  }</strong>
+            {!isApproved ? (
+              <div style={{ textAlign: 'center', padding: '60px 24px', backgroundColor: 'var(--surface-color)', borderRadius: '12px', border: '1px solid var(--border-color)', maxWidth: '650px', margin: '40px auto', boxShadow: 'var(--shadow-md)' }}>
+                <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: 'rgba(234, 179, 8, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                  <ShieldCheck size={36} color="#eab308" />
                 </div>
-
-                {offerSigned ? (
-                  <div className="offer-signed-box" style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#dcfce7', padding: '12px 20px', borderRadius: '8px', border: '1px solid #86efac' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#15803d', fontWeight: '800' }}>
-                      <CheckCircle2 size={24} color="#15803d" /> Signed & Accepted
-                    </div>
-                    <button onClick={handleDownloadPDF} className="btn" style={{ padding: '8px 18px', fontSize: '0.85rem', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold', width: '100%' }}>
-                      Download PDF
-                    </button>
-                  </div>
-                ) : (
-                  <button onClick={handleSignOffer} className="btn btn-primary" style={{ padding: '12px 30px' }}>
-                    Accept & Sign Contract
-                  </button>
-                )}
+                <h2 style={{ fontSize: '1.6rem', marginBottom: '12px', color: 'var(--text-primary)', fontWeight: '800' }}>Offer Letter Currently Locked</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
+                  Your candidate profile is currently pending Admin verification. Once Admin approves your profile, your official Offer Letter will automatically be unlocked for viewing & signing.
+                </p>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#fef9c3', border: '1px solid #fef08a', color: '#854d0e', padding: '10px 20px', borderRadius: '30px', fontWeight: 'bold', fontSize: '0.88rem' }}>
+                  ⏳ Status: Pending Admin Profile Approval
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Your Employment Offer Letter</h2>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Review and sign your active project contract.</p>
+
+                <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+                  <div className="contract-document-wrapper">
+                    <div 
+                      dangerouslySetInnerHTML={{ __html: renderOfferLetter() }} 
+                      style={{ textAlign: 'left' }}
+                    />
+                  </div>
+                  
+                  <hr style={{ margin: '30px 0', borderColor: '#e2e8f0' }} />
+
+                  <div className="offer-actions-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-surface)', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b' }}>CONTRACT DATE</div>
+                      <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>{
+                        new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+                      }</strong>
+                    </div>
+
+                    {offerSigned ? (
+                      <div className="offer-signed-box" style={{ display: 'flex', alignItems: 'center', gap: '16px', backgroundColor: '#dcfce7', padding: '12px 20px', borderRadius: '8px', border: '1px solid #86efac' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#15803d', fontWeight: '800' }}>
+                          <CheckCircle2 size={24} color="#15803d" /> Signed & Accepted
+                        </div>
+                        <button onClick={handleDownloadPDF} className="btn" style={{ padding: '8px 18px', fontSize: '0.85rem', backgroundColor: '#16a34a', color: '#ffffff', fontWeight: 'bold', width: '100%' }}>
+                          Download PDF
+                        </button>
+                      </div>
+                    ) : (
+                      <button onClick={handleSignOffer} className="btn btn-primary" style={{ padding: '12px 30px' }}>
+                        Accept & Sign Contract
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
 
