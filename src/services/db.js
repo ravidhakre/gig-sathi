@@ -1684,19 +1684,26 @@ export const dbService = {
 
   // --- Training Modules Operations ---
   getTrainingModules: async () => {
-    let modules = [];
+    let fbModules = [];
     if (dbMode === 'FIREBASE') {
       try {
         const snap = await getDocs(collection(firebaseFirestore, 'training_modules'));
-        snap.forEach(d => modules.push(d.data()));
+        snap.forEach(d => fbModules.push(d.data()));
       } catch (e) {
         console.error("Firestore getTrainingModules error:", e);
       }
     }
-    if (!modules || modules.length === 0) {
-      modules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
-    }
-    return (modules || []).map(m => {
+    const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
+    
+    const mergedMap = new Map();
+    [...SEED_TRAINING_MODULES, ...localModules, ...fbModules].forEach(m => {
+      if (m && m.id) {
+        const existing = mergedMap.get(m.id) || {};
+        mergedMap.set(m.id, { ...existing, ...m });
+      }
+    });
+
+    return Array.from(mergedMap.values()).map(m => {
       if (m.id) {
         const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
         if (storedPdf && storedPdf.startsWith('data:')) {
@@ -1710,12 +1717,12 @@ export const dbService = {
   addTrainingModule: async (moduleData) => {
     const newId = 'train-' + Date.now();
     let rawPdfUrl = moduleData.pdfUrl || '';
-    if (rawPdfUrl && rawPdfUrl.length > 50000) {
+    if (rawPdfUrl && rawPdfUrl.length > 50) {
       try { localStorage.setItem(`gs_train_pdf_${newId}`, rawPdfUrl); } catch(e){}
     }
 
-    // For Firestore document storage safety (<1MB), trim pdfUrl in the primary payload
-    const safePayloadPdfUrl = (rawPdfUrl.length > 500000) ? `[STORED_IN_KEY: gs_train_pdf_${newId}]` : rawPdfUrl;
+    // For Firestore document storage safety (<1MB), trim pdfUrl in primary payload if >100KB
+    const safePayloadPdfUrl = (rawPdfUrl.length > 100000) ? `[STORED_IN_KEY: gs_train_pdf_${newId}]` : rawPdfUrl;
 
     const newModule = {
       id: newId,
@@ -1742,13 +1749,13 @@ export const dbService = {
 
   updateTrainingModule: async (id, updatedFields) => {
     let rawPdfUrl = updatedFields.pdfUrl || '';
-    if (rawPdfUrl && rawPdfUrl.length > 50000) {
+    if (rawPdfUrl && rawPdfUrl.length > 50) {
       try { localStorage.setItem(`gs_train_pdf_${id}`, rawPdfUrl); } catch(e){}
     }
 
-    const safePayloadPdfUrl = (rawPdfUrl.length > 500000) ? `[STORED_IN_KEY: gs_train_pdf_${id}]` : rawPdfUrl;
+    const safePayloadPdfUrl = (rawPdfUrl.length > 100000) ? `[STORED_IN_KEY: gs_train_pdf_${id}]` : rawPdfUrl;
     const cleanFields = { ...updatedFields };
-    if (rawPdfUrl.length > 500000) cleanFields.pdfUrl = safePayloadPdfUrl;
+    if (rawPdfUrl.length > 100000) cleanFields.pdfUrl = safePayloadPdfUrl;
 
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
     const index = modules.findIndex(m => m.id === id);
@@ -1791,8 +1798,17 @@ export const dbService = {
         return onSnapshot(collection(firebaseFirestore, 'training_modules'), (snap) => {
           const fbModules = [];
           snap.forEach(d => fbModules.push(d.data()));
-          const list = fbModules.length > 0 ? fbModules : (JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES);
-          const mapped = (list || []).map(m => {
+          const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
+          
+          const mergedMap = new Map();
+          [...SEED_TRAINING_MODULES, ...localModules, ...fbModules].forEach(m => {
+            if (m && m.id) {
+              const existing = mergedMap.get(m.id) || {};
+              mergedMap.set(m.id, { ...existing, ...m });
+            }
+          });
+
+          const validModules = Array.from(mergedMap.values()).map(m => {
             if (m.id) {
               const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
               if (storedPdf && storedPdf.startsWith('data:')) {
@@ -1801,7 +1817,7 @@ export const dbService = {
             }
             return m;
           });
-          callback(mapped);
+          callback(validModules);
         });
       } catch (e) {
         console.error("subscribeTrainingModules error:", e);
