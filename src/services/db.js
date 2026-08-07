@@ -589,10 +589,49 @@ const SEED_CMS = {
   }
 };
 
+export const SEED_TRAINING_MODULES = [
+  {
+    id: 'train-fd-card-1',
+    title: 'FD Card Sourcing & Customer Onboarding Manual',
+    category: 'FD Card',
+    targetRole: 'Candidate',
+    description: 'Official step-by-step training PDF covering Fixed Deposit linked Credit Card benefits, customer CIBIL verification, and live activation guidelines.',
+    pdfUrl: '',
+    fileName: 'FD_Card_Training_Manual.pdf',
+    type: 'PDF',
+    date: '2026-08-07'
+  },
+  {
+    id: 'train-cre-pitch-1',
+    title: 'Customer Relationship Executive Telephonic Script & Objection Guide',
+    category: 'Financial Products',
+    targetRole: 'Candidate',
+    description: 'Round 1 & Round 2 pitching scripts, customer objection resolution phrases, and ethical compliance standards.',
+    pdfUrl: '',
+    fileName: 'CRE_Pitch_Script_Guide.pdf',
+    type: 'PDF',
+    date: '2026-08-07'
+  },
+  {
+    id: 'train-hr-sop-1',
+    title: 'HR Sourcing & Field Executive Verification Operational Guidelines',
+    category: 'HR Officers',
+    targetRole: 'HR',
+    description: 'HR Specialist guidelines for interviewing candidates, checking Aadhar KYC completeness, and managing team campaign leads.',
+    pdfUrl: '',
+    fileName: 'HR_SOP_Training_Guide.pdf',
+    type: 'PDF',
+    date: '2026-08-07'
+  }
+];
+
 // Initialize localStorage if empty
 const initMockStorage = () => {
   if (!localStorage.getItem('gs_users')) {
     localStorage.setItem('gs_users', JSON.stringify(SEED_USERS));
+  }
+  if (!localStorage.getItem('gs_training_modules')) {
+    localStorage.setItem('gs_training_modules', JSON.stringify(SEED_TRAINING_MODULES));
   }
   
   // Ensure FD Card & CRE projects are present and updated
