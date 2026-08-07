@@ -1704,24 +1704,23 @@ export const dbService = {
     });
 
     return Array.from(mergedMap.values()).map(m => {
+      let pdfUrl = m.pdfUrl || '';
       if (m.id) {
         const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
         if (storedPdf && storedPdf.startsWith('data:')) {
-          return { ...m, pdfUrl: storedPdf };
+          pdfUrl = storedPdf;
         }
       }
-      return m;
+      return { ...m, pdfUrl };
     });
   },
 
   addTrainingModule: async (moduleData) => {
     const newId = 'train-' + Date.now();
-    let rawPdfUrl = moduleData.pdfUrl || '';
-    if (rawPdfUrl && rawPdfUrl.length > 50) {
-      try { localStorage.setItem(`gs_train_pdf_${newId}`, rawPdfUrl); } catch(e){}
+    let pdfUrl = moduleData.pdfUrl || '';
+    if (pdfUrl && pdfUrl.length > 50) {
+      try { localStorage.setItem(`gs_train_pdf_${newId}`, pdfUrl); } catch(e){}
     }
-
-    const safePayloadPdfUrl = (rawPdfUrl.length > 100000) ? `[STORED_IN_KEY: gs_train_pdf_${newId}]` : rawPdfUrl;
 
     const newModule = {
       id: newId,
@@ -1729,50 +1728,64 @@ export const dbService = {
       targetRole: 'Candidate',
       type: 'PDF',
       ...moduleData,
-      pdfUrl: safePayloadPdfUrl
+      pdfUrl: pdfUrl
     };
 
+    // Trim pdfUrl ONLY for local list backup if LocalStorage quota is tight
+    const localBackup = { ...newModule };
+    if (pdfUrl.length > 100000) {
+      localBackup.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${newId}]`;
+    }
+
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
-    // Deduplicate by ID
     modules = modules.filter(m => m.id !== newId);
-    modules.unshift(newModule);
+    modules.unshift(localBackup);
     safeSetLocalStorage('gs_training_modules', modules);
 
     if (dbMode === 'FIREBASE') {
       try {
-        await setDoc(doc(firebaseFirestore, 'training_modules', newModule.id), newModule);
+        const firestoreDoc = { ...newModule };
+        // Firestore 1MB doc limit safeguard (approx 950,000 chars)
+        if (pdfUrl.length > 950000) {
+          firestoreDoc.pdfUrl = pdfUrl.substring(0, 950000);
+        }
+        await setDoc(doc(firebaseFirestore, 'training_modules', newId), firestoreDoc);
       } catch (e) {
         console.error("Firestore addTrainingModule error:", e);
       }
     }
-    return { ...newModule, pdfUrl: rawPdfUrl || safePayloadPdfUrl };
+    return newModule;
   },
 
   updateTrainingModule: async (id, updatedFields) => {
-    let rawPdfUrl = updatedFields.pdfUrl || '';
-    if (rawPdfUrl && rawPdfUrl.length > 50) {
-      try { localStorage.setItem(`gs_train_pdf_${id}`, rawPdfUrl); } catch(e){}
+    let pdfUrl = updatedFields.pdfUrl || '';
+    if (pdfUrl && pdfUrl.length > 50) {
+      try { localStorage.setItem(`gs_train_pdf_${id}`, pdfUrl); } catch(e){}
     }
-
-    const safePayloadPdfUrl = (rawPdfUrl.length > 100000) ? `[STORED_IN_KEY: gs_train_pdf_${id}]` : rawPdfUrl;
-    const cleanFields = { ...updatedFields };
-    if (rawPdfUrl.length > 100000) cleanFields.pdfUrl = safePayloadPdfUrl;
 
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
     const index = modules.findIndex(m => m.id === id);
     if (index !== -1) {
-      const updated = { ...modules[index], ...cleanFields };
-      modules[index] = updated;
+      const updated = { ...modules[index], ...updatedFields };
+      const localBackup = { ...updated };
+      if (pdfUrl.length > 100000) {
+        localBackup.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${id}]`;
+      }
+      modules[index] = localBackup;
       safeSetLocalStorage('gs_training_modules', modules);
 
       if (dbMode === 'FIREBASE') {
         try {
-          await setDoc(doc(firebaseFirestore, 'training_modules', id), updated, { merge: true });
+          const firestoreDoc = { ...updated };
+          if (pdfUrl.length > 950000) {
+            firestoreDoc.pdfUrl = pdfUrl.substring(0, 950000);
+          }
+          await setDoc(doc(firebaseFirestore, 'training_modules', id), firestoreDoc, { merge: true });
         } catch (e) {
           console.error("Firestore updateTrainingModule error:", e);
         }
       }
-      return { ...updated, pdfUrl: rawPdfUrl || safePayloadPdfUrl };
+      return updated;
     }
     throw new Error("Training module not found.");
   },
@@ -1810,13 +1823,14 @@ export const dbService = {
           });
 
           const validModules = Array.from(mergedMap.values()).map(m => {
+            let pdfUrl = m.pdfUrl || '';
             if (m.id) {
               const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
               if (storedPdf && storedPdf.startsWith('data:')) {
-                return { ...m, pdfUrl: storedPdf };
+                pdfUrl = storedPdf;
               }
             }
-            return m;
+            return { ...m, pdfUrl };
           });
           callback(validModules);
         });
