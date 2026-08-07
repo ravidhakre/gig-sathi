@@ -738,9 +738,12 @@ const syncFirestoreSeeds = async () => {
       await setDoc(doc(firebaseFirestore, 'settings', 'cms'), SEED_CMS);
       console.log('SRYN: Firestore seeded successfully.');
     } else {
-      // Ensure FD Card & CRE projects are in Firestore
+      // Ensure FD Card & CRE projects are in Firestore if missing (do not overwrite existing edits)
       const fdDocRef = doc(firebaseFirestore, 'projects', 'proj-fd-card-1');
-      await setDoc(fdDocRef, SEED_PROJECTS[0], { merge: true });
+      const fdSnap = await getDoc(fdDocRef);
+      if (!fdSnap.exists()) {
+        await setDoc(fdDocRef, SEED_PROJECTS[0]);
+      }
 
       const creDocRef = doc(firebaseFirestore, 'projects', 'proj-cre-1');
       const creSnap = await getDoc(creDocRef);
@@ -1287,24 +1290,40 @@ export const dbService = {
   },
 
   updateProject: async (id, updatedFields) => {
-    const projects = JSON.parse(localStorage.getItem('gs_projects'));
-    const index = projects.findIndex(p => p.id === id);
+    let projects = JSON.parse(localStorage.getItem('gs_projects')) || [];
+    let index = projects.findIndex(p => p.id === id);
+    if (index === -1 && updatedFields.title) {
+      index = projects.findIndex(p => p.title === updatedFields.title);
+    }
+    
     if (index !== -1) {
-      const updated = { ...projects[index], ...updatedFields };
+      const docId = projects[index].id || id;
+      const updated = { ...projects[index], ...updatedFields, id: docId };
       projects[index] = updated;
       localStorage.setItem('gs_projects', JSON.stringify(projects));
 
       if (dbMode === 'FIREBASE') {
         try {
-          await setDoc(doc(firebaseFirestore, 'projects', id), updated);
+          await setDoc(doc(firebaseFirestore, 'projects', docId), updated, { merge: true });
         } catch (e) {
-          console.error(e);
+          console.error("Firestore updateProject error:", e);
         }
       }
 
       return updated;
+    } else {
+      const newProj = { id, status: 'Active', hiringCount: 0, ...updatedFields };
+      projects.push(newProj);
+      localStorage.setItem('gs_projects', JSON.stringify(projects));
+      if (dbMode === 'FIREBASE') {
+        try {
+          await setDoc(doc(firebaseFirestore, 'projects', id), newProj, { merge: true });
+        } catch (e) {
+          console.error("Firestore updateProject fallback error:", e);
+        }
+      }
+      return newProj;
     }
-    throw new Error("Project not found.");
   },
 
   deleteProject: async (id) => {
