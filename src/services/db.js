@@ -1683,7 +1683,63 @@ export const dbService = {
   },
 
   // --- Training Modules Operations ---
-  getTrainingModules: async () => {
+  openPdfDB: () => {
+    return new Promise((resolve, reject) => {
+      try {
+        const req = indexedDB.open('GigSathiPdfDB', 1);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('pdfs')) {
+            db.createObjectStore('pdfs');
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e);
+      } catch(err) {
+        reject(err);
+      }
+    });
+  },
+
+  savePdfToDB: async function(key, pdfData) {
+    if (!key || !pdfData) return;
+    try {
+      const db = await this.openPdfDB();
+      const tx = db.transaction('pdfs', 'readwrite');
+      tx.objectStore('pdfs').put(pdfData, key);
+    } catch(e) {}
+    try { localStorage.setItem(key, pdfData); } catch(e) {}
+  },
+
+  getPdfFromDB: function(key) {
+    return new Promise((resolve) => {
+      let localValue = '';
+      try { localValue = localStorage.getItem(key) || ''; } catch(e){}
+      if (localValue && localValue.startsWith('data:')) {
+        resolve(localValue);
+        return;
+      }
+      this.openPdfDB().then(db => {
+        const tx = db.transaction('pdfs', 'readonly');
+        const req = tx.objectStore('pdfs').get(key);
+        req.onsuccess = () => {
+          resolve(req.result || localValue || '');
+        };
+        req.onerror = () => resolve(localValue || '');
+      }).catch(() => resolve(localValue || ''));
+    });
+  },
+
+  deletePdfFromDB: async function(key) {
+    try { localStorage.removeItem(key); } catch(e){}
+    try {
+      const db = await this.openPdfDB();
+      const tx = db.transaction('pdfs', 'readwrite');
+      tx.objectStore('pdfs').delete(key);
+    } catch(e) {}
+  },
+
+  getTrainingModules: async function() {
     let fbModules = [];
     if (dbMode === 'FIREBASE') {
       try {
@@ -1703,23 +1759,25 @@ export const dbService = {
       }
     });
 
-    return Array.from(mergedMap.values()).map(m => {
+    const modules = Array.from(mergedMap.values());
+    const resolved = await Promise.all(modules.map(async (m) => {
       let pdfUrl = m.pdfUrl || '';
-      if (m.id) {
-        const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
+      if (!pdfUrl || pdfUrl.startsWith('[STORED_IN_KEY:')) {
+        const storedPdf = await dbService.getPdfFromDB(`gs_train_pdf_${m.id}`);
         if (storedPdf && storedPdf.startsWith('data:')) {
           pdfUrl = storedPdf;
         }
       }
       return { ...m, pdfUrl };
-    });
+    }));
+    return resolved;
   },
 
   addTrainingModule: async (moduleData) => {
     const newId = 'train-' + Date.now();
     let pdfUrl = moduleData.pdfUrl || '';
     if (pdfUrl && pdfUrl.length > 50) {
-      try { localStorage.setItem(`gs_train_pdf_${newId}`, pdfUrl); } catch(e){}
+      await dbService.savePdfToDB(`gs_train_pdf_${newId}`, pdfUrl);
     }
 
     const newModule = {
@@ -1731,9 +1789,8 @@ export const dbService = {
       pdfUrl: pdfUrl
     };
 
-    // Trim pdfUrl ONLY for local list backup if LocalStorage quota is tight
     const localBackup = { ...newModule };
-    if (pdfUrl.length > 100000) {
+    if (pdfUrl.length > 50000) {
       localBackup.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${newId}]`;
     }
 
@@ -1745,8 +1802,8 @@ export const dbService = {
     if (dbMode === 'FIREBASE') {
       try {
         const firestoreDoc = { ...newModule };
-        // Firestore 1MB doc limit safeguard (approx 800,000 chars)
-        if (pdfUrl.length > 800000) {
+        // If pdf is under 900KB, send to Firestore as-is
+        if (pdfUrl.length > 900000) {
           firestoreDoc.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${newId}]`;
         }
         await setDoc(doc(firebaseFirestore, 'training_modules', newId), firestoreDoc);
@@ -1760,7 +1817,7 @@ export const dbService = {
   updateTrainingModule: async (id, updatedFields) => {
     let pdfUrl = updatedFields.pdfUrl || '';
     if (pdfUrl && pdfUrl.length > 50) {
-      try { localStorage.setItem(`gs_train_pdf_${id}`, pdfUrl); } catch(e){}
+      await dbService.savePdfToDB(`gs_train_pdf_${id}`, pdfUrl);
     }
 
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
@@ -1768,7 +1825,7 @@ export const dbService = {
     if (index !== -1) {
       const updated = { ...modules[index], ...updatedFields };
       const localBackup = { ...updated };
-      if (pdfUrl.length > 100000) {
+      if (pdfUrl.length > 50000) {
         localBackup.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${id}]`;
       }
       modules[index] = localBackup;
@@ -1777,7 +1834,7 @@ export const dbService = {
       if (dbMode === 'FIREBASE') {
         try {
           const firestoreDoc = { ...updated };
-          if (pdfUrl.length > 800000) {
+          if (pdfUrl.length > 900000) {
             firestoreDoc.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${id}]`;
           }
           await setDoc(doc(firebaseFirestore, 'training_modules', id), firestoreDoc, { merge: true });
@@ -1793,7 +1850,7 @@ export const dbService = {
   deleteTrainingModule: async (id) => {
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
     modules = modules.filter(m => m.id !== id);
-    try { localStorage.removeItem(`gs_train_pdf_${id}`); } catch(e){}
+    try { await dbService.deletePdfFromDB(`gs_train_pdf_${id}`); } catch(e){}
     safeSetLocalStorage('gs_training_modules', modules);
 
     if (dbMode === 'FIREBASE') {
@@ -1809,7 +1866,7 @@ export const dbService = {
   subscribeTrainingModules: (callback) => {
     if (dbMode === 'FIREBASE') {
       try {
-        return onSnapshot(collection(firebaseFirestore, 'training_modules'), (snap) => {
+        return onSnapshot(collection(firebaseFirestore, 'training_modules'), async (snap) => {
           const fbModules = [];
           snap.forEach(d => fbModules.push(d.data()));
           const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
@@ -1822,16 +1879,17 @@ export const dbService = {
             }
           });
 
-          const validModules = Array.from(mergedMap.values()).map(m => {
+          const modules = Array.from(mergedMap.values());
+          const validModules = await Promise.all(modules.map(async (m) => {
             let pdfUrl = m.pdfUrl || '';
-            if (m.id) {
-              const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
+            if (!pdfUrl || pdfUrl.startsWith('[STORED_IN_KEY:')) {
+              const storedPdf = await dbService.getPdfFromDB(`gs_train_pdf_${m.id}`);
               if (storedPdf && storedPdf.startsWith('data:')) {
                 pdfUrl = storedPdf;
               }
             }
             return { ...m, pdfUrl };
-          });
+          }));
           callback(validModules);
         });
       } catch (e) {
