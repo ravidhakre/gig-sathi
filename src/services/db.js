@@ -1699,7 +1699,7 @@ export const dbService = {
     return (modules || []).map(m => {
       if (m.id) {
         const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
-        if (storedPdf && (!m.pdfUrl || m.pdfUrl.length < 100)) {
+        if (storedPdf && storedPdf.startsWith('data:')) {
           return { ...m, pdfUrl: storedPdf };
         }
       }
@@ -1709,18 +1709,23 @@ export const dbService = {
 
   addTrainingModule: async (moduleData) => {
     const newId = 'train-' + Date.now();
-    let pdfUrl = moduleData.pdfUrl || '';
-    if (pdfUrl && pdfUrl.length > 100000) {
-      try { localStorage.setItem(`gs_train_pdf_${newId}`, pdfUrl); } catch(e){}
+    let rawPdfUrl = moduleData.pdfUrl || '';
+    if (rawPdfUrl && rawPdfUrl.length > 50000) {
+      try { localStorage.setItem(`gs_train_pdf_${newId}`, rawPdfUrl); } catch(e){}
     }
+
+    // For Firestore document storage safety (<1MB), trim pdfUrl in the primary payload
+    const safePayloadPdfUrl = (rawPdfUrl.length > 500000) ? `[STORED_IN_KEY: gs_train_pdf_${newId}]` : rawPdfUrl;
 
     const newModule = {
       id: newId,
       date: new Date().toISOString().split('T')[0],
       targetRole: 'Candidate',
       type: 'PDF',
-      ...moduleData
+      ...moduleData,
+      pdfUrl: safePayloadPdfUrl
     };
+
     const modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
     modules.unshift(newModule);
     safeSetLocalStorage('gs_training_modules', modules);
@@ -1732,17 +1737,23 @@ export const dbService = {
         console.error("Firestore addTrainingModule error:", e);
       }
     }
-    return newModule;
+    return { ...newModule, pdfUrl: rawPdfUrl || safePayloadPdfUrl };
   },
 
   updateTrainingModule: async (id, updatedFields) => {
-    if (updatedFields.pdfUrl && updatedFields.pdfUrl.length > 100000) {
-      try { localStorage.setItem(`gs_train_pdf_${id}`, updatedFields.pdfUrl); } catch(e){}
+    let rawPdfUrl = updatedFields.pdfUrl || '';
+    if (rawPdfUrl && rawPdfUrl.length > 50000) {
+      try { localStorage.setItem(`gs_train_pdf_${id}`, rawPdfUrl); } catch(e){}
     }
+
+    const safePayloadPdfUrl = (rawPdfUrl.length > 500000) ? `[STORED_IN_KEY: gs_train_pdf_${id}]` : rawPdfUrl;
+    const cleanFields = { ...updatedFields };
+    if (rawPdfUrl.length > 500000) cleanFields.pdfUrl = safePayloadPdfUrl;
+
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
     const index = modules.findIndex(m => m.id === id);
     if (index !== -1) {
-      const updated = { ...modules[index], ...updatedFields };
+      const updated = { ...modules[index], ...cleanFields };
       modules[index] = updated;
       safeSetLocalStorage('gs_training_modules', modules);
 
@@ -1753,7 +1764,7 @@ export const dbService = {
           console.error("Firestore updateTrainingModule error:", e);
         }
       }
-      return updated;
+      return { ...updated, pdfUrl: rawPdfUrl || safePayloadPdfUrl };
     }
     throw new Error("Training module not found.");
   },
@@ -1784,7 +1795,7 @@ export const dbService = {
           const mapped = (list || []).map(m => {
             if (m.id) {
               const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
-              if (storedPdf && (!m.pdfUrl || m.pdfUrl.length < 100)) {
+              if (storedPdf && storedPdf.startsWith('data:')) {
                 return { ...m, pdfUrl: storedPdf };
               }
             }

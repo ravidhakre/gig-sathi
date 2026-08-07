@@ -26,10 +26,21 @@ const CandidateDashboard = () => {
   const candTrainingModules = (trainingModules || []).filter(m => !m.targetRole || m.targetRole === 'Candidate' || m.targetRole === 'ALL');
   const filteredTraining = candTrainingModules.filter(m => selectedTrainCat === 'ALL' || m.category === selectedTrainCat);
 
+  const resolvePdfUrl = (mod) => {
+    if (!mod) return '';
+    if (mod.pdfUrl && mod.pdfUrl.startsWith('data:')) return mod.pdfUrl;
+    if (mod.id) {
+      const stored = localStorage.getItem(`gs_train_pdf_${mod.id}`);
+      if (stored && stored.startsWith('data:')) return stored;
+    }
+    return mod.pdfUrl || '';
+  };
+
   const handleDownloadTrainingPDF = (mod) => {
-    if (mod.pdfUrl && mod.pdfUrl.startsWith('data:')) {
+    const pdfData = resolvePdfUrl(mod);
+    if (pdfData && pdfData.startsWith('data:')) {
       const a = document.createElement('a');
-      a.href = mod.pdfUrl;
+      a.href = pdfData;
       a.download = mod.fileName || `${mod.title.replace(/\s+/g, '_')}.pdf`;
       document.body.appendChild(a);
       a.click();
@@ -866,9 +877,9 @@ const CandidateDashboard = () => {
                   {previewTrainModal.description}
                 </div>
 
-                {previewTrainModal.pdfUrl && previewTrainModal.pdfUrl.startsWith('data:') ? (
+                {resolvePdfUrl(previewTrainModal) && resolvePdfUrl(previewTrainModal).startsWith('data:') ? (
                   <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '400px' }}>
-                    <iframe src={previewTrainModal.pdfUrl} width="100%" height="100%" title="Training PDF Document"></iframe>
+                    <iframe src={resolvePdfUrl(previewTrainModal)} width="100%" height="100%" title="Training PDF Document"></iframe>
                   </div>
                 ) : (
                   <div style={{ backgroundColor: '#eff6ff', border: '1px dashed #93c5fd', borderRadius: '8px', padding: '24px', textAlign: 'center', color: '#1e40af' }}>
