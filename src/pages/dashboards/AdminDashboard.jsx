@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X,
-  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff, ExternalLink
+  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff, ExternalLink, CheckCircle2, ShieldCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import dbService from '../../services/db';
 
 const AdminDashboard = () => {
   const { 
-    projects, leads, templates, cms, logout, 
+    projects, leads, customers, templates, cms, logout, 
     createProject, updateProjectDetails, deleteProjectDetails, 
     updateCMS, saveOfferLetterTemplate, changeUserRoleAdmin,
     approveUserKYCAdmin, deleteUserAdmin, resetUserPasswordAdmin,
@@ -174,6 +174,16 @@ const AdminDashboard = () => {
   useEffect(() => {
     loadUsers();
   }, []);
+
+  // Calculate summary metrics for Admin Panel
+  const hrCount = usersList.filter(u => u.role === 'HR').length;
+  const candidateCount = usersList.filter(u => u.role === 'Candidate').length;
+  const pendingCandidatesCount = usersList.filter(u => u.role === 'Candidate' && u.profileApproved !== true).length;
+  const approvedCandidatesCount = usersList.filter(u => u.role === 'Candidate' && u.profileApproved === true).length;
+  
+  const totalCustomersCount = (customers || []).length;
+  const pendingCustomersCount = (customers || []).filter(c => c.status === 'Pending' || c.status === 'Pending KYC' || c.status === 'Calling' || !c.status).length;
+  const activeCustomersCount = (customers || []).filter(c => c.status === 'Active' || c.status === 'Completed' || c.status === 'Approved').length;
 
   // Initialize CMS forms
   useEffect(() => {
@@ -532,8 +542,83 @@ const AdminDashboard = () => {
         {/* --- USERS TAB --- */}
         {activeTab === 'users' && (
           <div style={tabContentStyle}>
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>User Portal Management</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Modify registered employee authorization levels and view KYC completeness status.</p>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>User Portal Management & System Metrics</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>Real-time dashboard metrics overview and employee authorization management.</p>
+
+            {/* --- ADMIN SUMMARY METRICS CARDS --- */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '30px' }}>
+              
+              {/* HR Officers */}
+              <div className="premium-metric-card metric-purple">
+                <Briefcase size={26} color="var(--secondary-color)" />
+                <div>
+                  <div style={metricLabelStyle}>HR Officers</div>
+                  <div style={metricValueStyle}>{hrCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Active HR Team</div>
+                </div>
+              </div>
+
+              {/* Total Candidates */}
+              <div className="premium-metric-card metric-cherry">
+                <Users size={26} color="var(--primary-color)" />
+                <div>
+                  <div style={metricLabelStyle}>Total Candidates</div>
+                  <div style={metricValueStyle}>{candidateCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Registered Field Candidates</div>
+                </div>
+              </div>
+
+              {/* Pending Candidates */}
+              <div className="premium-metric-card metric-orange">
+                <HelpCircle size={26} color="#eab308" />
+                <div>
+                  <div style={metricLabelStyle}>Pending Candidate KYC</div>
+                  <div style={{ ...metricValueStyle, color: '#eab308' }}>{pendingCandidatesCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#eab308', fontWeight: 'bold', marginTop: '4px' }}>⏳ Review Required</div>
+                </div>
+              </div>
+
+              {/* Approved Candidates */}
+              <div className="premium-metric-card metric-blue">
+                <UserCheck size={26} color="#16a34a" />
+                <div>
+                  <div style={metricLabelStyle}>Approved Candidates</div>
+                  <div style={{ ...metricValueStyle, color: '#16a34a' }}>{approvedCandidatesCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 'bold', marginTop: '4px' }}>✓ Offer Unlocked</div>
+                </div>
+              </div>
+
+              {/* Total Customers */}
+              <div className="premium-metric-card metric-cherry" style={{ background: 'linear-gradient(135deg, rgba(222,49,99,0.06) 0%, rgba(222,49,99,0.12) 100%)' }}>
+                <FileText size={26} color="var(--primary-color)" />
+                <div>
+                  <div style={metricLabelStyle}>Total Customers</div>
+                  <div style={metricValueStyle}>{totalCustomersCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Onboarded Leads</div>
+                </div>
+              </div>
+
+              {/* Pending Customers */}
+              <div className="premium-metric-card metric-orange" style={{ background: 'linear-gradient(135deg, rgba(234,179,8,0.06) 0%, rgba(234,179,8,0.12) 100%)' }}>
+                <HelpCircle size={26} color="#ca8a04" />
+                <div>
+                  <div style={metricLabelStyle}>Pending Customers</div>
+                  <div style={{ ...metricValueStyle, color: '#ca8a04' }}>{pendingCustomersCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#ca8a04', fontWeight: 'bold', marginTop: '4px' }}>⏳ Pending Activation</div>
+                </div>
+              </div>
+
+              {/* Active / Final Customers */}
+              <div className="premium-metric-card metric-purple" style={{ background: 'linear-gradient(135deg, rgba(22,163,74,0.06) 0%, rgba(22,163,74,0.12) 100%)' }}>
+                <CheckCircle2 size={26} color="#16a34a" />
+                <div>
+                  <div style={metricLabelStyle}>Final Active Customers</div>
+                  <div style={{ ...metricValueStyle, color: '#16a34a' }}>{activeCustomersCount}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 'bold', marginTop: '4px' }}>🎉 Final / Active</div>
+                </div>
+              </div>
+
+            </div>
 
             <div className="crm-table-container">
               <table className="crm-table">
@@ -2186,6 +2271,20 @@ const logoutBtnStyle = {
   textAlign: 'left',
   backgroundColor: 'var(--danger-light)',
   border: '1px solid rgba(239, 68, 68, 0.1)'
+};
+
+const metricLabelStyle = {
+  fontSize: '0.8rem',
+  color: 'var(--text-muted)',
+  fontWeight: '600',
+  textTransform: 'uppercase'
+};
+
+const metricValueStyle = {
+  fontSize: '1.6rem',
+  fontWeight: '800',
+  color: 'var(--text-primary)',
+  marginTop: '4px'
 };
 
 const tabContentStyle = {
