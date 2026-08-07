@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { 
   Users, Briefcase, FileText, Settings, Layout, LogOut, Plus, Trash2, Edit3, UserCheck, Upload, Save, HelpCircle, Menu, X,
-  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff, ExternalLink, CheckCircle2, ShieldCheck
+  BookOpen, Video, PhoneCall, Share2, Power, ToggleLeft, ToggleRight, Eye, EyeOff, ExternalLink, CheckCircle2, ShieldCheck,
+  LayoutDashboard
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import dbService from '../../services/db';
@@ -17,7 +18,7 @@ const AdminDashboard = () => {
   } = useApp();
   
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Local state for administrative tables
@@ -480,6 +481,12 @@ const AdminDashboard = () => {
 
         <div style={sidebarMenuStyle}>
           <button 
+            onClick={() => { setActiveTab('dashboard'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'dashboard' ? activeLinkStyle : {}) }}
+          >
+            <LayoutDashboard size={18} /> Dashboard
+          </button>
+          <button 
             onClick={() => { setActiveTab('users'); setSidebarOpen(false); }}
             style={{ ...sidebarLinkStyle, ...(activeTab === 'users' ? activeLinkStyle : {}) }}
           >
@@ -539,11 +546,15 @@ const AdminDashboard = () => {
       {/* Main Content Pane */}
       <main className="dashboard-main">
 
-        {/* --- USERS TAB --- */}
-        {activeTab === 'users' && (
+        {/* --- DASHBOARD TAB --- */}
+        {activeTab === 'dashboard' && (
           <div style={tabContentStyle}>
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>User Portal Management & System Metrics</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>Real-time dashboard metrics overview and employee authorization management.</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '6px' }}>System Overview Dashboard</h2>
+                <p style={{ color: 'var(--text-secondary)' }}>Real-time analytical overview of team operations, candidate approvals, and customer conversions.</p>
+              </div>
+            </div>
 
             {/* --- ADMIN SUMMARY METRICS CARDS --- */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '30px' }}>
@@ -569,17 +580,25 @@ const AdminDashboard = () => {
               </div>
 
               {/* Pending Candidates */}
-              <div className="premium-metric-card metric-orange">
+              <div 
+                onClick={() => setActiveTab('candidates')}
+                className="premium-metric-card metric-orange"
+                style={{ cursor: 'pointer' }}
+              >
                 <HelpCircle size={26} color="#eab308" />
                 <div>
                   <div style={metricLabelStyle}>Pending Candidate KYC</div>
                   <div style={{ ...metricValueStyle, color: '#eab308' }}>{pendingCandidatesCount}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#eab308', fontWeight: 'bold', marginTop: '4px' }}>⏳ Review Required</div>
+                  <div style={{ fontSize: '0.75rem', color: '#eab308', fontWeight: 'bold', marginTop: '4px' }}>⏳ Click to Review</div>
                 </div>
               </div>
 
               {/* Approved Candidates */}
-              <div className="premium-metric-card metric-blue">
+              <div 
+                onClick={() => setActiveTab('candidates')}
+                className="premium-metric-card metric-blue"
+                style={{ cursor: 'pointer' }}
+              >
                 <UserCheck size={26} color="#16a34a" />
                 <div>
                   <div style={metricLabelStyle}>Approved Candidates</div>
@@ -619,6 +638,62 @@ const AdminDashboard = () => {
               </div>
 
             </div>
+
+            {/* Quick Actions & System Overview Cards */}
+            <div className="grid-2" style={{ gap: '20px' }}>
+              <div className="card">
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <UserCheck size={20} color="var(--primary-color)" /> Pending Candidate Approvals
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {usersList.filter(u => u.role === 'Candidate' && u.profileApproved !== true).slice(0, 5).map(u => (
+                    <div key={u.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', backgroundColor: 'var(--surface-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                      <div>
+                        <strong style={{ fontSize: '0.9rem' }}>{u.fullName}</strong>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{u.email} | {u.mobile}</div>
+                      </div>
+                      <button 
+                        onClick={() => { setSelectedUserForKYC(u); setActiveTab('users'); }}
+                        className="btn btn-primary" 
+                        style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                      >
+                        Review KYC
+                      </button>
+                    </div>
+                  ))}
+                  {pendingCandidatesCount === 0 && (
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', padding: '20px', textAlign: 'center' }}>
+                      ✓ All candidates are currently approved & verified.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="card">
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Briefcase size={20} color="var(--secondary-color)" /> Active Hiring Campaigns
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {(projects || []).slice(0, 5).map(p => (
+                    <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', backgroundColor: 'var(--surface-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                      <div>
+                        <strong style={{ fontSize: '0.9rem' }}>{p.title}</strong>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{p.category} | {p.salary}</div>
+                      </div>
+                      <span className="badge badge-hired" style={{ fontSize: '0.75rem' }}>Active</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* --- USERS TAB --- */}
+        {activeTab === 'users' && (
+          <div style={tabContentStyle}>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>User Portal Management</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>Modify registered employee authorization levels and view KYC completeness status.</p>
 
             <div className="crm-table-container">
               <table className="crm-table">
