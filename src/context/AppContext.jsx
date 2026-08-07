@@ -6,7 +6,21 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     const saved = localStorage.getItem('gs_current_user');
-    return saved ? JSON.parse(saved) : null;
+    if (!saved) return null;
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.uid) {
+        const storedRes = localStorage.getItem(`gs_doc_resume_${parsed.uid}`);
+        if (storedRes && (!parsed.resume || parsed.resume.length < 100)) parsed.resume = storedRes;
+        const storedFront = localStorage.getItem(`gs_doc_aadharFront_${parsed.uid}`);
+        if (storedFront && (!parsed.aadharFront || parsed.aadharFront.length < 100)) parsed.aadharFront = storedFront;
+        const storedBack = localStorage.getItem(`gs_doc_aadharBack_${parsed.uid}`);
+        if (storedBack && (!parsed.aadharBack || parsed.aadharBack.length < 100)) parsed.aadharBack = storedBack;
+      }
+      return parsed;
+    } catch (e) {
+      return null;
+    }
   });
   
   const [projects, setProjects] = useState([]);
@@ -40,11 +54,22 @@ export const AppProvider = ({ children }) => {
       if (currentUser) {
         const allUsers = await dbService.getUsers();
         const latestSelf = allUsers.find(
-          (u) => u.uid === currentUser.uid || u.email?.toLowerCase() === currentUser.email?.toLowerCase()
+          (u) => (u.uid && currentUser.uid && u.uid === currentUser.uid) || 
+                 (u.email && currentUser.email && u.email.toLowerCase().trim() === currentUser.email.toLowerCase().trim())
         );
         if (latestSelf) {
-          localStorage.setItem('gs_current_user', JSON.stringify(latestSelf));
-          setCurrentUser(latestSelf);
+          const mergedSelf = { ...currentUser, ...latestSelf };
+          const storedRes = localStorage.getItem(`gs_doc_resume_${currentUser.uid}`);
+          if (storedRes && (!mergedSelf.resume || mergedSelf.resume.length < 100)) mergedSelf.resume = storedRes;
+          const storedFront = localStorage.getItem(`gs_doc_aadharFront_${currentUser.uid}`);
+          if (storedFront && (!mergedSelf.aadharFront || mergedSelf.aadharFront.length < 100)) mergedSelf.aadharFront = storedFront;
+          const storedBack = localStorage.getItem(`gs_doc_aadharBack_${currentUser.uid}`);
+          if (storedBack && (!mergedSelf.aadharBack || mergedSelf.aadharBack.length < 100)) mergedSelf.aadharBack = storedBack;
+
+          try {
+            localStorage.setItem('gs_current_user', JSON.stringify(mergedSelf));
+          } catch (e) {}
+          setCurrentUser(mergedSelf);
         }
 
         const custData = await dbService.getCustomers(
@@ -79,15 +104,17 @@ export const AppProvider = ({ children }) => {
         );
         if (latestSelf) {
           const mergedSelf = { ...activeUser, ...latestSelf };
+          
+          const storedRes = localStorage.getItem(`gs_doc_resume_${activeUser.uid}`);
+          if (storedRes && (!mergedSelf.resume || mergedSelf.resume.length < 100)) mergedSelf.resume = storedRes;
+          const storedFront = localStorage.getItem(`gs_doc_aadharFront_${activeUser.uid}`);
+          if (storedFront && (!mergedSelf.aadharFront || mergedSelf.aadharFront.length < 100)) mergedSelf.aadharFront = storedFront;
+          const storedBack = localStorage.getItem(`gs_doc_aadharBack_${activeUser.uid}`);
+          if (storedBack && (!mergedSelf.aadharBack || mergedSelf.aadharBack.length < 100)) mergedSelf.aadharBack = storedBack;
+
           try {
             localStorage.setItem('gs_current_user', JSON.stringify(mergedSelf));
-          } catch (e) {
-            const clone = { ...mergedSelf };
-            if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = clone.aadharFront.substring(0, 200) + '...[FIRESTORE]';
-            if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = clone.aadharBack.substring(0, 200) + '...[FIRESTORE]';
-            if (clone.resume && clone.resume.length > 500) clone.resume = clone.resume.substring(0, 200) + '...[FIRESTORE]';
-            try { localStorage.setItem('gs_current_user', JSON.stringify(clone)); } catch (e2) {}
-          }
+          } catch (e) {}
           setCurrentUser(mergedSelf);
         }
       }
@@ -217,11 +244,17 @@ export const AppProvider = ({ children }) => {
     if (!currentUser) return;
     try {
       const targetId = currentUser.uid || currentUser.email;
+      if (currentUser.uid) {
+        if (updatedFields.resume) try { localStorage.setItem(`gs_doc_resume_${currentUser.uid}`, updatedFields.resume); } catch(e){}
+        if (updatedFields.aadharFront) try { localStorage.setItem(`gs_doc_aadharFront_${currentUser.uid}`, updatedFields.aadharFront); } catch(e){}
+        if (updatedFields.aadharBack) try { localStorage.setItem(`gs_doc_aadharBack_${currentUser.uid}`, updatedFields.aadharBack); } catch(e){}
+      }
       const updatedUser = await dbService.updateProfile(targetId, updatedFields);
-      dbService.safeSetLocalStorage('gs_current_user', updatedUser);
-      setCurrentUser(updatedUser);
+      const merged = { ...currentUser, ...updatedUser, ...updatedFields };
+      dbService.safeSetLocalStorage('gs_current_user', merged);
+      setCurrentUser(merged);
       showToast("Profile details updated successfully!", "success");
-      return updatedUser;
+      return merged;
     } catch (error) {
       console.error("updateProfile error:", error);
       showToast(error.message, "danger");

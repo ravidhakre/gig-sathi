@@ -38,11 +38,28 @@ const Profile = () => {
   });
 
   // File uploads (DataURLs or simulated names)
+  const getStoredDoc = (field) => {
+    if (currentUser?.[field] && currentUser[field].length > 100) return currentUser[field];
+    if (currentUser?.uid) {
+      const stored = localStorage.getItem(`gs_doc_${field}_${currentUser.uid}`);
+      if (stored) return stored;
+    }
+    return currentUser?.[field] || '';
+  };
+
   const [files, setFiles] = useState({
-    aadharFront: currentUser?.aadharFront || '',
-    aadharBack: currentUser?.aadharBack || '',
-    resume: currentUser?.resume || ''
+    aadharFront: getStoredDoc('aadharFront'),
+    aadharBack: getStoredDoc('aadharBack'),
+    resume: getStoredDoc('resume')
   });
+
+  useEffect(() => {
+    setFiles({
+      aadharFront: getStoredDoc('aadharFront'),
+      aadharBack: getStoredDoc('aadharBack'),
+      resume: getStoredDoc('resume')
+    });
+  }, [currentUser?.resume, currentUser?.aadharFront, currentUser?.aadharBack, currentUser?.uid]);
 
   const [uploadProgress, setUploadProgress] = useState({ aadharFront: 0, aadharBack: 0, resume: 0 });
 
@@ -106,6 +123,12 @@ const Profile = () => {
       
       setFiles(prev => ({ ...prev, [fieldName]: processedFile }));
       setUploadProgress(prev => ({ ...prev, [fieldName]: 85 }));
+
+      if (currentUser?.uid) {
+        try {
+          localStorage.setItem(`gs_doc_${fieldName}_${currentUser.uid}`, processedFile);
+        } catch (sErr) {}
+      }
 
       await updateProfile({ [fieldName]: processedFile });
       setUploadProgress(prev => ({ ...prev, [fieldName]: 100 }));

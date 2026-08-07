@@ -313,7 +313,17 @@ const AdminDashboard = () => {
   };
 
   const handleReviewKYCClick = async (u) => {
-    setSelectedUserForKYC(u);
+    let base = { ...u };
+    if (u.uid) {
+      const storedRes = localStorage.getItem(`gs_doc_resume_${u.uid}`);
+      if (storedRes && (!base.resume || base.resume.length < 100)) base.resume = storedRes;
+      const storedFront = localStorage.getItem(`gs_doc_aadharFront_${u.uid}`);
+      if (storedFront && (!base.aadharFront || base.aadharFront.length < 100)) base.aadharFront = storedFront;
+      const storedBack = localStorage.getItem(`gs_doc_aadharBack_${u.uid}`);
+      if (storedBack && (!base.aadharBack || base.aadharBack.length < 100)) base.aadharBack = storedBack;
+    }
+    setSelectedUserForKYC(base);
+
     if (dbMode === 'FIREBASE' && (u.uid || u.email)) {
       try {
         let fullDoc = null;
@@ -326,7 +336,14 @@ const AdminDashboard = () => {
           if (docSnap.exists()) fullDoc = docSnap.data();
         }
         if (fullDoc) {
-          setSelectedUserForKYC(prev => ({ ...prev, ...fullDoc }));
+          setSelectedUserForKYC(prev => {
+            const merged = { ...prev, ...fullDoc };
+            if (u.uid) {
+              const sRes = localStorage.getItem(`gs_doc_resume_${u.uid}`);
+              if (sRes && (!merged.resume || merged.resume.length < 100)) merged.resume = sRes;
+            }
+            return merged;
+          });
         }
       } catch (err) {
         console.error("Error fetching full KYC doc from Firestore:", err);
