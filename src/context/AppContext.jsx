@@ -14,6 +14,7 @@ export const AppProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [cms, setCms] = useState({});
+  const [trainingModules, setTrainingModules] = useState([]);
   const [toasts, setToasts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +33,9 @@ export const AppProvider = ({ children }) => {
 
       const cmsData = await dbService.getCMS();
       setCms(cmsData || {});
+
+      const trainData = await dbService.getTrainingModules();
+      setTrainingModules(trainData || []);
 
       if (currentUser) {
         const allUsers = await dbService.getUsers();
@@ -56,6 +60,7 @@ export const AppProvider = ({ children }) => {
       setTemplates([]);
       setCustomers([]);
       setCms({});
+      setTrainingModules([]);
     } finally {
       setLoading(false);
     }
@@ -103,6 +108,10 @@ export const AppProvider = ({ children }) => {
       }
     );
 
+    const unsubTraining = dbService.subscribeTrainingModules((trainData) => {
+      if (trainData && trainData.length > 0) setTrainingModules(trainData);
+    });
+
     // Cross-tab storage listener for multi-tab sync
     const handleStorageChange = (e) => {
       if (e.key === 'gs_current_user' && e.newValue) {
@@ -118,6 +127,7 @@ export const AppProvider = ({ children }) => {
       unsubProjects();
       unsubLeads();
       unsubCustomers();
+      unsubTraining();
       window.removeEventListener('storage', handleStorageChange);
     };
   }, [currentUser?.uid]);
@@ -387,6 +397,40 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const createTrainingModule = async (moduleData) => {
+    try {
+      const res = await dbService.addTrainingModule(moduleData);
+      setTrainingModules((prev) => [res, ...prev]);
+      showToast(`Training Module "${moduleData.title}" published!`, 'success');
+      return res;
+    } catch (error) {
+      showToast(error.message, 'danger');
+      throw error;
+    }
+  };
+
+  const updateTrainingModuleDetails = async (id, fields) => {
+    try {
+      const res = await dbService.updateTrainingModule(id, fields);
+      setTrainingModules((prev) => prev.map(m => m.id === id ? res : m));
+      showToast(`Training Module updated successfully!`, 'success');
+      return res;
+    } catch (error) {
+      showToast(error.message, 'danger');
+      throw error;
+    }
+  };
+
+  const deleteTrainingModuleDetails = async (id) => {
+    try {
+      await dbService.deleteTrainingModule(id);
+      setTrainingModules((prev) => prev.filter(m => m.id !== id));
+      showToast(`Training Module deleted.`, 'info');
+    } catch (error) {
+      showToast(error.message, 'danger');
+    }
+  };
+
   return (
     <AppContext.Provider value={{
       currentUser,
@@ -395,6 +439,7 @@ export const AppProvider = ({ children }) => {
       customers,
       templates,
       cms,
+      trainingModules,
       toasts,
       loading,
       login,
@@ -413,6 +458,9 @@ export const AppProvider = ({ children }) => {
       createProject,
       updateProjectDetails,
       deleteProjectDetails,
+      createTrainingModule,
+      updateTrainingModuleDetails,
+      deleteTrainingModuleDetails,
       changeUserRoleAdmin,
       approveUserKYCAdmin,
       deleteUserAdmin,

@@ -3,22 +3,69 @@ import { useApp } from '../../context/AppContext';
 import Profile from '../Profile';
 import { 
   LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Plus, ShieldCheck, Mail, Calendar, HelpCircle, Menu, CheckCircle2,
-  Copy, Send, Smartphone, AlertTriangle, ExternalLink
+  Copy, Send, Smartphone, AlertTriangle, ExternalLink, BookOpen, Download, Eye, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const CandidateDashboard = () => {
-  const { currentUser, logout, projects, customers, addCustomer, templates, showToast } = useApp();
+  const { currentUser, logout, projects, customers, addCustomer, templates, trainingModules, showToast } = useApp();
   const navigate = useNavigate();
   
   const isApproved = currentUser?.profileApproved === true;
 
-  const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, customer, report, offer, profile
+  const [activeTab, setActiveTab] = useState('dashboard'); // dashboard, customer, report, training, offer, profile
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedTrainCat, setSelectedTrainCat] = useState('ALL');
+  const [previewTrainModal, setPreviewTrainModal] = useState(null);
 
   // Add Customer form state
   const [custForm, setCustForm] = useState({ name: '', mobile: '', email: '', project: '' });
   const [submittingCust, setSubmittingCust] = useState(false);
+
+  // Filter training modules for Candidate
+  const candTrainingModules = (trainingModules || []).filter(m => !m.targetRole || m.targetRole === 'Candidate' || m.targetRole === 'ALL');
+  const filteredTraining = candTrainingModules.filter(m => selectedTrainCat === 'ALL' || m.category === selectedTrainCat);
+
+  const handleDownloadTrainingPDF = (mod) => {
+    if (mod.pdfUrl && mod.pdfUrl.startsWith('data:')) {
+      const a = document.createElement('a');
+      a.href = mod.pdfUrl;
+      a.download = mod.fileName || `${mod.title.replace(/\s+/g, '_')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast(`Downloading "${mod.fileName || 'Training_Doc.pdf'}"...`, "success");
+    } else {
+      const printWin = window.open('', '_blank');
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>${mod.title}</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }
+              h1 { color: #de3163; border-bottom: 2px solid #de3163; padding-bottom: 10px; }
+              .badge { background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+              .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 20px; }
+            </style>
+          </head>
+          <body>
+            <span class="badge">${mod.category || 'Training Manual'}</span>
+            <h1>${mod.title}</h1>
+            <p style="color: #64748b; font-size: 14px;">Official Training Guide | SRYN Management Private Limited</p>
+            <div class="box">
+              <h3>Training Description & Guidelines</h3>
+              <p>${mod.description}</p>
+            </div>
+            <br/><br/>
+            <button onclick="window.print()" style="padding: 10px 20px; background: #de3163; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Print / Save as PDF</button>
+          </body>
+        </html>
+      `);
+      printWin.document.close();
+      showToast("Training document opened! Click 'Print / Save as PDF' to download.", "info");
+    }
+  };
 
   // Deduplicate customer list by ID / Mobile
   const uniqueCustomers = Array.from(
@@ -355,6 +402,12 @@ const CandidateDashboard = () => {
             style={{ ...sidebarLinkStyle, ...(activeTab === 'report' ? activeLinkStyle : {}) }}
           >
             <BarChart3 size={18} /> Earnings Reports
+          </button>
+          <button 
+            onClick={() => { setActiveTab('training'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'training' ? activeLinkStyle : {}) }}
+          >
+            <BookOpen size={18} /> Training & Pitching
           </button>
           <button 
             disabled={!isApproved}
@@ -707,6 +760,138 @@ const CandidateDashboard = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* --- TRAINING TAB --- */}
+        {activeTab === 'training' && (
+          <div style={tabContentStyle}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '6px' }}>Training & Pitching Materials</h2>
+                <p style={{ color: 'var(--text-secondary)' }}>Download official campaign SOPs, product training manuals, and calling pitch guidelines.</p>
+              </div>
+            </div>
+
+            {/* Training Category Filter */}
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', flexWrap: 'wrap' }}>
+              <button 
+                onClick={() => setSelectedTrainCat('ALL')}
+                className={`btn ${selectedTrainCat === 'ALL' ? 'btn-primary' : 'btn-outline'}`}
+                style={{ padding: '6px 16px', fontSize: '0.85rem' }}
+              >
+                All Materials
+              </button>
+              {['FD Card', 'Financial Products', 'Field Executive', 'General'].map(cat => (
+                <button 
+                  key={cat}
+                  onClick={() => setSelectedTrainCat(cat)}
+                  className={`btn ${selectedTrainCat === cat ? 'btn-primary' : 'btn-outline'}`}
+                  style={{ padding: '6px 16px', fontSize: '0.85rem' }}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Training Cards Grid */}
+            <div className="grid-2" style={{ gap: '20px' }}>
+              {filteredTraining.length > 0 ? (
+                filteredTraining.map((mod) => (
+                  <div key={mod.id} className="card" style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                        <span className="badge badge-calling" style={{ fontSize: '0.78rem' }}>{mod.category}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>📅 Updated {mod.date}</span>
+                      </div>
+                      <h3 style={{ fontSize: '1.15rem', marginBottom: '8px', color: 'var(--text-primary)', fontWeight: '700' }}>
+                        {mod.title}
+                      </h3>
+                      <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '16px' }}>
+                        {mod.description}
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px', borderTop: '1px solid var(--border-color)', paddingTop: '14px' }}>
+                      <button 
+                        onClick={() => setPreviewTrainModal(mod)}
+                        className="btn btn-outline" 
+                        style={{ flex: 1, padding: '8px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                      >
+                        <Eye size={16} /> View Details / PDF
+                      </button>
+                      <button 
+                        onClick={() => handleDownloadTrainingPDF(mod)}
+                        className="btn btn-primary" 
+                        style={{ flex: 1, padding: '8px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                      >
+                        <Download size={16} /> Download PDF
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="card" style={{ gridColumn: '1 / -1', padding: '40px', color: 'var(--text-muted)' }}>
+                  No training manuals found for the selected category.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* --- TRAINING DETAIL / PREVIEW MODAL --- */}
+        {previewTrainModal && (
+          <div className="modal-overlay">
+            <div className="modal-content fade-in" style={{ maxWidth: '750px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <BookOpen size={22} color="var(--primary-color)" />
+                  <h3 style={{ fontSize: '1.25rem' }}>{previewTrainModal.title}</h3>
+                </div>
+                <button onClick={() => setPreviewTrainModal(null)}><X size={20} /></button>
+              </div>
+
+              <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <span className="badge badge-hired">{previewTrainModal.category}</span>
+                  <span className="badge badge-calling">Target: {previewTrainModal.targetRole || 'Candidate'}</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>
+                    Uploaded: {previewTrainModal.date}
+                  </span>
+                </div>
+
+                <div style={{ backgroundColor: 'var(--surface-color)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '0.92rem', lineHeight: '1.6' }}>
+                  <strong style={{ display: 'block', marginBottom: '6px', color: 'var(--text-primary)' }}>Training Description & Overview:</strong>
+                  {previewTrainModal.description}
+                </div>
+
+                {previewTrainModal.pdfUrl && previewTrainModal.pdfUrl.startsWith('data:') ? (
+                  <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '400px' }}>
+                    <iframe src={previewTrainModal.pdfUrl} width="100%" height="100%" title="Training PDF Document"></iframe>
+                  </div>
+                ) : (
+                  <div style={{ backgroundColor: '#eff6ff', border: '1px dashed #93c5fd', borderRadius: '8px', padding: '24px', textAlign: 'center', color: '#1e40af' }}>
+                    <FileText size={36} color="#2563eb" style={{ margin: '0 auto 12px' }} />
+                    <strong style={{ display: 'block', fontSize: '1.05rem', marginBottom: '6px' }}>Official SRYN Training Module</strong>
+                    <p style={{ fontSize: '0.88rem', color: '#3b82f6', marginBottom: '16px' }}>Click the button below to view or download the complete PDF training manual.</p>
+                    <button 
+                      onClick={() => handleDownloadTrainingPDF(previewTrainModal)}
+                      className="btn btn-primary" 
+                      style={{ padding: '8px 20px', fontSize: '0.9rem' }}
+                    >
+                      <Download size={16} /> Download Official PDF Document
+                    </button>
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+                  <button onClick={() => setPreviewTrainModal(null)} className="btn btn-outline">Close</button>
+                  <button onClick={() => handleDownloadTrainingPDF(previewTrainModal)} className="btn btn-primary">
+                    <Download size={16} /> Download PDF
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

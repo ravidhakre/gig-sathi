@@ -10,8 +10,9 @@ import dbService from '../../services/db';
 
 const AdminDashboard = () => {
   const { 
-    projects, leads, customers, templates, cms, logout, 
+    projects, leads, customers, templates, cms, trainingModules, logout, 
     createProject, updateProjectDetails, deleteProjectDetails, 
+    createTrainingModule, updateTrainingModuleDetails, deleteTrainingModuleDetails,
     updateCMS, saveOfferLetterTemplate, changeUserRoleAdmin,
     approveUserKYCAdmin, deleteUserAdmin, resetUserPasswordAdmin,
     assignLeadsToHR, uploadLeadsBulk, showToast 
@@ -20,6 +21,70 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Training Module Form States
+  const [showTrainModal, setShowTrainModal] = useState(false);
+  const [editingTrain, setEditingTrain] = useState(null);
+  const [trainForm, setTrainForm] = useState({
+    title: '',
+    category: 'FD Card',
+    targetRole: 'Candidate',
+    description: '',
+    pdfUrl: '',
+    fileName: ''
+  });
+
+  const handleTrainFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setTrainForm(prev => ({
+        ...prev,
+        pdfUrl: event.target.result,
+        fileName: file.name
+      }));
+      showToast(`Attached PDF file "${file.name}"`, "info");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleTrainSubmit = async (e) => {
+    if (e) e.preventDefault();
+    if (!trainForm.title || !trainForm.category || !trainForm.description) {
+      showToast("Please fill in Title, Category, and Description.", "warning");
+      return;
+    }
+    try {
+      if (editingTrain) {
+        await updateTrainingModuleDetails(editingTrain.id, trainForm);
+      } else {
+        await createTrainingModule(trainForm);
+      }
+      setShowTrainModal(false);
+      setEditingTrain(null);
+      setTrainForm({ title: '', category: 'FD Card', targetRole: 'Candidate', description: '', pdfUrl: '', fileName: '' });
+    } catch (err) {}
+  };
+
+  const handleEditTrainClick = (m) => {
+    setEditingTrain(m);
+    setTrainForm({
+      title: m.title || '',
+      category: m.category || 'FD Card',
+      targetRole: m.targetRole || 'Candidate',
+      description: m.description || '',
+      pdfUrl: m.pdfUrl || '',
+      fileName: m.fileName || ''
+    });
+    setShowTrainModal(true);
+  };
+
+  const handleDeleteTrainClick = async (id) => {
+    if (window.confirm("Are you sure you want to delete this training module?")) {
+      await deleteTrainingModuleDetails(id);
+    }
+  };
 
   // Local state for administrative tables
   const [usersList, setUsersList] = useState([]);
@@ -515,6 +580,12 @@ const AdminDashboard = () => {
             style={{ ...sidebarLinkStyle, ...(activeTab === 'projects' ? activeLinkStyle : {}) }}
           >
             <Briefcase size={18} /> Campaign Projects
+          </button>
+          <button 
+            onClick={() => { setActiveTab('training'); setSidebarOpen(false); }}
+            style={{ ...sidebarLinkStyle, ...(activeTab === 'training' ? activeLinkStyle : {}) }}
+          >
+            <BookOpen size={18} /> Training Modules
           </button>
           <button 
             onClick={() => { setActiveTab('offer'); setSidebarOpen(false); }}
@@ -1591,7 +1662,176 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {/* --- TRAINING MODULES TAB --- */}
+        {activeTab === 'training' && (
+          <div style={tabContentStyle}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '6px' }}>Training & Sourcing Modules Manager</h2>
+                <p style={{ color: 'var(--text-secondary)' }}>Upload role-specific training PDFs, pitch guides, and SOP manuals for Candidates and HR Officers.</p>
+              </div>
+              <button 
+                onClick={() => {
+                  setEditingTrain(null);
+                  setTrainForm({ title: '', category: 'FD Card', targetRole: 'Candidate', description: '', pdfUrl: '', fileName: '' });
+                  setShowTrainModal(true);
+                }} 
+                className="btn btn-primary"
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Plus size={18} /> Upload New Training PDF / Module
+              </button>
+            </div>
+
+            <div className="crm-table-container">
+              <table className="crm-table">
+                <thead>
+                  <tr>
+                    <th>Title & Document</th>
+                    <th>Category</th>
+                    <th>Target Role</th>
+                    <th>Date Uploaded</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(trainingModules || []).length > 0 ? (
+                    trainingModules.map((m) => (
+                      <tr key={m.id}>
+                        <td style={{ fontWeight: '700' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <BookOpen size={18} color="var(--primary-color)" />
+                            <div>
+                              <div>{m.title}</div>
+                              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 'normal', marginTop: '2px' }}>
+                                {m.fileName || 'PDF Document'} • {(m.description || '').substring(0, 75)}...
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td><span className="badge badge-calling">{m.category}</span></td>
+                        <td><span className="badge badge-hired">{m.targetRole || 'Candidate'}</span></td>
+                        <td>{m.date || '2026-08-07'}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button 
+                              onClick={() => handleEditTrainClick(m)} 
+                              className="btn btn-outline"
+                              style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                            >
+                              <Edit3 size={14} /> Edit
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteTrainClick(m.id)} 
+                              className="btn btn-outline"
+                              style={{ padding: '4px 10px', fontSize: '0.75rem', color: 'var(--danger-color)', borderColor: 'rgba(239,68,68,0.3)' }}
+                            >
+                              <Trash2 size={14} /> Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                        No training modules uploaded yet. Click "+ Upload New Training PDF / Module" to add one.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
       </main>
+
+      {/* --- ADD / EDIT TRAINING MODULE MODAL --- */}
+      {showTrainModal && (
+        <div className="modal-overlay">
+          <div className="modal-content fade-in" style={{ maxWidth: '650px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={modalHeaderStyle}>
+              <h3>{editingTrain ? 'Edit Training Module' : 'Upload New Training Module / PDF'}</h3>
+              <button onClick={() => { setShowTrainModal(false); setEditingTrain(null); }}><X size={20} /></button>
+            </div>
+            <form onSubmit={handleTrainSubmit} style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div className="form-group">
+                <label style={{ fontWeight: 'bold' }}>Training Title <span style={{ color: 'var(--danger-color)' }}>*</span></label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={trainForm.title}
+                  onChange={(e) => setTrainForm({ ...trainForm, title: e.target.value })}
+                  placeholder="E.g., FD Card Customer Pitching & Activation SOP Manual"
+                  required
+                />
+              </div>
+
+              <div className="grid-2" style={{ gap: '15px' }}>
+                <div className="form-group">
+                  <label style={{ fontWeight: 'bold' }}>Campaign Category</label>
+                  <select
+                    className="form-control"
+                    value={trainForm.category}
+                    onChange={(e) => setTrainForm({ ...trainForm, category: e.target.value })}
+                  >
+                    <option value="FD Card">FD Card</option>
+                    <option value="Financial Products">Financial Products</option>
+                    <option value="Delivery Boy Hiring">Delivery Boy Sourcing</option>
+                    <option value="Field Executive">Field Executive Sourcing</option>
+                    <option value="General">General Training</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label style={{ fontWeight: 'bold' }}>Target Candidate Role</label>
+                  <select
+                    className="form-control"
+                    value={trainForm.targetRole}
+                    onChange={(e) => setTrainForm({ ...trainForm, targetRole: e.target.value })}
+                  >
+                    <option value="Candidate">Candidate (Field Executives)</option>
+                    <option value="HR">HR Officers</option>
+                    <option value="ALL">All Roles (Global)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label style={{ fontWeight: 'bold' }}>Training PDF Attachment</label>
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  className="form-control"
+                  onChange={handleTrainFileUpload}
+                />
+                {trainForm.fileName && (
+                  <div style={{ fontSize: '0.8rem', color: 'var(--primary-color)', fontWeight: 'bold', marginTop: '6px' }}>
+                    📎 Attached File: {trainForm.fileName}
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label style={{ fontWeight: 'bold' }}>Module Description & Operational SOP <span style={{ color: 'var(--danger-color)' }}>*</span></label>
+                <textarea
+                  rows="4"
+                  className="form-control"
+                  value={trainForm.description}
+                  onChange={(e) => setTrainForm({ ...trainForm, description: e.target.value })}
+                  placeholder="Detailed guidelines, pitching instructions, objection resolution steps..."
+                  required
+                ></textarea>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+                <button type="button" onClick={() => { setShowTrainModal(false); setEditingTrain(null); }} className="btn btn-outline">Cancel</button>
+                <button type="submit" className="btn btn-primary">{editingTrain ? 'Save Changes' : 'Publish Training Module'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* --- ADD / EDIT PROJECT CAMPAIGN MODAL --- */}
       {showProjModal && (

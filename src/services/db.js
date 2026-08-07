@@ -765,26 +765,25 @@ const safeSetLocalStorage = (key, value) => {
     const stringified = typeof value === 'string' ? value : JSON.stringify(value);
     localStorage.setItem(key, stringified);
   } catch (e) {
-    console.warn(`LocalStorage quota exceeded for key "${key}". Stripping heavy media base64 strings...`, e);
+    console.warn(`LocalStorage quota exceeded for key "${key}". Preserving active user documents...`);
     try {
-      if (typeof value === 'object' && value !== null) {
-        if (Array.isArray(value)) {
-          const stripped = value.map(u => {
-            if (!u) return u;
-            const clone = { ...u };
-            if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = clone.aadharFront.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
-            if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = clone.aadharBack.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
-            if (clone.resume && clone.resume.length > 500) clone.resume = clone.resume.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
-            return clone;
-          });
-          localStorage.setItem(key, JSON.stringify(stripped));
-        } else {
-          const clone = { ...value };
-          if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = clone.aadharFront.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
-          if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = clone.aadharBack.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
-          if (clone.resume && clone.resume.length > 500) clone.resume = clone.resume.substring(0, 200) + '...[STORED_IN_FIRESTORE]';
-          localStorage.setItem(key, JSON.stringify(clone));
-        }
+      if (key === 'gs_current_user') {
+        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+      } else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
+        const curUserStr = localStorage.getItem('gs_current_user');
+        let curUid = '';
+        try { curUid = JSON.parse(curUserStr)?.uid || ''; } catch(err){}
+
+        const stripped = value.map(u => {
+          if (!u) return u;
+          if (u.uid === curUid || u.email === curUid) return u; // Do not truncate active user!
+          const clone = { ...u };
+          if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = '[STORED_IN_FIRESTORE]';
+          if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = '[STORED_IN_FIRESTORE]';
+          if (clone.resume && clone.resume.length > 500) clone.resume = '[STORED_IN_FIRESTORE]';
+          return clone;
+        });
+        localStorage.setItem(key, JSON.stringify(stripped));
       }
     } catch (err2) {
       console.error("Critical LocalStorage failure:", err2);
@@ -1607,6 +1606,98 @@ export const dbService = {
         });
       } catch (e) {
         console.error("subscribeCustomers error:", e);
+      }
+    }
+    return () => {};
+  },
+
+  // --- Training Modules Operations ---
+  getTrainingModules: async () => {
+    let modules = [];
+    if (dbMode === 'FIREBASE') {
+      try {
+        const snap = await getDocs(collection(firebaseFirestore, 'training_modules'));
+        snap.forEach(d => modules.push(d.data()));
+        if (modules.length > 0) return modules;
+      } catch (e) {
+        console.error("Firestore getTrainingModules error:", e);
+      }
+    }
+    const local = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
+    return local;
+  },
+
+  addTrainingModule: async (moduleData) => {
+    const newModule = {
+      id: 'train-' + Date.now(),
+      date: new Date().toISOString().split('T')[0],
+      targetRole: 'Candidate',
+      type: 'PDF',
+      ...moduleData
+    };
+    const modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
+    modules.unshift(newModule);
+    localStorage.setItem('gs_training_modules', JSON.stringify(modules));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await setDoc(doc(firebaseFirestore, 'training_modules', newModule.id), newModule);
+      } catch (e) {
+        console.error("Firestore addTrainingModule error:", e);
+      }
+    }
+    return newModule;
+  },
+
+  updateTrainingModule: async (id, updatedFields) => {
+    let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
+    const index = modules.findIndex(m => m.id === id);
+    if (index !== -1) {
+      const updated = { ...modules[index], ...updatedFields };
+      modules[index] = updated;
+      localStorage.setItem('gs_training_modules', JSON.stringify(modules));
+
+      if (dbMode === 'FIREBASE') {
+        try {
+          await setDoc(doc(firebaseFirestore, 'training_modules', id), updated, { merge: true });
+        } catch (e) {
+          console.error("Firestore updateTrainingModule error:", e);
+        }
+      }
+      return updated;
+    }
+    throw new Error("Training module not found.");
+  },
+
+  deleteTrainingModule: async (id) => {
+    let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
+    modules = modules.filter(m => m.id !== id);
+    localStorage.setItem('gs_training_modules', JSON.stringify(modules));
+
+    if (dbMode === 'FIREBASE') {
+      try {
+        await deleteDoc(doc(firebaseFirestore, 'training_modules', id));
+      } catch (e) {
+        console.error("Firestore deleteTrainingModule error:", e);
+      }
+    }
+    return true;
+  },
+
+  subscribeTrainingModules: (callback) => {
+    if (dbMode === 'FIREBASE') {
+      try {
+        return onSnapshot(collection(firebaseFirestore, 'training_modules'), (snap) => {
+          const fbModules = [];
+          snap.forEach(d => fbModules.push(d.data()));
+          if (fbModules.length > 0) {
+            callback(fbModules);
+          } else {
+            callback(SEED_TRAINING_MODULES);
+          }
+        });
+      } catch (e) {
+        console.error("subscribeTrainingModules error:", e);
       }
     }
     return () => {};
