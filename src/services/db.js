@@ -230,6 +230,27 @@ HR Contact: {{hrName}}`;
 
 const SEED_PROJECTS = [
   {
+    id: 'proj-fd-card-1',
+    title: 'FD Card',
+    category: 'Financial Products',
+    description: 'Work as Customer Relationship Executive for FD Card Campaign. Assist customers with Fixed Deposit Linked Credit Card activations, CIBIL score building, and onboarding.',
+    commission: '₹15,000 / month + ₹500 incentive per FD card',
+    salary: '₹15,000 / month + Incentives',
+    location: 'Hometown / Local District',
+    hiringCount: 500,
+    status: 'Active',
+    scriptActive: true,
+    assignedHR: 'ALL',
+    assignedHRs: ['ALL'],
+    workingLink: 'https://www.sryn.online/auth?signup=true',
+    scriptRound1Hindi: DEFAULT_PITCH_HI_R1,
+    scriptRound1English: DEFAULT_PITCH_EN_R1,
+    scriptRound2Hindi: DEFAULT_PITCH_HI_R2,
+    scriptRound2English: DEFAULT_PITCH_EN_R2,
+    jdHindi: DEFAULT_PITCH_HI_JD,
+    jdEnglish: DEFAULT_PITCH_EN_JD
+  },
+  {
     id: 'proj-cre-1',
     title: 'Customer Relationship Executive',
     category: 'Financial Products',
@@ -573,11 +594,16 @@ const initMockStorage = () => {
   if (!localStorage.getItem('gs_users')) {
     localStorage.setItem('gs_users', JSON.stringify(SEED_USERS));
   }
-  if (!localStorage.getItem('gs_projects')) {
-    localStorage.setItem('gs_projects', JSON.stringify(SEED_PROJECTS));
+  
+  // Ensure FD Card & CRE projects are present and updated
+  let existing = JSON.parse(localStorage.getItem('gs_projects')) || [];
+  if (existing.length === 0) {
+    existing = [...SEED_PROJECTS];
   } else {
-    // Ensure CRE project is present and updated with full original scripts
-    let existing = JSON.parse(localStorage.getItem('gs_projects')) || [];
+    const fdIndex = existing.findIndex(p => p.id === 'proj-fd-card-1' || p.title === 'FD Card');
+    if (fdIndex === -1) {
+      existing.unshift(SEED_PROJECTS[0]);
+    }
     const creIndex = existing.findIndex(p => p.id === 'proj-cre-1' || p.title === 'Customer Relationship Executive');
     if (creIndex !== -1) {
       existing[creIndex] = {
@@ -588,10 +614,11 @@ const initMockStorage = () => {
         scriptRound2English: DEFAULT_PITCH_EN_R2
       };
     } else {
-      existing.unshift(SEED_PROJECTS[0]);
+      existing.push(SEED_PROJECTS[1]);
     }
-    localStorage.setItem('gs_projects', JSON.stringify(existing));
   }
+  localStorage.setItem('gs_projects', JSON.stringify(existing));
+
   if (!localStorage.getItem('gs_leads')) {
     localStorage.setItem('gs_leads', JSON.stringify(SEED_LEADS));
   }
@@ -711,11 +738,14 @@ const syncFirestoreSeeds = async () => {
       await setDoc(doc(firebaseFirestore, 'settings', 'cms'), SEED_CMS);
       console.log('SRYN: Firestore seeded successfully.');
     } else {
-      // Ensure CRE project is in Firestore
+      // Ensure FD Card & CRE projects are in Firestore
+      const fdDocRef = doc(firebaseFirestore, 'projects', 'proj-fd-card-1');
+      await setDoc(fdDocRef, SEED_PROJECTS[0], { merge: true });
+
       const creDocRef = doc(firebaseFirestore, 'projects', 'proj-cre-1');
       const creSnap = await getDoc(creDocRef);
       if (!creSnap.exists()) {
-        await setDoc(creDocRef, SEED_PROJECTS[0]);
+        await setDoc(creDocRef, SEED_PROJECTS[1]);
       }
     }
   } catch (e) {
