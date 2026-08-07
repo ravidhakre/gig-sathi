@@ -1749,18 +1749,16 @@ export const dbService = {
         console.error("Firestore getTrainingModules error:", e);
       }
     }
-    const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
-    
-    const mergedMap = new Map();
-    [...localModules, ...fbModules].forEach(m => {
-      if (m && m.id) {
-        const existing = mergedMap.get(m.id) || {};
-        mergedMap.set(m.id, { ...existing, ...m });
-      }
-    });
 
-    const modules = Array.from(mergedMap.values());
-    const resolved = await Promise.all(modules.map(async (m) => {
+    let list = [];
+    if (dbMode === 'FIREBASE' && fbModules.length > 0) {
+      list = fbModules;
+      safeSetLocalStorage('gs_training_modules', fbModules);
+    } else {
+      list = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
+    }
+
+    const resolved = await Promise.all(list.map(async (m) => {
       let pdfUrl = m.pdfUrl || '';
       if (!pdfUrl || pdfUrl.startsWith('[STORED_IN_KEY:')) {
         const storedPdf = await dbService.getPdfFromDB(`gs_train_pdf_${m.id}`);
@@ -1869,18 +1867,16 @@ export const dbService = {
         return onSnapshot(collection(firebaseFirestore, 'training_modules'), async (snap) => {
           const fbModules = [];
           snap.forEach(d => fbModules.push(d.data()));
-          const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
           
-          const mergedMap = new Map();
-          [...localModules, ...fbModules].forEach(m => {
-            if (m && m.id) {
-              const existing = mergedMap.get(m.id) || {};
-              mergedMap.set(m.id, { ...existing, ...m });
-            }
-          });
+          let list = [];
+          if (fbModules.length > 0) {
+            list = fbModules;
+            safeSetLocalStorage('gs_training_modules', fbModules);
+          } else {
+            list = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
+          }
 
-          const modules = Array.from(mergedMap.values());
-          const validModules = await Promise.all(modules.map(async (m) => {
+          const validModules = await Promise.all(list.map(async (m) => {
             let pdfUrl = m.pdfUrl || '';
             if (!pdfUrl || pdfUrl.startsWith('[STORED_IN_KEY:')) {
               const storedPdf = await dbService.getPdfFromDB(`gs_train_pdf_${m.id}`);
