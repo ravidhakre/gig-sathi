@@ -37,12 +37,14 @@ const CandidateDashboard = () => {
   };
 
   const createPdfBlobUrl = (dataUrl) => {
-    if (!dataUrl || !dataUrl.startsWith('data:')) return null;
+    if (!dataUrl || typeof dataUrl !== 'string') return null;
+    if (!dataUrl.startsWith('data:')) return null;
     try {
       const parts = dataUrl.split(';base64,');
       if (parts.length < 2) return null;
       const contentType = parts[0].replace('data:', '') || 'application/pdf';
-      const raw = window.atob(parts[1]);
+      const cleanBase64 = parts[1].replace(/[^A-Za-z0-9+/=]/g, '');
+      const raw = window.atob(cleanBase64);
       const rawLength = raw.length;
       const uInt8Array = new Uint8Array(rawLength);
       for (let i = 0; i < rawLength; ++i) {
@@ -873,24 +875,45 @@ const CandidateDashboard = () => {
                   {previewTrainModal.description}
                 </div>
 
-                {createPdfBlobUrl(resolvePdfUrl(previewTrainModal)) ? (
-                  <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '450px' }}>
-                    <iframe src={createPdfBlobUrl(resolvePdfUrl(previewTrainModal))} width="100%" height="100%" title="Training PDF Document"></iframe>
-                  </div>
-                ) : (
-                  <div style={{ backgroundColor: '#eff6ff', border: '1px dashed #93c5fd', borderRadius: '8px', padding: '24px', textAlign: 'center', color: '#1e40af' }}>
-                    <FileText size={36} color="#2563eb" style={{ margin: '0 auto 12px' }} />
-                    <strong style={{ display: 'block', fontSize: '1.05rem', marginBottom: '6px' }}>Official SRYN Training Module</strong>
-                    <p style={{ fontSize: '0.88rem', color: '#3b82f6', marginBottom: '16px' }}>Click the button below to view or download the complete PDF training manual.</p>
-                    <button 
-                      onClick={() => handleDownloadTrainingPDF(previewTrainModal)}
-                      className="btn btn-primary" 
-                      style={{ padding: '8px 20px', fontSize: '0.9rem' }}
-                    >
-                      <Download size={16} /> Download Official PDF Document
-                    </button>
-                  </div>
-                )}
+                {(() => {
+                  const blobUrl = createPdfBlobUrl(resolvePdfUrl(previewTrainModal));
+                  if (blobUrl) {
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', backgroundColor: '#f8fafc', padding: '10px 16px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                          <FileText size={20} color="var(--primary-color)" />
+                          <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-primary)', flexGrow: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {previewTrainModal.fileName || 'Official_Training_Document.pdf'}
+                          </span>
+                          <button 
+                            onClick={() => window.open(blobUrl, '_blank')} 
+                            className="btn btn-outline" 
+                            style={{ padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                          >
+                            <ExternalLink size={14} /> Open Full Screen PDF
+                          </button>
+                        </div>
+
+                        <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '420px', backgroundColor: '#525659' }}>
+                          <object data={blobUrl} type="application/pdf" width="100%" height="100%">
+                            <iframe src={blobUrl} width="100%" height="100%" title="Training PDF Document">
+                              <p>Your browser does not support PDF embeds.</p>
+                            </iframe>
+                          </object>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div style={{ backgroundColor: '#fff1f2', border: '1px dashed #f43f5e', borderRadius: '8px', padding: '24px', textAlign: 'center', color: '#be123c' }}>
+                      <AlertTriangle size={36} color="#e11d48" style={{ margin: '0 auto 12px' }} />
+                      <strong style={{ display: 'block', fontSize: '1.05rem', marginBottom: '6px' }}>PDF Document Data Corrupted / Unavailable</strong>
+                      <p style={{ fontSize: '0.88rem', color: '#9f1239', marginBottom: '16px' }}>
+                        This training item was created during a previous broken test attempt. Please delete this entry from Admin Panel and upload a fresh PDF.
+                      </p>
+                    </div>
+                  );
+                })()}
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
                   <button onClick={() => setPreviewTrainModal(null)} className="btn btn-outline">Close</button>
