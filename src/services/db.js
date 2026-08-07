@@ -824,6 +824,19 @@ const safeSetLocalStorage = (key, value) => {
           }
         }
         localStorage.setItem(key, JSON.stringify(obj));
+      } else if (key === 'gs_training_modules' && Array.isArray(value)) {
+        const stripped = value.map(m => {
+          if (!m) return m;
+          const clone = { ...m };
+          if (clone.pdfUrl && clone.pdfUrl.length > 100000) {
+            if (clone.id) {
+              try { localStorage.setItem(`gs_train_pdf_${clone.id}`, clone.pdfUrl); } catch(e2){}
+            }
+            clone.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${clone.id}]`;
+          }
+          return clone;
+        });
+        localStorage.setItem(key, JSON.stringify(stripped));
       } else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
         const curUserStr = localStorage.getItem('gs_current_user');
         let curUid = '';
@@ -1676,18 +1689,33 @@ export const dbService = {
       try {
         const snap = await getDocs(collection(firebaseFirestore, 'training_modules'));
         snap.forEach(d => modules.push(d.data()));
-        if (modules.length > 0) return modules;
       } catch (e) {
         console.error("Firestore getTrainingModules error:", e);
       }
     }
-    const local = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
-    return local;
+    if (!modules || modules.length === 0) {
+      modules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
+    }
+    return (modules || []).map(m => {
+      if (m.id) {
+        const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
+        if (storedPdf && (!m.pdfUrl || m.pdfUrl.length < 100)) {
+          return { ...m, pdfUrl: storedPdf };
+        }
+      }
+      return m;
+    });
   },
 
   addTrainingModule: async (moduleData) => {
+    const newId = 'train-' + Date.now();
+    let pdfUrl = moduleData.pdfUrl || '';
+    if (pdfUrl && pdfUrl.length > 100000) {
+      try { localStorage.setItem(`gs_train_pdf_${newId}`, pdfUrl); } catch(e){}
+    }
+
     const newModule = {
-      id: 'train-' + Date.now(),
+      id: newId,
       date: new Date().toISOString().split('T')[0],
       targetRole: 'Candidate',
       type: 'PDF',
@@ -1695,7 +1723,7 @@ export const dbService = {
     };
     const modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
     modules.unshift(newModule);
-    localStorage.setItem('gs_training_modules', JSON.stringify(modules));
+    safeSetLocalStorage('gs_training_modules', modules);
 
     if (dbMode === 'FIREBASE') {
       try {
@@ -1708,12 +1736,15 @@ export const dbService = {
   },
 
   updateTrainingModule: async (id, updatedFields) => {
+    if (updatedFields.pdfUrl && updatedFields.pdfUrl.length > 100000) {
+      try { localStorage.setItem(`gs_train_pdf_${id}`, updatedFields.pdfUrl); } catch(e){}
+    }
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
     const index = modules.findIndex(m => m.id === id);
     if (index !== -1) {
       const updated = { ...modules[index], ...updatedFields };
       modules[index] = updated;
-      localStorage.setItem('gs_training_modules', JSON.stringify(modules));
+      safeSetLocalStorage('gs_training_modules', modules);
 
       if (dbMode === 'FIREBASE') {
         try {
@@ -1730,7 +1761,8 @@ export const dbService = {
   deleteTrainingModule: async (id) => {
     let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
     modules = modules.filter(m => m.id !== id);
-    localStorage.setItem('gs_training_modules', JSON.stringify(modules));
+    try { localStorage.removeItem(`gs_train_pdf_${id}`); } catch(e){}
+    safeSetLocalStorage('gs_training_modules', modules);
 
     if (dbMode === 'FIREBASE') {
       try {
@@ -1748,11 +1780,17 @@ export const dbService = {
         return onSnapshot(collection(firebaseFirestore, 'training_modules'), (snap) => {
           const fbModules = [];
           snap.forEach(d => fbModules.push(d.data()));
-          if (fbModules.length > 0) {
-            callback(fbModules);
-          } else {
-            callback(SEED_TRAINING_MODULES);
-          }
+          const list = fbModules.length > 0 ? fbModules : (JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES);
+          const mapped = (list || []).map(m => {
+            if (m.id) {
+              const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
+              if (storedPdf && (!m.pdfUrl || m.pdfUrl.length < 100)) {
+                return { ...m, pdfUrl: storedPdf };
+              }
+            }
+            return m;
+          });
+          callback(mapped);
         });
       } catch (e) {
         console.error("subscribeTrainingModules error:", e);
