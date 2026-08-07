@@ -804,10 +804,26 @@ const safeSetLocalStorage = (key, value) => {
     const stringified = typeof value === 'string' ? value : JSON.stringify(value);
     localStorage.setItem(key, stringified);
   } catch (e) {
-    console.warn(`LocalStorage quota exceeded for key "${key}". Preserving active user documents...`);
+    console.warn(`LocalStorage quota exceeded for key "${key}". Applying resilient document storage fallback...`);
     try {
       if (key === 'gs_current_user') {
-        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+        const obj = typeof value === 'string' ? JSON.parse(value) : { ...value };
+        const uid = obj.uid || obj.email;
+        if (uid) {
+          if (obj.resume && obj.resume.length > 200000) {
+            try { localStorage.setItem(`gs_doc_resume_${uid}`, obj.resume); } catch(e2){}
+            obj.resume = obj.resumeName ? `[PDF_DOCUMENT: ${obj.resumeName}]` : '[PDF_SAVED]';
+          }
+          if (obj.aadharFront && obj.aadharFront.length > 200000) {
+            try { localStorage.setItem(`gs_doc_aadharFront_${uid}`, obj.aadharFront); } catch(e2){}
+            obj.aadharFront = '[AADHAR_FRONT_SAVED]';
+          }
+          if (obj.aadharBack && obj.aadharBack.length > 200000) {
+            try { localStorage.setItem(`gs_doc_aadharBack_${uid}`, obj.aadharBack); } catch(e2){}
+            obj.aadharBack = '[AADHAR_BACK_SAVED]';
+          }
+        }
+        localStorage.setItem(key, JSON.stringify(obj));
       } else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
         const curUserStr = localStorage.getItem('gs_current_user');
         let curUid = '';
@@ -815,11 +831,14 @@ const safeSetLocalStorage = (key, value) => {
 
         const stripped = value.map(u => {
           if (!u) return u;
-          if (u.uid === curUid || u.email === curUid) return u; // Do not truncate active user!
           const clone = { ...u };
-          if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = '[STORED_IN_FIRESTORE]';
-          if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = '[STORED_IN_FIRESTORE]';
-          if (clone.resume && clone.resume.length > 500) clone.resume = '[STORED_IN_FIRESTORE]';
+          if (clone.uid !== curUid && clone.email !== curUid) {
+            if (clone.aadharFront && clone.aadharFront.length > 500) clone.aadharFront = '[STORED_IN_FIRESTORE]';
+            if (clone.aadharBack && clone.aadharBack.length > 500) clone.aadharBack = '[STORED_IN_FIRESTORE]';
+            if (clone.resume && clone.resume.length > 500) clone.resume = '[STORED_IN_FIRESTORE]';
+          } else {
+            if (clone.resume && clone.resume.length > 200000) clone.resume = clone.resumeName ? `[PDF_DOCUMENT: ${clone.resumeName}]` : '[PDF_SAVED]';
+          }
           return clone;
         });
         localStorage.setItem(key, JSON.stringify(stripped));

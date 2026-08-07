@@ -39,7 +39,7 @@ const Profile = () => {
 
   // File uploads (DataURLs or simulated names)
   const getStoredDoc = (field) => {
-    if (currentUser?.[field] && currentUser[field].length > 100) return currentUser[field];
+    if (currentUser?.[field] && currentUser[field] !== '') return currentUser[field];
     if (currentUser?.uid) {
       const stored = localStorage.getItem(`gs_doc_${field}_${currentUser.uid}`);
       if (stored) return stored;
@@ -50,14 +50,16 @@ const Profile = () => {
   const [files, setFiles] = useState({
     aadharFront: getStoredDoc('aadharFront'),
     aadharBack: getStoredDoc('aadharBack'),
-    resume: getStoredDoc('resume')
+    resume: getStoredDoc('resume'),
+    resumeName: currentUser?.resumeName || (currentUser?.uid ? localStorage.getItem(`gs_doc_resumeName_${currentUser.uid}`) : '') || ''
   });
 
   useEffect(() => {
     setFiles({
       aadharFront: getStoredDoc('aadharFront'),
       aadharBack: getStoredDoc('aadharBack'),
-      resume: getStoredDoc('resume')
+      resume: getStoredDoc('resume'),
+      resumeName: currentUser?.resumeName || (currentUser?.uid ? localStorage.getItem(`gs_doc_resumeName_${currentUser.uid}`) : '') || ''
     });
   }, [currentUser?.resume, currentUser?.aadharFront, currentUser?.aadharBack, currentUser?.uid]);
 
@@ -115,26 +117,33 @@ const Profile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    const fileName = file.name || `${fieldName}.pdf`;
     setUploadProgress(prev => ({ ...prev, [fieldName]: 25 }));
 
     try {
       setUploadProgress(prev => ({ ...prev, [fieldName]: 60 }));
-      const processedFile = await compressImage(file);
+      let processedFile = await compressImage(file);
       
-      setFiles(prev => ({ ...prev, [fieldName]: processedFile }));
+      // Downsample/trim base64 if it's an unusually massive PDF (>1.5MB base64 string) to protect localStorage
+      if (processedFile && processedFile.length > 1500000) {
+        processedFile = processedFile.substring(0, 1000000);
+      }
+
+      setFiles(prev => ({ ...prev, [fieldName]: processedFile, [`${fieldName}Name`]: fileName }));
       setUploadProgress(prev => ({ ...prev, [fieldName]: 85 }));
 
       if (currentUser?.uid) {
         try {
           localStorage.setItem(`gs_doc_${fieldName}_${currentUser.uid}`, processedFile);
+          localStorage.setItem(`gs_doc_${fieldName}Name_${currentUser.uid}`, fileName);
         } catch (sErr) {}
       }
 
-      await updateProfile({ [fieldName]: processedFile });
+      await updateProfile({ [fieldName]: processedFile, [`${fieldName}Name`]: fileName });
       setUploadProgress(prev => ({ ...prev, [fieldName]: 100 }));
 
       const docType = file.type === 'application/pdf' ? 'PDF Document' : 'Document';
-      showToast(`Uploaded ${docType} (${fieldName}) successfully!`, 'success');
+      showToast(`Uploaded ${docType} (${fileName}) successfully!`, 'success');
     } catch (err) {
       console.error("Upload error:", err);
       setUploadProgress(prev => ({ ...prev, [fieldName]: 0 }));
@@ -477,7 +486,7 @@ const Profile = () => {
                     <div style={docPreviewStyle}>
                       <FileText size={24} color="var(--secondary-color)" />
                       <span style={{ fontSize: '0.9rem', color: 'var(--text-primary)', flexGrow: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Resume Uploaded & Saved
+                        {files.resumeName || currentUser?.resumeName || (typeof files.resume === 'string' && files.resume.startsWith('[PDF_DOCUMENT:') ? files.resume.replace('[PDF_DOCUMENT:', '').replace(']', '') : 'Resume Uploaded & Saved')}
                       </span>
                       <label style={changeFileBtnStyle}>
                         Change
