@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import Profile from '../Profile';
 import { 
-  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Plus, ShieldCheck, Mail, Calendar, HelpCircle, Menu, CheckCircle2
+  LayoutDashboard, Users, BarChart3, FileText, User, LogOut, Plus, ShieldCheck, Mail, Calendar, HelpCircle, Menu, CheckCircle2,
+  Copy, Send, Smartphone, AlertTriangle, ExternalLink
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +18,38 @@ const CandidateDashboard = () => {
 
   // Add Customer form state
   const [custForm, setCustForm] = useState({ name: '', mobile: '', email: '', project: '' });
+  const [submittingCust, setSubmittingCust] = useState(false);
+
+  // Deduplicate customer list by ID / Mobile
+  const uniqueCustomers = Array.from(
+    new Map((customers || []).map(c => [c.id || `${c.mobile}_${c.date}_${c.customerName}`, c])).values()
+  );
+
+  const getCampaignWorkingLink = (projectTitle) => {
+    const target = (projects || []).find(p => p.title === projectTitle) || (projects || [])[0];
+    return target?.workingLink || 'https://www.sryn.online/auth?signup=true';
+  };
+
+  const handleCopyLink = (link) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link);
+      showToast("Campaign link copied to clipboard!", "success");
+    } else {
+      showToast(`Campaign link: ${link}`, "info", 6000);
+    }
+  };
+
+  const handleSendWhatsApp = (cust) => {
+    const link = getCampaignWorkingLink(cust.project);
+    const msg = encodeURIComponent(`Dear ${cust.customerName},\n\nPlease complete your application for ${cust.project} using the official link below:\n${link}\n\n- SRYN Management`);
+    window.open(`https://wa.me/91${cust.mobile}?text=${msg}`, '_blank');
+  };
+
+  const handleSendSMS = (cust) => {
+    const link = getCampaignWorkingLink(cust.project);
+    const msg = encodeURIComponent(`Apply for ${cust.project} here: ${link}`);
+    window.open(`sms:${cust.mobile}?body=${msg}`, '_blank');
+  };
 
   // Offer letter sign state
   const [offerSigned, setOfferSigned] = useState(() => {
@@ -31,10 +64,12 @@ const CandidateDashboard = () => {
 
   const handleCustSubmit = async (e) => {
     e.preventDefault();
+    if (submittingCust) return;
     if (!custForm.name || !custForm.mobile || !custForm.email || !custForm.project) {
       showToast("Please fill in all customer fields.", "warning");
       return;
     }
+    setSubmittingCust(true);
     try {
       await addCustomer({
         customerName: custForm.name,
@@ -44,7 +79,11 @@ const CandidateDashboard = () => {
       });
       setCustForm({ name: '', mobile: '', email: '', project: '' });
       showToast("Customer added successfully and card link sent!", "success");
-    } catch (err) {}
+    } catch (err) {
+      showToast(err.message || "Error adding customer", "danger");
+    } finally {
+      setSubmittingCust(false);
+    }
   };
 
   const handleSignOffer = async () => {
@@ -405,6 +444,22 @@ const CandidateDashboard = () => {
               </div>
             </div>
 
+            {/* Professional Incentive & Remuneration Structure Banner */}
+            <div style={{ background: 'linear-gradient(135deg, rgba(222,49,99,0.08) 0%, rgba(139,92,246,0.08) 100%)', border: '1px solid rgba(222,49,99,0.2)', borderRadius: '12px', padding: '20px 24px', marginBottom: '30px', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                <span style={{ backgroundColor: 'var(--primary-color)', color: '#fff', padding: '4px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  ★ OFFICIAL REMUNERATION & INCENTIVE POLICY
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '8px', fontWeight: '800' }}>
+                Performance Benchmark & Commission Incentive Structure
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', margin: 0 }}>
+                • <strong>Full Fixed Salary (₹15,000/-):</strong> Eligible upon achieving <strong>≥ 60% Monthly Performance</strong> (30 FD Cards activated).<br/>
+                • <strong>Performance Incentive Surge:</strong> Earn an additional <strong>₹500/- Performance Incentive per Card</strong> on every activated card completed beyond your target threshold, paid directly along with your monthly salary!
+              </p>
+            </div>
+
             {/* Sub-panels */}
             <div className="grid-2">
               <div className="card" style={{ textAlign: 'left' }}>
@@ -450,10 +505,33 @@ const CandidateDashboard = () => {
         {/* --- CUSTOMER TAB --- */}
         {activeTab === 'customer' && (
           <div style={tabContentStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <div>
-                <h2 style={{ fontSize: '1.8rem' }}>Customer Database</h2>
-                <p style={{ color: 'var(--text-secondary)' }}>Add your onboarded customers to send them link forms.</p>
+                <h2 style={{ fontSize: '1.8rem' }}>Customer Database & Link Dispatch</h2>
+                <p style={{ color: 'var(--text-secondary)' }}>Register onboarded customers and share application links directly.</p>
+              </div>
+            </div>
+
+            {/* Technical Link Dispatch Notice */}
+            <div style={{ backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '10px', padding: '16px 20px', marginBottom: '20px', textAlign: 'left', color: '#1e40af', fontSize: '0.9rem', lineHeight: '1.5' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700', fontSize: '0.95rem', marginBottom: '6px', color: '#1d4ed8' }}>
+                <Send size={18} color="#1d4ed8" /> AUTOMATED LINK DISPATCH & TECHNICAL FALLBACK PROTOCOL
+              </div>
+              <div>
+                Upon registering a customer below, our automated system dispatches an instant activation link to their email address.<br/>
+                <strong>Technical Problem Fallback:</strong> If due to network congestion or technical delay the customer does not receive the automated message, candidate <strong>MUST immediately copy the campaign link or send it directly</strong> to the customer's mobile number via <strong>WhatsApp</strong>, <strong>SMS (Text Message)</strong>, or <strong>Email</strong> using the buttons in the table below.
+              </div>
+            </div>
+
+            {/* Mandatory Customer Phone Device Policy Warning */}
+            <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '16px 20px', marginBottom: '24px', textAlign: 'left', color: '#991b1b', fontSize: '0.9rem', lineHeight: '1.5' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '800', fontSize: '0.95rem', marginBottom: '6px', color: '#dc2626' }}>
+                <Smartphone size={20} color="#dc2626" /> MANDATORY POLICY: APPLICATION MUST BE COMPLETED ON CUSTOMER'S PHONE ONLY
+              </div>
+              <div>
+                All card applications, document uploads, and deposit activations <strong>MUST be performed directly on the Customer's Personal Mobile Device</strong>.<br/>
+                ❌ <strong>STRICT PROHIBITION:</strong> Candidates MUST NOT fill customer applications or activate cards on their own personal phones.<br/>
+                ⚠️ <strong>Audit Penalty:</strong> Applications completed on a candidate's personal device will be flagged as invalid by system security and <strong>WILL NOT BE COUNTED</strong> towards monthly targets or incentive payouts.
               </div>
             </div>
 
@@ -511,8 +589,31 @@ const CandidateDashboard = () => {
                       ))}
                     </select>
                   </div>
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
-                    Register Customer & Send Link
+
+                  {custForm.project && (
+                    <div style={{ backgroundColor: 'var(--surface-color)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '14px' }}>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px' }}>ACTIVE CAMPAIGN LINK:</div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--primary-color)', wordBreak: 'break-all', marginBottom: '8px' }}>
+                        {getCampaignWorkingLink(custForm.project)}
+                      </div>
+                      <button 
+                        type="button" 
+                        onClick={() => handleCopyLink(getCampaignWorkingLink(custForm.project))}
+                        className="btn btn-outline" 
+                        style={{ padding: '4px 12px', fontSize: '0.78rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                      >
+                        <Copy size={14} /> Copy Campaign Working Link
+                      </button>
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    disabled={submittingCust}
+                    className="btn btn-primary" 
+                    style={{ width: '100%', marginTop: '10px', opacity: submittingCust ? 0.7 : 1 }}
+                  >
+                    {submittingCust ? 'Processing...' : 'Register Customer & Send Link'}
                   </button>
                 </form>
               </div>
@@ -522,8 +623,9 @@ const CandidateDashboard = () => {
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '12px' }}><span className="text-gradient">How it Works?</span></h3>
                 <ol style={{ paddingLeft: '16px', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '0.95rem' }}>
                   <li>Enter the customer details here immediately after explaining the bank card features.</li>
-                  <li>Our server automatically dispatches the custom working link (configured by our system admin) to their email.</li>
-                  <li>The customer opens the link, completes their onboarding/KYC.</li>
+                  <li>Our server dispatches the custom working link (configured by system admin) to their email.</li>
+                  <li><strong>Technical Fallback:</strong> If link fails to arrive, click "Copy Link" or "WhatsApp" below to send it directly to customer's phone.</li>
+                  <li><strong>Customer Phone Rule:</strong> Customer MUST open the link on their OWN phone to complete KYC/activation.</li>
                   <li>Once validated, your commissions will be calculated and visible in your reports.</li>
                 </ol>
               </div>
@@ -535,7 +637,7 @@ const CandidateDashboard = () => {
         {activeTab === 'report' && (
           <div style={tabContentStyle}>
             <h2 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>Customer Submissions & Earnings</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Historical ledger of customers registered by you.</p>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>Historical ledger of customers registered by you. Use buttons to resend application links.</p>
 
             <div className="crm-table-container">
               <table className="crm-table">
@@ -547,11 +649,12 @@ const CandidateDashboard = () => {
                     <th>Campaign Project</th>
                     <th>Status</th>
                     <th>Earned</th>
+                    <th>Share Link / Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.length > 0 ? (
-                    customers.map((c) => (
+                  {uniqueCustomers.length > 0 ? (
+                    uniqueCustomers.map((c) => (
                       <tr key={c.id}>
                         <td>{c.date}</td>
                         <td style={{ fontWeight: '700' }}>{c.customerName}</td>
@@ -565,11 +668,39 @@ const CandidateDashboard = () => {
                         <td style={{ fontWeight: '700', color: 'var(--primary-color)' }}>
                           {c.status === 'Active' ? '₹1,200' : '₹0 (Pending)'}
                         </td>
+                        <td style={{ whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            <button 
+                              onClick={() => handleCopyLink(getCampaignWorkingLink(c.project))}
+                              className="btn btn-outline" 
+                              style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                              title="Copy Campaign Application Link"
+                            >
+                              <Copy size={12} /> Copy
+                            </button>
+                            <button 
+                              onClick={() => handleSendWhatsApp(c)}
+                              className="btn" 
+                              style={{ padding: '4px 8px', fontSize: '0.75rem', backgroundColor: '#25D366', color: '#ffffff', border: 'none', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}
+                              title="Send via WhatsApp to Customer"
+                            >
+                              <Send size={12} /> WhatsApp
+                            </button>
+                            <button 
+                              onClick={() => handleSendSMS(c)}
+                              className="btn btn-outline" 
+                              style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                              title="Send via SMS to Customer"
+                            >
+                              SMS
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px' }}>
+                      <td colSpan="7" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px' }}>
                         No customers added yet. Navigate to "Customers" tab to register your first lead.
                       </td>
                     </tr>
