@@ -1745,9 +1745,9 @@ export const dbService = {
     if (dbMode === 'FIREBASE') {
       try {
         const firestoreDoc = { ...newModule };
-        // Firestore 1MB doc limit safeguard (approx 950,000 chars)
-        if (pdfUrl.length > 950000) {
-          firestoreDoc.pdfUrl = pdfUrl.substring(0, 950000);
+        // Firestore 1MB doc limit safeguard (approx 800,000 chars)
+        if (pdfUrl.length > 800000) {
+          firestoreDoc.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${newId}]`;
         }
         await setDoc(doc(firebaseFirestore, 'training_modules', newId), firestoreDoc);
       } catch (e) {
@@ -1777,8 +1777,8 @@ export const dbService = {
       if (dbMode === 'FIREBASE') {
         try {
           const firestoreDoc = { ...updated };
-          if (pdfUrl.length > 950000) {
-            firestoreDoc.pdfUrl = pdfUrl.substring(0, 950000);
+          if (pdfUrl.length > 800000) {
+            firestoreDoc.pdfUrl = `[STORED_IN_KEY: gs_train_pdf_${id}]`;
           }
           await setDoc(doc(firebaseFirestore, 'training_modules', id), firestoreDoc, { merge: true });
         } catch (e) {

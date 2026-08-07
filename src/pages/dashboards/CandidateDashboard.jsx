@@ -36,45 +36,41 @@ const CandidateDashboard = () => {
     return mod.pdfUrl || '';
   };
 
+  const createPdfBlobUrl = (dataUrl) => {
+    if (!dataUrl || !dataUrl.startsWith('data:')) return null;
+    try {
+      const parts = dataUrl.split(';base64,');
+      if (parts.length < 2) return null;
+      const contentType = parts[0].replace('data:', '') || 'application/pdf';
+      const raw = window.atob(parts[1]);
+      const rawLength = raw.length;
+      const uInt8Array = new Uint8Array(rawLength);
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
+      const blob = new Blob([uInt8Array], { type: contentType });
+      return URL.createObjectURL(blob);
+    } catch (e) {
+      console.error("Failed to create PDF blob URL:", e);
+      return null;
+    }
+  };
+
   const handleDownloadTrainingPDF = (mod) => {
     const pdfData = resolvePdfUrl(mod);
-    if (pdfData && pdfData.startsWith('data:')) {
+    const blobUrl = createPdfBlobUrl(pdfData);
+
+    if (blobUrl) {
       const a = document.createElement('a');
-      a.href = pdfData;
-      a.download = mod.fileName || `${mod.title.replace(/\s+/g, '_')}.pdf`;
+      a.href = blobUrl;
+      a.download = mod.fileName || `${(mod.title || 'Training_Doc').replace(/\s+/g, '_')}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
       showToast(`Downloading "${mod.fileName || 'Training_Doc.pdf'}"...`, "success");
     } else {
-      const printWin = window.open('', '_blank');
-      printWin.document.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>${mod.title}</title>
-            <style>
-              body { font-family: Arial, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }
-              h1 { color: #de3163; border-bottom: 2px solid #de3163; padding-bottom: 10px; }
-              .badge { background: #eff6ff; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-              .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 20px; }
-            </style>
-          </head>
-          <body>
-            <span class="badge">${mod.category || 'Training Manual'}</span>
-            <h1>${mod.title}</h1>
-            <p style="color: #64748b; font-size: 14px;">Official Training Guide | SRYN Management Private Limited</p>
-            <div class="box">
-              <h3>Training Description & Guidelines</h3>
-              <p>${mod.description}</p>
-            </div>
-            <br/><br/>
-            <button onclick="window.print()" style="padding: 10px 20px; background: #de3163; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Print / Save as PDF</button>
-          </body>
-        </html>
-      `);
-      printWin.document.close();
-      showToast("Training document opened! Click 'Print / Save as PDF' to download.", "info");
+      showToast("PDF document data is unavailable for download.", "warning");
     }
   };
 
@@ -877,9 +873,9 @@ const CandidateDashboard = () => {
                   {previewTrainModal.description}
                 </div>
 
-                {resolvePdfUrl(previewTrainModal) && resolvePdfUrl(previewTrainModal).startsWith('data:') ? (
-                  <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '400px' }}>
-                    <iframe src={resolvePdfUrl(previewTrainModal)} width="100%" height="100%" title="Training PDF Document"></iframe>
+                {createPdfBlobUrl(resolvePdfUrl(previewTrainModal)) ? (
+                  <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '450px' }}>
+                    <iframe src={createPdfBlobUrl(resolvePdfUrl(previewTrainModal))} width="100%" height="100%" title="Training PDF Document"></iframe>
                   </div>
                 ) : (
                   <div style={{ backgroundColor: '#eff6ff', border: '1px dashed #93c5fd', borderRadius: '8px', padding: '24px', textAlign: 'center', color: '#1e40af' }}>
