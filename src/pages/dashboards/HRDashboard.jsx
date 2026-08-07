@@ -553,10 +553,10 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
         person?.pincode
       ].filter(Boolean).join(', ') || (currentUser?.address ? [currentUser.address, currentUser.city, currentUser.state, currentUser.pincode].filter(Boolean).join(', ') : 'Not Provided (Complete Candidate Profile)');
 
-      const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Field Executive');
-      const userSalary = person?.salary || '₹8,000/- (Rupees Eight Thousand Only)';
+      const userRole = person?.roleApplied || person?.position || person?.project || (person?.role === 'HR' ? 'HR Executive' : 'Customer Relationship Executive');
+      const userSalary = person?.salary || '₹15,000/- (Rupees Fifteen Thousand Only)';
       const userWorkingHours = person?.workingHours || '11:00 A.M. to 7:30 P.M.';
-      const userPerformanceTarget = person?.performanceTarget || 'Fifty (50) candidates';
+      const userPerformanceTarget = person?.performanceTarget || 'Fifty (50) Fixed Deposit Linked Cards';
 
       let html = (hrTemplate?.content || '')
         .replace(/{{name}}/g, person?.fullName || person?.name || currentUser?.fullName || 'Candidate')

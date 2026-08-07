@@ -244,10 +244,10 @@ const CandidateDashboard = () => {
         target?.pincode
       ].filter(Boolean).join(', ') || (currentUser?.address ? [currentUser.address, currentUser.city, currentUser.state, currentUser.pincode].filter(Boolean).join(', ') : 'Not Provided (Complete Candidate Profile)');
 
-      const userRole = target?.roleApplied || target?.position || 'Field Executive';
-      const userSalary = target?.salary || '₹8,000/- (Rupees Eight Thousand Only)';
+      const userRole = target?.roleApplied || target?.position || 'Customer Relationship Executive';
+      const userSalary = target?.salary || '₹15,000/- (Rupees Fifteen Thousand Only)';
       const userWorkingHours = target?.workingHours || '11:00 A.M. to 7:30 P.M.';
-      const userPerformanceTarget = target?.performanceTarget || 'Fifty (50) candidates';
+      const userPerformanceTarget = target?.performanceTarget || 'Fifty (50) Fixed Deposit Linked Cards';
 
       let html = (candidateTemplate?.content || '')
         .replace(/{{name}}/g, target?.fullName || target?.name || currentUser?.fullName || 'Candidate')
