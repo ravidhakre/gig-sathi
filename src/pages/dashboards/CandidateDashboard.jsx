@@ -46,10 +46,32 @@ const CandidateDashboard = () => {
   };
 
   const handleSignOffer = async () => {
-    if (currentUser?.uid) {
-      localStorage.setItem(`gs_offer_signed_${currentUser.uid}`, 'true');
+    const now = new Date();
+    const offerSignedDate = now.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    
+    const joiningObj = new Date(now);
+    joiningObj.setDate(joiningObj.getDate() + 1);
+    const joiningDate = joiningObj.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    if (currentUser?.uid || currentUser?.email) {
+      const targetId = currentUser.uid || currentUser.email;
+      localStorage.setItem(`gs_offer_signed_${targetId}`, 'true');
+      localStorage.setItem(`gs_offer_signed_date_${targetId}`, offerSignedDate);
+      localStorage.setItem(`gs_offer_joining_date_${targetId}`, joiningDate);
       try {
-        await updateProfile({ offerSigned: true });
+        await updateProfile({ 
+          offerSigned: true, 
+          offerSignedDate: offerSignedDate, 
+          joiningDate: joiningDate 
+        });
       } catch (err) {}
     }
     setOfferSigned(true);
@@ -192,17 +214,24 @@ const CandidateDashboard = () => {
         content: `<h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Dear {{name}}, offer letter loading...</p>`
       };
       
-      const issueDateObj = target?.date ? new Date(target.date) : new Date();
-      const joiningDateObj = new Date(issueDateObj);
-      joiningDateObj.setDate(joiningDateObj.getDate() + 1);
+      const targetId = target?.uid || target?.email || currentUser?.uid || currentUser?.email;
+      
+      const storedSignedDate = target?.offerSignedDate || (targetId ? localStorage.getItem(`gs_offer_signed_date_${targetId}`) : null);
+      const storedJoiningDate = target?.joiningDate || (targetId ? localStorage.getItem(`gs_offer_joining_date_${targetId}`) : null);
 
-      const todayStr = issueDateObj.toLocaleDateString('en-IN', {
+      const issueDateObj = storedSignedDate ? new Date(storedSignedDate) : (target?.date ? new Date(target.date) : new Date());
+      const joiningDateObj = storedJoiningDate ? new Date(storedJoiningDate) : new Date(issueDateObj);
+      if (!storedJoiningDate) {
+        joiningDateObj.setDate(joiningDateObj.getDate() + 1);
+      }
+
+      const todayStr = storedSignedDate || issueDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
       });
 
-      const joiningDateStr = target?.joiningDate || joiningDateObj.toLocaleDateString('en-IN', {
+      const joiningDateStr = storedJoiningDate || joiningDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'

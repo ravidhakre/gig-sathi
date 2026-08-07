@@ -334,10 +334,32 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
   };
 
   const handleSignOffer = async () => {
-    if (currentUser?.uid) {
-      localStorage.setItem(`gs_hr_offer_signed_${currentUser.uid}`, 'true');
+    const now = new Date();
+    const offerSignedDate = now.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    
+    const joiningObj = new Date(now);
+    joiningObj.setDate(joiningObj.getDate() + 1);
+    const joiningDate = joiningObj.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    if (currentUser?.uid || currentUser?.email) {
+      const targetId = currentUser.uid || currentUser.email;
+      localStorage.setItem(`gs_hr_offer_signed_${targetId}`, 'true');
+      localStorage.setItem(`gs_offer_signed_date_${targetId}`, offerSignedDate);
+      localStorage.setItem(`gs_offer_joining_date_${targetId}`, joiningDate);
       try {
-        await updateProfile({ offerSigned: true });
+        await updateProfile({ 
+          offerSigned: true, 
+          offerSignedDate: offerSignedDate, 
+          joiningDate: joiningDate 
+        });
       } catch (err) {}
     }
     setOfferSigned(true);
@@ -501,17 +523,24 @@ We look forward to welcoming you to *SRYN Management Pvt. Ltd.*! Have a wonderfu
         || safeTemplates.find(t => t.role === 'HR') 
         || { content: `<h3>SRYN MANAGEMENT PRIVATE LIMITED</h3><p>Dear {{name}}, your official offer letter is loading...</p>` };
       
-      const issueDateObj = person?.date ? new Date(person.date) : new Date();
-      const joiningDateObj = new Date(issueDateObj);
-      joiningDateObj.setDate(joiningDateObj.getDate() + 1);
+      const targetId = person?.uid || person?.email || currentUser?.uid || currentUser?.email;
+      
+      const storedSignedDate = person?.offerSignedDate || (targetId ? localStorage.getItem(`gs_offer_signed_date_${targetId}`) : null);
+      const storedJoiningDate = person?.joiningDate || (targetId ? localStorage.getItem(`gs_offer_joining_date_${targetId}`) : null);
 
-      const todayStr = issueDateObj.toLocaleDateString('en-IN', {
+      const issueDateObj = storedSignedDate ? new Date(storedSignedDate) : (person?.date ? new Date(person.date) : new Date());
+      const joiningDateObj = storedJoiningDate ? new Date(storedJoiningDate) : new Date(issueDateObj);
+      if (!storedJoiningDate) {
+        joiningDateObj.setDate(joiningDateObj.getDate() + 1);
+      }
+
+      const todayStr = storedSignedDate || issueDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
       });
 
-      const joiningDateStr = person?.joiningDate || joiningDateObj.toLocaleDateString('en-IN', {
+      const joiningDateStr = storedJoiningDate || joiningDateObj.toLocaleDateString('en-IN', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
