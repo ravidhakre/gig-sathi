@@ -433,7 +433,10 @@ export const AppProvider = ({ children }) => {
   const createTrainingModule = async (moduleData) => {
     try {
       const res = await dbService.addTrainingModule(moduleData);
-      setTrainingModules((prev) => [res, ...prev]);
+      setTrainingModules((prev) => {
+        const filtered = (prev || []).filter(m => m.id !== res.id);
+        return [res, ...filtered];
+      });
       showToast(`Training Module "${moduleData.title}" published!`, 'success');
       return res;
     } catch (error) {
@@ -445,7 +448,7 @@ export const AppProvider = ({ children }) => {
   const updateTrainingModuleDetails = async (id, fields) => {
     try {
       const res = await dbService.updateTrainingModule(id, fields);
-      setTrainingModules((prev) => prev.map(m => m.id === id ? res : m));
+      setTrainingModules((prev) => (prev || []).map(m => m.id === id ? { ...m, ...res } : m));
       showToast(`Training Module updated successfully!`, 'success');
       return res;
     } catch (error) {
@@ -457,7 +460,7 @@ export const AppProvider = ({ children }) => {
   const deleteTrainingModuleDetails = async (id) => {
     try {
       await dbService.deleteTrainingModule(id);
-      setTrainingModules((prev) => prev.filter(m => m.id !== id));
+      setTrainingModules((prev) => (prev || []).filter(m => m.id !== id));
       showToast(`Training Module deleted.`, 'info');
     } catch (error) {
       showToast(error.message, 'danger');

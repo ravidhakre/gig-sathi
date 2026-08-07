@@ -68,14 +68,21 @@ const AdminDashboard = () => {
   };
 
   const handleEditTrainClick = (m) => {
+    let resolvedPdf = m.pdfUrl || '';
+    if (m.id) {
+      const storedPdf = localStorage.getItem(`gs_train_pdf_${m.id}`);
+      if (storedPdf && storedPdf.startsWith('data:')) {
+        resolvedPdf = storedPdf;
+      }
+    }
     setEditingTrain(m);
     setTrainForm({
       title: m.title || '',
       category: m.category || 'FD Card',
       targetRole: m.targetRole || 'Candidate',
       description: m.description || '',
-      pdfUrl: m.pdfUrl || '',
-      fileName: m.fileName || ''
+      pdfUrl: resolvedPdf,
+      fileName: m.fileName || (resolvedPdf.startsWith('data:') ? 'Attached_Training_Doc.pdf' : '')
     });
     setShowTrainModal(true);
   };
@@ -1712,50 +1719,55 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {(trainingModules || []).length > 0 ? (
-                    trainingModules.map((m) => (
-                      <tr key={m.id}>
-                        <td style={{ fontWeight: '700' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <BookOpen size={18} color="var(--primary-color)" />
-                            <div>
-                              <div>{m.title}</div>
-                              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 'normal', marginTop: '2px' }}>
-                                {m.fileName || 'PDF Document'} • {(m.description || '').substring(0, 75)}...
+                  {(() => {
+                    const uniqueModules = Array.from(
+                      new Map((trainingModules || []).map(m => [m.id || m.title, m])).values()
+                    );
+                    return uniqueModules.length > 0 ? (
+                      uniqueModules.map((m) => (
+                        <tr key={m.id}>
+                          <td style={{ fontWeight: '700' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <BookOpen size={18} color="var(--primary-color)" />
+                              <div>
+                                <div>{m.title}</div>
+                                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 'normal', marginTop: '2px' }}>
+                                  {m.fileName || 'PDF Document'} • {(m.description || '').substring(0, 75)}...
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td><span className="badge badge-calling">{m.category}</span></td>
-                        <td><span className="badge badge-hired">{m.targetRole || 'Candidate'}</span></td>
-                        <td>{m.date || '2026-08-07'}</td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '8px' }}>
-                            <button 
-                              onClick={() => handleEditTrainClick(m)} 
-                              className="btn btn-outline"
-                              style={{ padding: '4px 10px', fontSize: '0.75rem' }}
-                            >
-                              <Edit3 size={14} /> Edit
-                            </button>
-                            <button 
-                              onClick={() => handleDeleteTrainClick(m.id)} 
-                              className="btn btn-outline"
-                              style={{ padding: '4px 10px', fontSize: '0.75rem', color: 'var(--danger-color)', borderColor: 'rgba(239,68,68,0.3)' }}
-                            >
-                              <Trash2 size={14} /> Delete
-                            </button>
-                          </div>
+                          </td>
+                          <td><span className="badge badge-calling">{m.category}</span></td>
+                          <td><span className="badge badge-hired">{m.targetRole || 'Candidate'}</span></td>
+                          <td>{m.date || '2026-08-07'}</td>
+                          <td>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <button 
+                                onClick={() => handleEditTrainClick(m)} 
+                                className="btn btn-outline"
+                                style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                              >
+                                <Edit3 size={14} /> Edit
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteTrainClick(m.id)} 
+                                className="btn btn-outline"
+                                style={{ padding: '4px 10px', fontSize: '0.75rem', color: 'var(--danger-color)', borderColor: 'rgba(239,68,68,0.3)' }}
+                              >
+                                <Trash2 size={14} /> Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                          No training modules uploaded yet. Click "+ Upload New Training PDF / Module" to add one.
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-                        No training modules uploaded yet. Click "+ Upload New Training PDF / Module" to add one.
-                      </td>
-                    </tr>
-                  )}
+                    );
+                  })()}
                 </tbody>
               </table>
             </div>

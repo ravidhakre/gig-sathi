@@ -1693,10 +1693,10 @@ export const dbService = {
         console.error("Firestore getTrainingModules error:", e);
       }
     }
-    const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
+    const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
     
     const mergedMap = new Map();
-    [...SEED_TRAINING_MODULES, ...localModules, ...fbModules].forEach(m => {
+    [...localModules, ...fbModules].forEach(m => {
       if (m && m.id) {
         const existing = mergedMap.get(m.id) || {};
         mergedMap.set(m.id, { ...existing, ...m });
@@ -1721,7 +1721,6 @@ export const dbService = {
       try { localStorage.setItem(`gs_train_pdf_${newId}`, rawPdfUrl); } catch(e){}
     }
 
-    // For Firestore document storage safety (<1MB), trim pdfUrl in primary payload if >100KB
     const safePayloadPdfUrl = (rawPdfUrl.length > 100000) ? `[STORED_IN_KEY: gs_train_pdf_${newId}]` : rawPdfUrl;
 
     const newModule = {
@@ -1733,7 +1732,9 @@ export const dbService = {
       pdfUrl: safePayloadPdfUrl
     };
 
-    const modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
+    let modules = JSON.parse(localStorage.getItem('gs_training_modules')) || [...SEED_TRAINING_MODULES];
+    // Deduplicate by ID
+    modules = modules.filter(m => m.id !== newId);
     modules.unshift(newModule);
     safeSetLocalStorage('gs_training_modules', modules);
 
@@ -1798,10 +1799,10 @@ export const dbService = {
         return onSnapshot(collection(firebaseFirestore, 'training_modules'), (snap) => {
           const fbModules = [];
           snap.forEach(d => fbModules.push(d.data()));
-          const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || [];
+          const localModules = JSON.parse(localStorage.getItem('gs_training_modules')) || SEED_TRAINING_MODULES;
           
           const mergedMap = new Map();
-          [...SEED_TRAINING_MODULES, ...localModules, ...fbModules].forEach(m => {
+          [...localModules, ...fbModules].forEach(m => {
             if (m && m.id) {
               const existing = mergedMap.get(m.id) || {};
               mergedMap.set(m.id, { ...existing, ...m });
