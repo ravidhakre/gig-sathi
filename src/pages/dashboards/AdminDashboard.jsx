@@ -1000,7 +1000,7 @@ const AdminDashboard = () => {
                       value={selectedTemplateRole}
                       onChange={(e) => setSelectedTemplateRole(e.target.value)}
                     >
-                      <option value="Candidate">Candidate / Field Executive</option>
+                      <option value="Candidate">Candidate</option>
                       <option value="HR">HR Officer / Recruiter</option>
                     </select>
                   </div>

@@ -301,7 +301,6 @@ const Auth = () => {
                       <div style={{ fontSize: '0.85rem', fontWeight: 'bold', marginTop: '4px', color: role === 'Candidate' ? 'var(--primary-color)' : 'var(--text-primary)' }}>
                         Candidate
                       </div>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Field Executive</span>
                     </div>
 
                     <div
